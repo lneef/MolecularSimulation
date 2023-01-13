@@ -38,9 +38,8 @@ namespace XMLReader {
         sim->setOut_frequency(f);
     }
 
-    void simulation_pimpl::l_radius(double rl_arg){
-        //ToDo: Add Force
-        //sim->setForce(std::make_unique<LJSmoothed>());
+    void simulation_pimpl::l_radius(double rl){
+        //sim->setForce(std::make_unique<SLennardjones>(rCutOff, rl));
     }
 
     void simulation_pimpl::post_simulation() {

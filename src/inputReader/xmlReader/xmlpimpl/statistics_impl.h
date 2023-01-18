@@ -6,8 +6,8 @@
 
 #include "../molsim-pskel.h"
 #include "Simulation.h"
-#include "Statistics.h"
 #include "container/LinkedCellContainer.h"
+#include "../../../Statistics.h"
 
 namespace XMLReader{
      class statistics_impl : public XMLReader::statistics_pskel{

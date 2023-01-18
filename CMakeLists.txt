@@ -45,7 +45,7 @@ if (FAST_G)
 endif ()
 
 # create make target
-add_executable(MolSim ${MY_SRC})
+add_executable(MolSim ${MY_SRC} src/Statistics.cpp src/Statistics.h)
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
         PRIVATE
@@ -147,7 +147,8 @@ if (TESTS)
             ${CMAKE_CURRENT_SOURCE_DIR}/src/Particle.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/outputWriter/FileWriter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/Simulation.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/Thermostat.cpp)
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/Thermostat.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/Statistics.cpp)
 
 
     target_link_libraries(lib_test PRIVATE spdlog::spdlog)

@@ -14,8 +14,9 @@
 #include "forceCalculation/LJGravitation.h"
 #include "forceCalculation/MembraneForce.h"
 #include "Statistics.h"
-#include "forcecalculation/SLennardJones.h"
+#include "forceCalculation/SLennardJones.h"
 #include <chrono>
+
 
 /**
  * @brief The class Simulation provides the functionality for running the simulation. It can be tailored to a specific

@@ -17,10 +17,10 @@ private:
     int i_rdf_begin;
     int i_rdf_end;
     double delta_r;
-    std::shared_ptr<Container> particles;
+    std::shared_ptr<LinkedCellContainer> particles;
 public:
     Statistics(int i_begin, int i_end, double delta_distance);
     void calcDiffusion();
     void calcRDF();
-    void setParticles(std::shared_ptr<Container> particles_arg);
+    void setParticles(std::shared_ptr<LinkedCellContainer> particles_arg);
 };

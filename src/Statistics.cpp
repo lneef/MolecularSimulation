@@ -12,9 +12,19 @@ Statistics::Statistics(int i_begin, int i_end, double delta_distance) {
 
 void Statistics::calcDiffusion() {
     double numerator = 0.;
-    particles->apply([&numerator](Particle &p) {
-        //ToDo: perodic boundary
-        std::array<double, 3> x_diff = p.getX() - p.getOldX();
+    std::array<double, 3> dom_size = particles->getDomain();
+    particles->apply([&numerator, &dom_size](Particle &p) {
+        std::array<double, 3> x_diff;
+        std::array<double, 3> v = p.getV();
+        std::array<double, 3> x = p.getX();
+        std::array<double, 3> old_x = p.getOldX();
+        for (int i = 0; i < 3; i++) {
+            if ((x[i] > old_x[i] && v[i] > 0) || (x[i] < old_x[i] && v[i] < 0)) {
+                x_diff[i] = dom_size[0] - (old_x[i] - x[i]);
+            } else {
+                x_diff[i] = x[i] - old_x[i];
+            }
+        }
         double sum = x_diff[0] * x_diff[0] + x_diff[1] * x_diff[1] + x_diff[2] * x_diff[2];
         numerator = numerator + sum;
     });
@@ -45,12 +55,13 @@ void Statistics::calcRDF() {
         }
     }
     std::vector<double> loc_densities;
-    for(int i = 0; i < array_size; i++){
-        loc_densities.push_back((quantities[i])/(((4*M_PI)/(3))*(pow(i+i_rdf_begin+delta_r,3)-pow(i+i_rdf_begin,3))));
+    for (int i = 0; i < array_size; i++) {
+        loc_densities.push_back(
+                (quantities[i]) / (((4 * M_PI) / (3)) * (pow(i + i_rdf_begin + delta_r, 3) - pow(i + i_rdf_begin, 3))));
     }
     rdf.push_back(loc_densities);
 }
 
-void Statistics::setParticles(std::shared_ptr<Container> particles_arg) {
+void Statistics::setParticles(std::shared_ptr<LinkedCellContainer> particles_arg) {
     particles = particles_arg;
 }

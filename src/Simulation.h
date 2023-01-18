@@ -14,6 +14,7 @@
 #include "forceCalculation/LJGravitation.h"
 #include "forceCalculation/MembraneForce.h"
 #include "Statistics.h"
+#include "forcecalculation/SLennardJones.h"
 #include <chrono>
 
 /**
@@ -41,7 +42,7 @@ class Simulation {
     double end_time;
 
     /**
-     * @brief gravitation constant 
+     * @brief gravitation constant
      */
     double g;
 
@@ -105,10 +106,10 @@ public:
      */
     void run();
 
-     /**
-     * @brief Function to generate the checkPointing file
-     * @param filename name of the outputfile
-     */
+    /**
+    * @brief Function to generate the checkPointing file
+    * @param filename name of the outputfile
+    */
     void checkpoint(const std::string& filename);
 
     /**
@@ -120,8 +121,8 @@ public:
      * @param force object to specify the type of force calculation used during the simulation
      */
 
-    Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,
-               std::unique_ptr<outputWriter::FileWriter> &writer, std::unique_ptr<Force> &force);
+    Simulation(std::shared_ptr<Container>& particles, double delta_t, double end_time,
+        std::unique_ptr<outputWriter::FileWriter>& writer, std::unique_ptr<Force>& force);
 
     /**
      * @brief constructor of Simulation which only initializes delta_t and end_time
@@ -153,29 +154,31 @@ public:
      * @brief setter for force
      * @param force_arg method for calculating the force effective on particles
      */
-    void setForce(std::unique_ptr<Force> &force_arg);
+    void setForce(std::unique_ptr<Force>& force_arg);
 
-    void setForce(std::unique_ptr<LJGravitation> &&force_arg);
+    void setForce(std::unique_ptr<LJGravitation>&& force_arg);
 
-    void setForce(std::unique_ptr<MembraneForce> &&force_arg);
+    void setForce(std::unique_ptr<SLennardJones>&& force_arg);
+
+    void setForce(std::unique_ptr<MembraneForce>&& force_arg);
 
     /**
      * @brief setter for particles
      * @param particles_arg ParticleContainer containing the particles
      */
-    void setParticle(std::shared_ptr<ParticleContainer> &particles_arg);
+    void setParticle(std::shared_ptr<ParticleContainer>& particles_arg);
 
     /**
      * @brief setter for particles
      * @param particles_arg LinkedCellContainer containing the particles
      */
-    void setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg);
+    void setParticle(std::shared_ptr<LinkedCellContainer>& particles_arg);
 
     /**
       *  @brief setter for out_name
      * @param out_name_arg base name for output file
      */
-    void setOut_name(const std::string &out_name_arg);
+    void setOut_name(const std::string& out_name_arg);
 
     /**
      * @brief setter for output frequency
@@ -191,7 +194,7 @@ public:
      * @brief setter for output writer
      * @param writer_arg file writer for writing output to a file
      */
-    void setWriter(std::unique_ptr<outputWriter::FileWriter> &writer_arg);
+    void setWriter(std::unique_ptr<outputWriter::FileWriter>& writer_arg);
 
     /**
      * @brief getter for field force
@@ -209,7 +212,7 @@ public:
      * @brief setter for the field thermostat
      * @param thermostat shared pointer to thermostat
      */
-    void setThermostat(std::shared_ptr<Thermostat> &thermostat);
+    void setThermostat(std::shared_ptr<Thermostat>& thermostat);
 
     void setN_statistics(int n_arg);
     void setUse_statistics(bool use_arg);
@@ -219,7 +222,7 @@ public:
      * @brief getter for the field thermostat
      * @return reference to shared pointer to the field thermostat
      */
-    [[nodiscard]] const std::shared_ptr<Thermostat> &getThermostat() const;
+    [[nodiscard]] const std::shared_ptr<Thermostat>& getThermostat() const;
 };
 
 

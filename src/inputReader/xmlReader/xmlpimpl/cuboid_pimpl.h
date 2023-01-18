@@ -5,7 +5,7 @@
 
 #include <queue>
 #include "inputReader/xmlReader/molsim-pskel.h"
-#include "container/LinkedCellContainer.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 #include "Simulation.h"
 
 namespace XMLReader {
@@ -14,7 +14,7 @@ namespace XMLReader {
         /**
          * @brief Container containing all linked cells for the simulation
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
         /**
          * @brief Queue containing the position of the cuboid
          */
@@ -36,11 +36,7 @@ namespace XMLReader {
          */
         double width;
 
-        /**
-         * @brief simulation which works with the particles
-         */
         std::shared_ptr<Simulation> sim;
-
         /**
          * @brief flag for initialization with brownian motion, default: true to enable backwards compatability
          */
@@ -64,7 +60,7 @@ namespace XMLReader {
         /**
          * @brief Function that initializes the container
          */
-        void init(std::shared_ptr<LinkedCellContainer> &lc, std::shared_ptr<Simulation> &sim_arg);
+        void init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &sim_arg);
         /**
          * @brief Function that reads the position in x-dimension
          */

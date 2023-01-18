@@ -5,7 +5,7 @@
 #pragma once
 #include "LinkedCellContainer.h"
 
-class LinkedCell3D : Container {
+class LinkedCell3D : public LinkedCellDataStructure {
 public:
     /**
      * @brief applies the given function to all elements of the container
@@ -47,13 +47,13 @@ public:
      */
     void addParticle(Particle&& p) override;
 
-    void addPeriodic(Boundary boundary);
-
-    void addReflecting(Reflecting&& ref);
+    void addParticle(Particle& p) override;
 
     LinkedCell3D();
 
-    void setSize(std::array<double, 3>& domain_arg, double cutOff_arg);
+    void setSize(double cutOff_arg, std::array<double, 3>& domain_arg) override;
+
+    std::array<double, 3> &getDomain() override;
 
 
 private:
@@ -65,7 +65,7 @@ private:
 
     std::array<double, 3> domain{};
 
-    std::array<size_t, 3> mesh{};
+    std::array<size_t , 3> mesh{};
 
     size_t layerSize = 0;
 
@@ -84,5 +84,7 @@ private:
     void update(Particle &particle, size_t ind3D, size_t ind);
 
     void updatePeriodic(Particle &p, size_t ind3D);
+
+    void update();
 };
 

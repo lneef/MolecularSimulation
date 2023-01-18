@@ -9,8 +9,6 @@
 #include "Reflecting.h"
 #include "MolSimLogger.h"
 
-std::vector<Reflecting> LinkedCellContainer::conditions{};
-std::set<Boundary> LinkedCellContainer::periodic{};
 std::array<double, 3> LinkedCellContainer::domain{};
 double LinkedCellContainer::rcutoff{};
 std::array<size_t , 3> LinkedCellContainer::mesh{};
@@ -238,10 +236,6 @@ const std::vector<std::reference_wrapper<ParticleContainer>> &LinkedCellContaine
     return boundary;
 }
 
-void LinkedCellContainer::addReflecting(Reflecting &&reflecting) {
-    conditions.emplace_back(reflecting);
-}
-
 std::array<double, 3> &LinkedCellContainer::getDomain() {
     return domain;
 }
@@ -293,9 +287,7 @@ void LinkedCellContainer::upperRightNeighbour(size_t i, const std::function<void
     }
 }
 
-void LinkedCellContainer::addPeriodic(Boundary bound) {
-    periodic.emplace(bound);
-}
+
 
 bool LinkedCellContainer::side(size_t ind) {
     return (ind % mesh[0] == 0 && containsPeriodic(Boundary::LEFT)) ||
@@ -447,10 +439,6 @@ void LinkedCellContainer::addParticle(Particle& p){
         cells[ind].addParticle(p);
 
     }
-}
-
-bool LinkedCellContainer::containsPeriodic(Boundary bound) {
-    return periodic.find(bound) != periodic.end();
 }
 
 ParticleContainer &LinkedCellContainer::operator[](size_t i) {

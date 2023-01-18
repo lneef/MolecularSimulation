@@ -90,13 +90,7 @@ namespace XMLReader {
          */
         void read(std::shared_ptr<Simulation> &sim) override;
 
-        /**
-         * @brief reads input from file and initializes the given Simulation and LinkedCellContainer
-         * @param sim lvalue reference to shared_ptr pointing to simulation
-         * @param lc lvalue reference to shared_ptr pointing to LinkedCellContainer
-         */
-        void read(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellContainer> &lc);
-
+        void read(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellStrategy> &lc);
     };
 
 }

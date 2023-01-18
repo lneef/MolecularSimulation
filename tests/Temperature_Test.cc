@@ -32,7 +32,7 @@ protected:
         cub.generateCuboidNoBrownian(par, {.55, .55, 0}, {3, 3, 1}, {4, 6, 0}, 1,  1.0, 1);
         std::array<double, 3> domain{3., 3., 0.5};
         par->setDomain(domain);
-        par->setSize(1., domain, 2);
+        par->setSize(1., domain);
 
         test = par;
 

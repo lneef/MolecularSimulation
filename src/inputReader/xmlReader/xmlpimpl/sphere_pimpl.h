@@ -7,6 +7,7 @@
 #include <queue>
 #include "inputReader/xmlReader/molsim-pskel.h"
 #include "Simulation.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 
 namespace XMLReader {
     class sphere_pimpl : public sphere_pskel {
@@ -14,7 +15,7 @@ namespace XMLReader {
         /**
          * @brief shared pointer to LinkedCellContainer where particles are stores
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
 
         /**
          * @brief simulation that works with the sphere
@@ -72,7 +73,7 @@ namespace XMLReader {
          * @param lc reference to shared pointer pointing to a LinkedCellContainer
          * @param sim reference to shared pointer pointing to instance of Simulation
          */
-        void init(std::shared_ptr<LinkedCellContainer> &lc, std::shared_ptr<Simulation> &sim);
+        void init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &sim);
 
         /**
          * @brief function to process x coordinate of the center

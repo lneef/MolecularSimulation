@@ -62,7 +62,7 @@ LinkedCell3D::forceThreeD(Particle &p, size_t ind2D, size_t ind3D, std::function
         fun(p, p1);
     };
     auto &next = layers[ind3D + 1];
-    for (long int j = -mesh[0]; j <= mesh[0]; j += mesh[0]) {
+    for (int j = -mesh[0]; j <= mesh[0]; j += mesh[0]) {
 
         if (ind2D + j < 0 || ind3D + j > next.cells.size())
             continue;
@@ -88,6 +88,14 @@ LinkedCell3D::forceThreeD(Particle &p, size_t ind2D, size_t ind3D, std::function
 }
 
 void LinkedCell3D::applyX(std::function<void(Particle &)> fun) {
+    for (auto &layer: layers) {
+        layer.apply(fun);
+    }
+    update();
+
+}
+
+void LinkedCell3D::update() {
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         for (size_t j = mesh[0] + 1; j < layers[i].cells.size() - mesh[0] - 1; ++j) {
             for (auto it = layers[i].cells[j].begin(); it != layers[i].cells[j].end();) {
@@ -133,15 +141,15 @@ void LinkedCell3D::applyX(std::function<void(Particle &)> fun) {
 
 
 void LinkedCell3D::clearHalo() {
-    for(auto & cont: layers)
+    for (auto &cont: layers)
         cont.clearHalo();
 
     auto &container = layers[0];
-    for(auto & cell : container.cells)
+    for (auto &cell: container.cells)
         cell.clear();
 
     container = layers[layers.size() - 1];
-    for(auto & cell : container.cells)
+    for (auto &cell: container.cells)
         cell.clear();
 
 }
@@ -200,7 +208,7 @@ bool LinkedCell3D::side(size_t ind3D) {
 }
 
 void LinkedCell3D::update(Particle &particle, size_t ind3D, size_t ind) {
-    if (ind3D > 0 && ind3D < layers.size()) {
+    if (ind3D > 0 && ind3D < layers.size() - 1) {
         layers[ind3D].addParticle(particle);
         return;
     }
@@ -224,32 +232,33 @@ void LinkedCell3D::updatePeriodic(Particle &p, size_t ind3D) {
     layers[ind3D].addParticle(p);
 }
 
-void LinkedCell3D::addPeriodic(Boundary boundary) {
-    if(boundary == Boundary::FRONT || boundary == Boundary::BACK)
-        periodic.emplace(boundary);
-
-    LinkedCellContainer::addPeriodic(boundary);
-}
-
-void LinkedCell3D::setSize(std::array<double, 3> &domain_arg, double cutOff_arg) {
+void LinkedCell3D::setSize(double cutOff_arg, std::array<double, 3> &domain_arg) {
     domain = domain_arg;
     cutOff = cutOff_arg;
-    for(size_t i = 0; i<3; ++i){
+    for (size_t i = 0; i < 3; ++i) {
         mesh[i] = ceil(std::abs(domain_arg[i]) / cutOff_arg) + 2;
     }
     LinkedCellContainer::setDomain(domain_arg);
     LinkedCellContainer::setRCutOff(cutOff_arg);
     LinkedCellContainer::setMesh(mesh);
 
-    layers.resize(mesh[0]);
-    for(auto& layer : layers){
+    layers.resize(mesh[2]);
+    for (auto &layer: layers) {
         layer.setSize(cutOff_arg, domain_arg);
     }
 
 }
 
-void LinkedCell3D::addReflecting(Reflecting &&ref) {
-    LinkedCellContainer::conditions.push_back(ref);
+void LinkedCell3D::addParticle(Particle &p) {
+    auto &pos = p.getX();
+    size_t ind3D = index(pos);
+    layers[ind3D].addParticle(p);
+
 }
+
+std::array<double, 3> &LinkedCell3D::getDomain() {
+    return domain;
+}
+
 
 LinkedCell3D::LinkedCell3D() = default;

@@ -5,7 +5,7 @@
 #pragma once
 
 #include "inputReader/xmlReader/molsim-pskel.h"
-#include "container/LinkedCellContainer.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 #include <array>
 
 namespace XMLReader {
@@ -31,6 +31,10 @@ namespace XMLReader {
          */
         void right_boundary(const ::std::string &) override;
 
+        void front_boundary(const ::std::string &) override;
+
+        void back_boundary(const ::std::string &) override;
+
         /**
          * @brief function called after reading the boundary element
          */
@@ -41,7 +45,7 @@ namespace XMLReader {
          *
          * @param cells_arg shared_ptr to LinkedCellContainer to which the conditions apply
          */
-        void init(std::shared_ptr<LinkedCellContainer>& cells_arg);
+        void init(std::shared_ptr<LinkedCellStrategy>& cells_arg);
 
     private:
         /**
@@ -62,6 +66,6 @@ namespace XMLReader {
         /**
          * @brief cells to which the boundary condition applies
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
     };
 }

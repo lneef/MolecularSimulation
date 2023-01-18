@@ -3,12 +3,9 @@
 #include "Container.h"
 #include "ParticleContainer.h"
 #include "Reflecting.h"
+#include "LinkedCellDataStructure.h"
 #include <vector>
 
-/**
- * @brief enum to store identifiers for sides
- */
-enum class Boundary{LEFT, RIGHT, BOTTOM, TOP, FRONT, BACK};
 
 class LinkedCell3D;
 /**
@@ -20,7 +17,7 @@ class LinkedCell3D;
  * \image latex linkedcell.png "Benchmark LinkedCellContainer" width=10cm
  */
 
-class LinkedCellContainer : public Container {
+class LinkedCellContainer : public LinkedCellDataStructure {
 public:
 
 
@@ -40,12 +37,6 @@ public:
      * @brief overridden destructor to prevent memory leaks
      */
     ~LinkedCellContainer() override;
-
-    /**
-     * @brief adds a reflecting boundary condition to the container
-     * @param ref rvalue reference to object of type Reflecting
-     */
-    static void addReflecting(Reflecting &&ref);
 
     /**
      * @brief calculates the force effective on particles using the given function
@@ -95,7 +86,7 @@ public:
      * @param domain_arg domain the linked cells are covering
      * @param dim dimension of the simulation; currently only value 2 acceptable
      */
-     void setSize(double rcutoff_arg, std::array<double, 3> &domain_arg);
+     void setSize(double rcutoff_arg, std::array<double, 3> &domain_arg) override;
 
 
     /**
@@ -108,7 +99,7 @@ public:
      * @brief returns the domain size
      * @return size of the domain
      */
-    static std::array<double, 3> &getDomain();
+    std::array<double, 3> &getDomain() override;
 
     /**
      * @brief returns particles in halo
@@ -122,12 +113,10 @@ public:
      */
     [[nodiscard]] const std::vector<std::reference_wrapper<ParticleContainer>> &getBoundary() const;
 
-    static void addPeriodic(Boundary bound);
-
     /**
      * @brief set containing periodic boundaries
      */
-    void addParticle(Particle& p);
+    void addParticle(Particle& p) override;
     /**
      * @brief removes all particles from the halo
      */
@@ -186,9 +175,7 @@ private:
     /**
      * @brief vector containing reelecting boundaries
      */
-    static std::vector<Reflecting> conditions;
 
-    static std::set<Boundary> periodic;
 
     /**
      * @brief applies reflecting boundary to particles in boundary cells
@@ -295,14 +282,6 @@ private:
      * @return true if cell in upper boundary, false otherwise
      */
     static bool topBoundary(size_t ind);
-
-    /**
-     * @brief implements c++20 contains for LinkedCellContainer for icpc
-     * @param bound Boundary
-     * @return true if for bound periodic boundary is specified, false otherwise
-     */
-    static bool containsPeriodic(Boundary bound);
-
 
     friend class LinkedCell3D;
 

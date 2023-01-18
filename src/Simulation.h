@@ -160,11 +160,13 @@ public:
      */
     void setParticle(std::shared_ptr<ParticleContainer> &particles_arg);
 
+    void setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg);
+
     /**
      * @brief setter for particles
      * @param particles_arg LinkedCellContainer containing the particles
      */
-    void setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg);
+    void setParticle(std::shared_ptr<LinkedCellDataStructure> &particles_arg);
 
     /**
       *  @brief setter for out_name

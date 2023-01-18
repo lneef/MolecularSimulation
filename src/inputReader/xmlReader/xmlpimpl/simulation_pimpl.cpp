@@ -39,7 +39,7 @@ namespace XMLReader {
     }
 
     void simulation_pimpl::l_radius(double rl){
-        //sim->setForce(std::make_unique<SLennardjones>(rCutOff, rl));
+        sim->setForce(std::make_unique<SLennardJones>(rCutOff, rl));
     }
 
     void simulation_pimpl::post_simulation() {

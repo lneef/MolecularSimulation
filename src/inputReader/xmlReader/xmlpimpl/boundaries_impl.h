@@ -59,6 +59,11 @@ namespace XMLReader {
         std::array<double, 3> vert{1, 0, 0};
 
         /**
+         * @brief indicator array for boundaries in third dimension
+         */
+        std::array<double, 3> dim3{0, 0, 1};
+
+        /**
          * @brief set for storing periodic boundaries
          */
          std::set<int> periodic;

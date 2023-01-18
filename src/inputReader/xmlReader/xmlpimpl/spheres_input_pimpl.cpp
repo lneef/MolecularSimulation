@@ -3,10 +3,11 @@
 //
 
 #include "spheres_input_pimpl.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 #include <iostream>
 
 namespace XMLReader{
-    void spheres_input_pimpl::init(std::shared_ptr<LinkedCellContainer> &cell_arg){
+    void spheres_input_pimpl::init(std::shared_ptr<LinkedCellStrategy> &cell_arg){
         cells=cell_arg;
     }
     void spheres_input_pimpl::path(const ::std::string &file) {
@@ -15,6 +16,6 @@ namespace XMLReader{
     }
     void spheres_input_pimpl::post_spheres_input() {
         inputReader::Cuboid_file spheres_reader(path_spheres);
-        spheres_reader.readSphere(cells);
+        spheres_reader.readSphere(cells->get());
     }
 }

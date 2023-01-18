@@ -29,9 +29,6 @@
         <bond_length>2.2</bond_length>
     </membrane>
     <boundaries>
-        <top_boundary>reflecting</top_boundary>
-        <bottom_boundary>reflecting</bottom_boundary>
-        <left_boundary>reflecting</left_boundary>
-        <right_boundary>reflecting</right_boundary>
+        <front_boundary>reflecting</front_boundary>
     </boundaries>
 </molecular>

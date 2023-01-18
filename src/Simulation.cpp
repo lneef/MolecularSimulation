@@ -45,7 +45,7 @@ void Simulation::run() {
 #ifdef BENCHMARK
     MolSimLogger::logger()->flush();
 #endif
-    double particles_begin = particles->size();
+    size_t particles_begin = particles->size();
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -188,7 +188,7 @@ void Simulation::setParticle(std::shared_ptr<ParticleContainer>& particles_arg) 
     particles = particles_arg;
 }
 
-void Simulation::setParticle(std::shared_ptr<LinkedCellContainer>& particles_arg) {
+void Simulation::setParticle(std::shared_ptr<LinkedCellDataStructure>& particles_arg) {
     particles = particles_arg;
 }
 
@@ -317,4 +317,8 @@ void Simulation::checkpoint(const std::string& filename) {
         });
 
     file.close();
-};
+}
+
+void Simulation::setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg) {
+    particles = particles_arg;
+}

@@ -324,6 +324,9 @@ namespace XMLReader {
         l_radius(double);
 
         virtual void
+        dimension(int);
+
+        virtual void
         post_simulation();
 
         // Parser construction API.
@@ -359,6 +362,9 @@ namespace XMLReader {
         l_radius_parser(xml_schema::double_pskel &);
 
         void
+        dimension_parser(xml_schema::int_pskel &);
+
+        void
         parsers(xml_schema::double_pskel & /* t_end */,
                 xml_schema::double_pskel & /* delta_t */,
                 xml_schema::double_pskel & /* domain_size_x */,
@@ -368,7 +374,8 @@ namespace XMLReader {
                 xml_schema::string_pskel & /* output_name */,
                 xml_schema::int_pskel & /* output_frequency */,
                 xml_schema::double_pskel & /* g_gravitation */,
-                xml_schema::double_pskel & /* l_radius */);
+                xml_schema::double_pskel & /* l_radius */,
+                xml_schema::int_pskel & /* dimension */);
 
         // Constructor.
         //
@@ -397,6 +404,7 @@ namespace XMLReader {
         xml_schema::int_pskel *output_frequency_parser_;
         xml_schema::double_pskel *g_gravitation_parser_;
         xml_schema::double_pskel *l_radius_parser_;
+        xml_schema::int_pskel *dimension_parser_;
     };
 
     class temperature_pskel : public xml_schema::complex_content {
@@ -1066,6 +1074,12 @@ namespace XMLReader {
         right_boundary(const ::std::string &);
 
         virtual void
+        front_boundary(const ::std::string &);
+
+        virtual void
+        back_boundary(const ::std::string &);
+
+        virtual void
         post_boundaries();
 
         // Parser construction API.
@@ -1083,10 +1097,18 @@ namespace XMLReader {
         right_boundary_parser(xml_schema::string_pskel &);
 
         void
+        front_boundary_parser(xml_schema::string_pskel &);
+
+        void
+        back_boundary_parser(xml_schema::string_pskel &);
+
+        void
         parsers(xml_schema::string_pskel & /* top_boundary */,
                 xml_schema::string_pskel & /* bottom_boundary */,
                 xml_schema::string_pskel & /* left_boundary */,
-                xml_schema::string_pskel & /* right_boundary */);
+                xml_schema::string_pskel & /* right_boundary */,
+                xml_schema::string_pskel & /* front_boundary */,
+                xml_schema::string_pskel & /* back_boundary */);
 
         // Constructor.
         //
@@ -1109,6 +1131,8 @@ namespace XMLReader {
         xml_schema::string_pskel *bottom_boundary_parser_;
         xml_schema::string_pskel *left_boundary_parser_;
         xml_schema::string_pskel *right_boundary_parser_;
+        xml_schema::string_pskel *front_boundary_parser_;
+        xml_schema::string_pskel *back_boundary_parser_;
     };
 
     class statistics_pskel : public xml_schema::complex_content {

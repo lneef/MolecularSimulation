@@ -20,13 +20,6 @@ namespace XMLReader {
     public:
 
         void pre() override;
-        /**
-         * @brief Function that initializes the container and the simulation
-         *
-         * @param lc reference to shared pointer pointing to a LinkedCellContainer
-         * @param sim reference to shared pointer pointing to instance of Simulation
-         */
-        void init(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellContainer> &lc);
 
         /**
          * @brief function to process the subparser cuboid

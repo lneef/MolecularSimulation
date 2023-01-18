@@ -13,6 +13,7 @@
             <xs:element name="output_frequency" type="xs:int"/>
             <xs:element name="g_gravitation" type="xs:double" minOccurs="0" maxOccurs="1"/>
             <xs:element name="l_radius" type="xs:double"/>
+            <xs:element name="dimension" type="xs:int" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -109,6 +110,8 @@
             <xs:element name="bottom_boundary" type="xs:string"/>
             <xs:element name="left_boundary" type="xs:string"/>
             <xs:element name="right_boundary" type="xs:string"/>
+            <xs:element name="front_boundary" type="xs:string"/>
+            <xs:element name="back_boundary" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 

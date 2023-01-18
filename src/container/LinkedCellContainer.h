@@ -3,12 +3,11 @@
 #include "Container.h"
 #include "ParticleContainer.h"
 #include "Reflecting.h"
+#include "LinkedCellDataStructure.h"
 #include <vector>
 
-/**
- * @brief enum to store identifiers for sides
- */
-enum class Boundary{LEFT, RIGHT, BOTTOM, TOP};
+
+class LinkedCell3D;
 /**
  * @brief LinkedCellContainer implements the linked cell algorithm for a 2D simulation
  *
@@ -17,7 +16,8 @@ enum class Boundary{LEFT, RIGHT, BOTTOM, TOP};
  * \image html linkedcell.png "Benchmark LinkedCellContainer" width=450cm
  * \image latex linkedcell.png "Benchmark LinkedCellContainer" width=10cm
  */
-class LinkedCellContainer : public Container {
+
+class LinkedCellContainer : public LinkedCellDataStructure {
 public:
 
 
@@ -37,12 +37,6 @@ public:
      * @brief overridden destructor to prevent memory leaks
      */
     ~LinkedCellContainer() override;
-
-    /**
-     * @brief adds a reflecting boundary condition to the container
-     * @param ref rvalue reference to object of type Reflecting
-     */
-    void addReflecting(Reflecting &&ref);
 
     /**
      * @brief calculates the force effective on particles using the given function
@@ -67,7 +61,7 @@ public:
      * @param p lvalue reference to particle
      * @return index of the particle in the linked cells data structure
      */
-    size_t index(Particle &p);
+    static size_t index(Particle &p);
 
     /**
      * @brief default constructor for LinkedCellContainer
@@ -78,13 +72,13 @@ public:
      * @brief setter for cutoff radius
      * @param rcutoff_arg cutoff radius for the linked cell algorihtm
      */
-    void setRCutOff(double rcutoff_arg);
+    static void setRCutOff(double rcutoff_arg);
 
     /**
      * setter for the domain
      * @param domain_arg three dimensional vector representing the domain
      */
-    void setDomain(std::array<double, 3> &domain_arg);
+    static void setDomain(std::array<double, 3> &domain_arg);
 
     /**
      * @brief funtion to initailize the linked cell algorithm for given domain and cutoff radius
@@ -92,7 +86,7 @@ public:
      * @param domain_arg domain the linked cells are covering
      * @param dim dimension of the simulation; currently only value 2 acceptable
      */
-    void setSize(double rcutoff_arg, std::array<double, 3> &domain_arg, size_t dim);
+     void setSize(double rcutoff_arg, std::array<double, 3> &domain_arg) override;
 
 
     /**
@@ -105,7 +99,7 @@ public:
      * @brief returns the domain size
      * @return size of the domain
      */
-    std::array<double, 3> &getDomain();
+    std::array<double, 3> &getDomain() override;
 
     /**
      * @brief returns particles in halo
@@ -119,18 +113,20 @@ public:
      */
     [[nodiscard]] const std::vector<std::reference_wrapper<ParticleContainer>> &getBoundary() const;
 
-    void addPeriodic(Boundary bound);
-
     /**
      * @brief set containing periodic boundaries
      */
-    void addParticle(Particle& p);
-
-
+    void addParticle(Particle& p) override;
     /**
      * @brief removes all particles from the halo
      */
     void clearHalo();
+
+    static void setMesh(std::array<size_t, 3>& mesh_arg);
+
+    ParticleContainer& operator[](size_t i);
+
+    void clearBoundary();
 
 
 private:
@@ -143,18 +139,17 @@ private:
     /**
      * @brief array to hold the number of cells in all three dimensions
      */
-    std::array<size_t, 3> mesh{};
+    static std::array<size_t, 3> mesh;
 
     /**
      * @brief vector spanning the domain which is covered by the cells
      */
-    std::array<double, 3> domain{};
+    static std::array<double, 3> domain;
 
     /**
      * @brief cutoff radius, i.e. length of the sides of the cells
      */
-    double rcutoff{};
-
+    static double rcutoff;
     /**
      * @brief updates the cell a particle is contained in after calculating the positions
      */
@@ -173,14 +168,14 @@ private:
     /**
      * @brief updates the boundary field after initialization
      */
+    void setUpRef();
+
     void setUp();
 
     /**
      * @brief vector containing reelecting boundaries
      */
-    std::vector<Reflecting> conditions;
 
-    std::set<Boundary> periodic;
 
     /**
      * @brief applies reflecting boundary to particles in boundary cells
@@ -188,15 +183,6 @@ private:
      * @param fun function to calculate force
      */
     void applyFBoundary(Reflecting cond, std::function<void(Particle &, Particle &)> &fun);
-
-
-
-    /**
-     * @brief check if particle is inside the domain for 2D and 3D simualtions
-     * @param p lvalue reference to particle
-     * @return true if particle is inside the domain for the fourth dimension
-     */
-    bool inside3D(Particle& p);
 
     /**
      * @brief calculates the force between a particle and its right neighbours
@@ -235,7 +221,7 @@ private:
     bool side(size_t ind);
 
     /**
-     * @brief mirros particles in boundary cells in the halo if periodic boundary is specified
+     * @brief mirrors particles in boundary cells in the halo if periodic boundary is specified
      * @param ind index of the cell the particle is contained in
      * @param p particle to be mirrored
      */
@@ -274,33 +260,32 @@ private:
      * @param ind index of a cell
      * @return true if cell in bottom boundary, false otherwise
      */
-    bool bottomBoundary(size_t ind);
+    static bool bottomBoundary(size_t ind);
 
     /**
      * @brief check test if cell with given index is in left boundary
      * @param ind index of a cell
      * @return true if cell in left boundary, false otherwise
      */
-    bool leftBoundary(size_t ind);
+    static bool leftBoundary(size_t ind);
 
      /**
      * @brief check test if cell with given index is in right boundary
      * @param ind index of a cell
      * @return true if cell in right boundary, false otherwise
      */
-    bool rightBoundary(size_t ind);
+    static bool rightBoundary(size_t ind);
 
      /**
      * @brief check test if cell with given index is in upper boundary
      * @param ind index of a cell
      * @return true if cell in upper boundary, false otherwise
      */
-    bool topBoundary(size_t ind);
+    static bool topBoundary(size_t ind);
 
-    /**
-     * @brief implements c++20 contains for LinkedCellContainer for icpc
-     * @param bound Boundary
-     * @return true if for bound periodic boundary is specified, false otherwise
-     */
-    bool containsPeriodic(Boundary bound);
+    friend class LinkedCell3D;
+
+    void forceTwoD(ParticleContainer &particles, size_t ind, std::function<void(Particle &, Particle &)> fun);
+
+
 };

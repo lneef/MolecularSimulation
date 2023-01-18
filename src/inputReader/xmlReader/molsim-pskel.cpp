@@ -94,6 +94,11 @@ namespace XMLReader {
     }
 
     void simulation_pskel::
+    dimension_parser(xml_schema::int_pskel &p) {
+        this->dimension_parser_ = &p;
+    }
+
+    void simulation_pskel::
     parsers(xml_schema::double_pskel &t_end,
             xml_schema::double_pskel &delta_t,
             xml_schema::double_pskel &domain_size_x,
@@ -103,7 +108,8 @@ namespace XMLReader {
             xml_schema::string_pskel &output_name,
             xml_schema::int_pskel &output_frequency,
             xml_schema::double_pskel &g_gravitation,
-            xml_schema::double_pskel &l_radius) {
+            xml_schema::double_pskel &l_radius,
+            xml_schema::int_pskel &dimension) {
         this->t_end_parser_ = &t_end;
         this->delta_t_parser_ = &delta_t;
         this->domain_size_x_parser_ = &domain_size_x;
@@ -114,6 +120,7 @@ namespace XMLReader {
         this->output_frequency_parser_ = &output_frequency;
         this->g_gravitation_parser_ = &g_gravitation;
         this->l_radius_parser_ = &l_radius;
+        this->dimension_parser_ = &dimension;
     }
 
     simulation_pskel::
@@ -127,7 +134,8 @@ namespace XMLReader {
               output_name_parser_(0),
               output_frequency_parser_(0),
               g_gravitation_parser_(0),
-              l_radius_parser_(0) {
+              l_radius_parser_(0),
+              dimension_parser_(0) {
     }
 
 // temperature_pskel
@@ -640,14 +648,28 @@ namespace XMLReader {
     }
 
     void boundaries_pskel::
+    front_boundary_parser(xml_schema::string_pskel &p) {
+        this->front_boundary_parser_ = &p;
+    }
+
+    void boundaries_pskel::
+    back_boundary_parser(xml_schema::string_pskel &p) {
+        this->back_boundary_parser_ = &p;
+    }
+
+    void boundaries_pskel::
     parsers(xml_schema::string_pskel &top_boundary,
             xml_schema::string_pskel &bottom_boundary,
             xml_schema::string_pskel &left_boundary,
-            xml_schema::string_pskel &right_boundary) {
+            xml_schema::string_pskel &right_boundary,
+            xml_schema::string_pskel &front_boundary,
+            xml_schema::string_pskel &back_boundary) {
         this->top_boundary_parser_ = &top_boundary;
         this->bottom_boundary_parser_ = &bottom_boundary;
         this->left_boundary_parser_ = &left_boundary;
         this->right_boundary_parser_ = &right_boundary;
+        this->front_boundary_parser_ = &front_boundary;
+        this->back_boundary_parser_ = &back_boundary;
     }
 
     boundaries_pskel::
@@ -655,7 +677,9 @@ namespace XMLReader {
             : top_boundary_parser_(0),
               bottom_boundary_parser_(0),
               left_boundary_parser_(0),
-              right_boundary_parser_(0) {
+              right_boundary_parser_(0),
+              front_boundary_parser_(0),
+              back_boundary_parser_(0) {
     }
 
 // statistics_pskel
@@ -834,6 +858,10 @@ namespace XMLReader {
     }
 
     void simulation_pskel::
+    dimension(int) {
+    }
+
+    void simulation_pskel::
     post_simulation() {
     }
 
@@ -936,6 +964,15 @@ namespace XMLReader {
             return true;
         }
 
+        if (n == "dimension" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->dimension_parser_;
+
+            if (this->dimension_parser_)
+                this->dimension_parser_->pre();
+
+            return true;
+        }
+
         return false;
     }
 
@@ -1011,6 +1048,13 @@ namespace XMLReader {
         if (n == "l_radius" && ns.empty()) {
             if (this->l_radius_parser_)
                 this->l_radius(this->l_radius_parser_->post_double());
+
+            return true;
+        }
+
+        if (n == "dimension" && ns.empty()) {
+            if (this->dimension_parser_)
+                this->dimension(this->dimension_parser_->post_int());
 
             return true;
         }
@@ -2274,6 +2318,14 @@ namespace XMLReader {
     }
 
     void boundaries_pskel::
+    front_boundary(const ::std::string &) {
+    }
+
+    void boundaries_pskel::
+    back_boundary(const ::std::string &) {
+    }
+
+    void boundaries_pskel::
     post_boundaries() {
     }
 
@@ -2322,6 +2374,24 @@ namespace XMLReader {
             return true;
         }
 
+        if (n == "front_boundary" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->front_boundary_parser_;
+
+            if (this->front_boundary_parser_)
+                this->front_boundary_parser_->pre();
+
+            return true;
+        }
+
+        if (n == "back_boundary" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->back_boundary_parser_;
+
+            if (this->back_boundary_parser_)
+                this->back_boundary_parser_->pre();
+
+            return true;
+        }
+
         return false;
     }
 
@@ -2355,6 +2425,20 @@ namespace XMLReader {
         if (n == "right_boundary" && ns.empty()) {
             if (this->right_boundary_parser_)
                 this->right_boundary(this->right_boundary_parser_->post_string());
+
+            return true;
+        }
+
+        if (n == "front_boundary" && ns.empty()) {
+            if (this->front_boundary_parser_)
+                this->front_boundary(this->front_boundary_parser_->post_string());
+
+            return true;
+        }
+
+        if (n == "back_boundary" && ns.empty()) {
+            if (this->back_boundary_parser_)
+                this->back_boundary(this->back_boundary_parser_->post_string());
 
             return true;
         }

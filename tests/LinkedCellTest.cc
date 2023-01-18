@@ -17,12 +17,12 @@ protected:
         test = std::make_shared<LinkedCellContainer>();
         std::array<double, 3> domain{3., 3., 0.5};
         test->setDomain(domain);
-        test->setSize(1.1, domain, 2);
+        test->setSize(1.1, domain);
         cub.generateCuboid(test, {.55, .55, 0}, {3, 3, 1}, 1., 1.0, {0., 1, 0.}, 1);
     }
 
     void TearDown() override {
-
+        test->clearBoundary();
     }
 };
 
@@ -135,10 +135,6 @@ TEST_F(LinkedCellTest, PeriodicTest){
         p1.setF(p1.getF() + add);
         p2.setF(p2.getF() + add);
     });
-
-    int n = std::accumulate(test->getHalo().cbegin(), test->getHalo().cend(), 0, [](int acc,std::reference_wrapper<ParticleContainer> l ){
-        return acc + l.get().size();
-    });
     auto celllist = test->getCells();
     auto it1 = celllist[16].begin();
     auto it2 = celllist[11].begin();
@@ -183,7 +179,7 @@ TEST(LinkedCellTest_Outflow_Test, AppTest1){
     std::shared_ptr<LinkedCellContainer> test1 = std::make_shared<LinkedCellContainer>();
     std::array<double, 3> domain{3., 3., 0.5};
     test1->setDomain(domain);
-    test1->setSize(1., domain, 2);
+    test1->setSize(1., domain);
     cub.generateCuboid(test1, {.75, .75, 0}, {3, 3, 1}, .5, 1.0, {0., 1, 0.});
 
     test1->applyF([](Particle &p1, Particle &p2) {

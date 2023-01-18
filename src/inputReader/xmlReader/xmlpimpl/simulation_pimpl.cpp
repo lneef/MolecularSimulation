@@ -49,12 +49,14 @@ namespace XMLReader {
             dom[i++] = domain.front();
             domain.pop();
         }
-        cells->setSize(rCutOff, dom, 2);
+        auto& chosen = cells -> chose(dim);
+        chosen->setSize(rCutOff, dom);
+        sim->setParticle(chosen);
         MolSimLogger::logInfo("XMLReader: domain=({}, {}, {}), cutoff_radius = {}", dom[0], dom[1], dom[2], rCutOff);
     }
 
 
-    void simulation_pimpl::init(std::shared_ptr<LinkedCellContainer> &cells_arg, std::shared_ptr<Simulation> &simu) {
+    void simulation_pimpl::init(std::shared_ptr<LinkedCellStrategy> &cells_arg, std::shared_ptr<Simulation> &simu) {
         cells = cells_arg;
         sim = simu;
     }
@@ -62,6 +64,10 @@ namespace XMLReader {
     void simulation_pimpl::g_gravitation(double g) {
         sim->setForce(std::make_unique<LJGravitation>(g));
         sim->setG(g);
+    }
+
+    void simulation_pimpl::dimension(int dim_arg) {
+        dim = dim_arg;
     }
 
 

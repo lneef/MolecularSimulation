@@ -6,10 +6,10 @@ namespace XMLReader {
         filename = s;
     }
 
-    void XmlReader::read(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellContainer> &lc) {
+    void XmlReader::read(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellStrategy> &lc) {
         XMLReader::molecular_pimpl parser{};
         xml_schema::document doc_p(parser, "molecular");
-        sim_p.parsers(double_p, double_p, double_p, double_p, double_p, double_p, string_p, int_p, double_p, double_p);
+        sim_p.parsers(double_p, double_p, double_p, double_p, double_p, double_p, string_p, int_p, double_p, double_p, int_p);
         temp_p.parsers(double_p, int_p, double_p, double_p);
         cub_in_p.parsers(string_p);
         cub_p.parsers(int_p, double_p, double_p, double_p, double_p, double_p, int_p, int_p, int_p, double_p, double_p,
@@ -17,7 +17,7 @@ namespace XMLReader {
         sph_in_p.parsers(string_p);
         sph_p.parsers(int_p, double_p, double_p, double_p, double_p, double_p, int_p, double_p, double_p, double_p,
                       double_p, double_p, bool_p);
-        bou_in_p.parsers(string_p, string_p, string_p, string_p);
+        bou_in_p.parsers(string_p, string_p, string_p, string_p, string_p, string_p);
         fr_check.parsers(string_p);
         memb_p.parsers(double_p, double_p, double_p, double_p, double_p, int_p, int_p, int_p, double_p, double_p,
                        double_p, double_p, double_p, bool_p, double_p, double_p, double_p);
@@ -38,7 +38,6 @@ namespace XMLReader {
         stat_p.init(lc,sim);
         parser.parsers(cub_p, sim_p, cub_in_p, sph_p, sph_in_p, bou_in_p, temp_p, fr_check, memb_p,stat_p);
         parser.pre();
-        parser.init(sim, lc);
         try {
             MolSimLogger::logInfo("Parsing xml file:{}", filename);
             doc_p.parse(filename, xml_schema::flags::dont_validate);
@@ -49,10 +48,9 @@ namespace XMLReader {
         parser.post_molecular();
     }
 
-    void XmlReader::read(std::shared_ptr<Simulation> &sim) {
-        std::shared_ptr<LinkedCellContainer> cell = std::make_shared<LinkedCellContainer>();
-        read(sim, cell);
-        sim->setParticle(cell);
+    void XmlReader::read(std::shared_ptr<Simulation> &sim){
+        std::shared_ptr<LinkedCellStrategy> lc = std::make_shared<LinkedCellStrategy>();
+        read(sim, lc);
     }
 
 }

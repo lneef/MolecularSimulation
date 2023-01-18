@@ -658,6 +658,48 @@ namespace XMLReader {
               right_boundary_parser_(0) {
     }
 
+// statistics_pskel
+//
+
+    void statistics_pskel::
+    begin_rdf_parser(xml_schema::int_pskel &p) {
+        this->begin_rdf_parser_ = &p;
+    }
+
+    void statistics_pskel::
+    end_rdf_parser(xml_schema::int_pskel &p) {
+        this->end_rdf_parser_ = &p;
+    }
+
+    void statistics_pskel::
+    delta_rdf_parser(xml_schema::double_pskel &p) {
+        this->delta_rdf_parser_ = &p;
+    }
+
+    void statistics_pskel::
+    n_statistics_parser(xml_schema::int_pskel &p) {
+        this->n_statistics_parser_ = &p;
+    }
+
+    void statistics_pskel::
+    parsers(xml_schema::int_pskel &begin_rdf,
+            xml_schema::int_pskel &end_rdf,
+            xml_schema::double_pskel &delta_rdf,
+            xml_schema::int_pskel &n_statistics) {
+        this->begin_rdf_parser_ = &begin_rdf;
+        this->end_rdf_parser_ = &end_rdf;
+        this->delta_rdf_parser_ = &delta_rdf;
+        this->n_statistics_parser_ = &n_statistics;
+    }
+
+    statistics_pskel::
+    statistics_pskel()
+            : begin_rdf_parser_(0),
+              end_rdf_parser_(0),
+              delta_rdf_parser_(0),
+              n_statistics_parser_(0) {
+    }
+
 // molecular_pskel
 //
 
@@ -707,6 +749,11 @@ namespace XMLReader {
     }
 
     void molecular_pskel::
+    statistics_parser(statistics_pskel &p) {
+        this->statistics_parser_ = &p;
+    }
+
+    void molecular_pskel::
     parsers(cuboid_pskel &cuboid,
             simulation_pskel &simulation,
             cuboid_input_pskel &cuboid_input,
@@ -715,7 +762,8 @@ namespace XMLReader {
             boundaries_pskel &boundaries,
             temperature_pskel &temperature,
             from_checkpoint_pskel &from_checkpoint,
-            membrane_pskel &membrane) {
+            membrane_pskel &membrane,
+            statistics_pskel &statistics) {
         this->cuboid_parser_ = &cuboid;
         this->simulation_parser_ = &simulation;
         this->cuboid_input_parser_ = &cuboid_input;
@@ -725,6 +773,7 @@ namespace XMLReader {
         this->temperature_parser_ = &temperature;
         this->from_checkpoint_parser_ = &from_checkpoint;
         this->membrane_parser_ = &membrane;
+        this->statistics_parser_ = &statistics;
     }
 
     molecular_pskel::
@@ -737,7 +786,8 @@ namespace XMLReader {
               boundaries_parser_(0),
               temperature_parser_(0),
               from_checkpoint_parser_(0),
-              membrane_parser_(0) {
+              membrane_parser_(0),
+              statistics_parser_(0) {
     }
 
 // simulation_pskel
@@ -2312,6 +2362,114 @@ namespace XMLReader {
         return false;
     }
 
+// statistics_pskel
+//
+
+    void statistics_pskel::
+    begin_rdf(int) {
+    }
+
+    void statistics_pskel::
+    end_rdf(int) {
+    }
+
+    void statistics_pskel::
+    delta_rdf(double) {
+    }
+
+    void statistics_pskel::
+    n_statistics(int) {
+    }
+
+    void statistics_pskel::
+    post_statistics() {
+    }
+
+    bool statistics_pskel::
+    _start_element_impl(const xml_schema::ro_string &ns,
+                        const xml_schema::ro_string &n,
+                        const xml_schema::ro_string *t) {
+        XSD_UNUSED (t);
+
+        if (this->xml_schema::complex_content::_start_element_impl(ns, n, t))
+            return true;
+
+        if (n == "begin_rdf" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->begin_rdf_parser_;
+
+            if (this->begin_rdf_parser_)
+                this->begin_rdf_parser_->pre();
+
+            return true;
+        }
+
+        if (n == "end_rdf" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->end_rdf_parser_;
+
+            if (this->end_rdf_parser_)
+                this->end_rdf_parser_->pre();
+
+            return true;
+        }
+
+        if (n == "delta_rdf" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->delta_rdf_parser_;
+
+            if (this->delta_rdf_parser_)
+                this->delta_rdf_parser_->pre();
+
+            return true;
+        }
+
+        if (n == "n_statistics" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->n_statistics_parser_;
+
+            if (this->n_statistics_parser_)
+                this->n_statistics_parser_->pre();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool statistics_pskel::
+    _end_element_impl(const xml_schema::ro_string &ns,
+                      const xml_schema::ro_string &n) {
+        if (this->xml_schema::complex_content::_end_element_impl(ns, n))
+            return true;
+
+        if (n == "begin_rdf" && ns.empty()) {
+            if (this->begin_rdf_parser_)
+                this->begin_rdf(this->begin_rdf_parser_->post_int());
+
+            return true;
+        }
+
+        if (n == "end_rdf" && ns.empty()) {
+            if (this->end_rdf_parser_)
+                this->end_rdf(this->end_rdf_parser_->post_int());
+
+            return true;
+        }
+
+        if (n == "delta_rdf" && ns.empty()) {
+            if (this->delta_rdf_parser_)
+                this->delta_rdf(this->delta_rdf_parser_->post_double());
+
+            return true;
+        }
+
+        if (n == "n_statistics" && ns.empty()) {
+            if (this->n_statistics_parser_)
+                this->n_statistics(this->n_statistics_parser_->post_int());
+
+            return true;
+        }
+
+        return false;
+    }
+
 // molecular_pskel
 //
 
@@ -2349,6 +2507,10 @@ namespace XMLReader {
 
     void molecular_pskel::
     membrane() {
+    }
+
+    void molecular_pskel::
+    statistics() {
     }
 
     void molecular_pskel::
@@ -2445,6 +2607,15 @@ namespace XMLReader {
             return true;
         }
 
+        if (n == "statistics" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->statistics_parser_;
+
+            if (this->statistics_parser_)
+                this->statistics_parser_->pre();
+
+            return true;
+        }
+
         return false;
     }
 
@@ -2530,6 +2701,15 @@ namespace XMLReader {
             if (this->membrane_parser_) {
                 this->membrane_parser_->post_membrane();
                 this->membrane();
+            }
+
+            return true;
+        }
+
+        if (n == "statistics" && ns.empty()) {
+            if (this->statistics_parser_) {
+                this->statistics_parser_->post_statistics();
+                this->statistics();
             }
 
             return true;

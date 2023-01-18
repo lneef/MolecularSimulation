@@ -8,17 +8,19 @@
 #include <vector>
 #include <array>
 #include "container/LinkedCellContainer.h"
+#include <cmath>
 
 class Statistics {
 private:
     std::vector<double> diffusion;
-    std::vector<std::vector<int>> rdf;
+    std::vector<std::vector<double>> rdf;
     int i_rdf_begin;
     int i_rdf_end;
     double delta_r;
     std::shared_ptr<Container> particles;
 public:
-    Statistics(int i_begin, int i_end, double delta_distance, std::shared_ptr<Container> &particles);
+    Statistics(int i_begin, int i_end, double delta_distance);
     void calcDiffusion();
     void calcRDF();
+    void setParticles(std::shared_ptr<Container> particles_arg);
 };

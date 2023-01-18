@@ -112,6 +112,15 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="statistics">
+        <xs:sequence>
+            <xs:element name="begin_rdf" type="xs:int"/>
+            <xs:element name="end_rdf" type="xs:int"/>
+            <xs:element name="delta_rdf" type="xs:double"/>
+            <xs:element name="n_statistics" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="molecular">
         <xs:sequence>
             <xs:element name="cuboid" type="cuboid"/>
@@ -123,6 +132,7 @@
             <xs:element name="temperature" type="temperature"/>
             <xs:element name="from_checkpoint" type="from_checkpoint"/>
             <xs:element name="membrane" type="membrane"/>
+            <xs:element name="statistics" type="statistics"/>
         </xs:sequence>
     </xs:complexType>
 

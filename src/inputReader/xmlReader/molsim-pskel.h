@@ -71,6 +71,8 @@ class spheres_input_pskel;
 
 class boundaries_pskel;
 
+class statistics_pskel;
+
 class molecular_pskel;
 
 #ifndef XSD_USE_CHAR
@@ -1109,6 +1111,71 @@ namespace XMLReader {
         xml_schema::string_pskel *right_boundary_parser_;
     };
 
+    class statistics_pskel : public xml_schema::complex_content {
+    public:
+        // Parser callbacks. Override them in your implementation.
+        //
+        // virtual void
+        // pre ();
+
+        virtual void
+        begin_rdf(int);
+
+        virtual void
+        end_rdf(int);
+
+        virtual void
+        delta_rdf(double);
+
+        virtual void
+        n_statistics(int);
+
+        virtual void
+        post_statistics();
+
+        // Parser construction API.
+        //
+        void
+        begin_rdf_parser(xml_schema::int_pskel &);
+
+        void
+        end_rdf_parser(xml_schema::int_pskel &);
+
+        void
+        delta_rdf_parser(xml_schema::double_pskel &);
+
+        void
+        n_statistics_parser(xml_schema::int_pskel &);
+
+        void
+        parsers(xml_schema::int_pskel & /* begin_rdf */,
+                xml_schema::int_pskel & /* end_rdf */,
+                xml_schema::double_pskel & /* delta_rdf */,
+                xml_schema::int_pskel & /* n_statistics */);
+
+        // Constructor.
+        //
+        statistics_pskel();
+
+        // Implementation.
+        //
+    protected:
+        virtual bool
+        _start_element_impl(const xml_schema::ro_string &,
+                            const xml_schema::ro_string &,
+                            const xml_schema::ro_string *);
+
+        virtual bool
+        _end_element_impl(const xml_schema::ro_string &,
+                          const xml_schema::ro_string &);
+
+    protected:
+        xml_schema::int_pskel *begin_rdf_parser_;
+        xml_schema::int_pskel *end_rdf_parser_;
+        xml_schema::double_pskel *delta_rdf_parser_;
+        xml_schema::int_pskel *n_statistics_parser_;
+    };
+
     class molecular_pskel : public xml_schema::complex_content {
     public:
         // Parser callbacks. Override them in your implementation.
@@ -1144,6 +1211,9 @@ namespace XMLReader {
         membrane();
 
         virtual void
+        statistics();
+
+        virtual void
         post_molecular();
 
         // Parser construction API.
@@ -1176,6 +1246,9 @@ namespace XMLReader {
         membrane_parser(membrane_pskel &);
 
         void
+        statistics_parser(statistics_pskel &);
+
+        void
         parsers(cuboid_pskel & /* cuboid */,
                 simulation_pskel & /* simulation */,
                 cuboid_input_pskel & /* cuboid_input */,
@@ -1184,7 +1257,8 @@ namespace XMLReader {
                 boundaries_pskel & /* boundaries */,
                 temperature_pskel & /* temperature */,
                 from_checkpoint_pskel & /* from_checkpoint */,
-                membrane_pskel & /* membrane */);
+                membrane_pskel & /* membrane */,
+                statistics_pskel & /* statistics */);
 
         // Constructor.
         //
@@ -1212,6 +1286,7 @@ namespace XMLReader {
         temperature_pskel *temperature_parser_;
         from_checkpoint_pskel *from_checkpoint_parser_;
         membrane_pskel *membrane_parser_;
+        statistics_pskel *statistics_parser_;
     };
 }
 

@@ -41,6 +41,10 @@ namespace XMLReader {
 
     }
 
+    void molecular_pimpl::statistics() {
+
+    }
+
     void molecular_pimpl::post_molecular() {
 
 

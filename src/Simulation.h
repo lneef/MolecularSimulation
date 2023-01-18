@@ -13,6 +13,7 @@
 #include "utils/Thermostat.h"
 #include "forceCalculation/LJGravitation.h"
 #include "forceCalculation/MembraneForce.h"
+#include "Statistics.h"
 #include <chrono>
 
 /**
@@ -83,6 +84,10 @@ class Simulation {
      * @brief the Fz_up parameter of the membrane-calculation
      */
     double F_up;
+
+    int n_statistics;
+    bool use_statistics = false;
+    std::shared_ptr<Statistics> statistics;
 
 public:
     /**
@@ -205,6 +210,10 @@ public:
      * @param thermostat shared pointer to thermostat
      */
     void setThermostat(std::shared_ptr<Thermostat> &thermostat);
+
+    void setN_statistics(int n_arg);
+    void setUse_statistics(bool use_arg);
+    void setStatistics(std::shared_ptr<Statistics> &statistics_arg);
 
     /**
      * @brief getter for the field thermostat

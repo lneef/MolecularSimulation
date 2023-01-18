@@ -143,6 +143,13 @@ void Simulation::run() {
                 writer->plotParticles(particles, out_name, iteration);
             }
 
+            if(use_statistics){
+                if(iteration % n_statistics == 0){
+                    statistics->calcDiffusion();
+                    statistics->calcRDF();
+                }
+            }
+
             MolSimLogger::logInfo("Itertation {} finished.", iteration);
 #endif
             current_time += delta_t;
@@ -226,6 +233,16 @@ void Simulation::setG(double g_arg) {
     g = g_arg;
 }
 
+void Simulation::setN_statistics(int n_arg){
+    n_statistics = n_arg;
+}
+void Simulation::setUse_statistics(bool use_arg){
+    use_statistics = use_arg;
+}
+void Simulation::setStatistics(std::shared_ptr<Statistics> &statistics_arg){
+    statistics = statistics_arg;
+}
+
 const std::shared_ptr<Thermostat>& Simulation::getThermostat() const { return thermostat; }
 
 void Simulation::setForce(std::unique_ptr<LJGravitation>&& force_arg) {
@@ -239,6 +256,7 @@ void Simulation::setForce(std::unique_ptr<MembraneForce>&& force_arg) {
 const std::unique_ptr<Force>& Simulation::getForce() const {
     return force;
 }
+
 
 void Simulation::checkpoint(const std::string& filename) {
     std::ofstream file;

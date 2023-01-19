@@ -73,6 +73,8 @@ public:
 
     virtual std::array<double, 3> &getDomain() = 0;
 
+    void clearBoundary();
+
 protected:
     static std::vector<Reflecting> conditions;
 

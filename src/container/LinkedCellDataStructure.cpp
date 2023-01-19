@@ -19,3 +19,8 @@ void LinkedCellDataStructure::addPeriodic(Boundary bound) {
 void LinkedCellDataStructure::addReflecting(Reflecting &&reflecting) {
     conditions.emplace_back(reflecting);
 }
+
+void LinkedCellDataStructure::clearBoundary() {
+    periodic.clear();
+    conditions.clear();
+}

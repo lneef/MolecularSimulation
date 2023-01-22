@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include "LinkedCellContainer.h"
 
 class LinkedCell3D : public LinkedCellDataStructure {
@@ -45,15 +46,17 @@ public:
      *
      * @param p rvalue reference to particle to be added to the container
      */
-    void addParticle(Particle&& p) override;
+    void addParticle(Particle &&p) override;
 
-    void addParticle(Particle& p) override;
+    void addParticle(Particle &p) override;
 
     LinkedCell3D();
 
-    void setSize(double cutOff_arg, std::array<double, 3>& domain_arg) override;
+    void setSize(double cutOff_arg, std::array<double, 3> &domain_arg) override;
 
     std::array<double, 3> &getDomain() override;
+
+    void setDomain(std::array<double, 3> &domain_arg);
 
 
 private:
@@ -65,11 +68,11 @@ private:
 
     std::array<double, 3> domain{};
 
-    std::array<size_t , 3> mesh{};
+    std::array<size_t, 3> mesh{};
 
     size_t layerSize = 0;
 
-    size_t index(const std::array<double, 3>& pos) noexcept;
+    size_t index(const std::array<double, 3> &pos) noexcept;
 
     void clearHalo();
 

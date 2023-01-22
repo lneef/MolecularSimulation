@@ -227,6 +227,8 @@ public:
      * @return reference to shared pointer to the field thermostat
      */
     [[nodiscard]] const std::shared_ptr<Thermostat>& getThermostat() const;
+
+    [[nodiscard]] const std::shared_ptr<Container>& getParticles() const;
 };
 
 

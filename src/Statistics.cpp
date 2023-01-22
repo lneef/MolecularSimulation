@@ -19,7 +19,7 @@ void Statistics::calcDiffusion() {
         std::array<double, 3> x = p.getX();
         std::array<double, 3> old_x = p.getOldX();
         for (int i = 0; i < 3; i++) {
-            if ((x[i] > old_x[i] && v[i] > 0) || (x[i] < old_x[i] && v[i] < 0)) {
+            if ((x[i] < old_x[i] && v[i] > 0) || (x[i] > old_x[i] && v[i] < 0)) {
                 x_diff[i] = dom_size[0] - (old_x[i] - x[i]);
             } else {
                 x_diff[i] = x[i] - old_x[i];
@@ -62,6 +62,14 @@ void Statistics::calcRDF() {
     rdf.push_back(loc_densities);
 }
 
-void Statistics::setParticles(std::shared_ptr<LinkedCellContainer> particles_arg) {
+void Statistics::setParticles(std::shared_ptr<LinkedCellDataStructure> particles_arg) {
     particles = particles_arg;
+}
+
+std::vector<std::vector<double>> Statistics::getRdf() const{
+    return rdf;
+}
+
+std::vector<double> Statistics::getDiffusion() const{
+    return diffusion;
 }

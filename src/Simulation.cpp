@@ -322,3 +322,7 @@ void Simulation::checkpoint(const std::string& filename) {
 void Simulation::setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg) {
     particles = particles_arg;
 }
+
+const std::shared_ptr<Container>& Simulation::getParticles() const{
+    return particles;
+}

@@ -6,7 +6,7 @@
 
 #include "../molsim-pskel.h"
 #include "Simulation.h"
-#include "container/LinkedCellContainer.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 #include "../../../Statistics.h"
 
 namespace XMLReader{
@@ -17,9 +17,9 @@ namespace XMLReader{
          double delta;
          int n;
          std::shared_ptr<Simulation> sim;
-         std::shared_ptr<LinkedCellContainer> cells;
+         std::shared_ptr<LinkedCellStrategy> cells;
      public:
-         void init(std::shared_ptr<LinkedCellContainer> &lc,std::shared_ptr<Simulation> &sim);
+         void init(std::shared_ptr<LinkedCellStrategy> &lc,std::shared_ptr<Simulation> &sim);
          void begin_rdf (int ) override;
          void end_rdf (int ) override;
          void delta_rdf (double ) override;

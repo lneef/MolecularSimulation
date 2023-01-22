@@ -260,5 +260,8 @@ std::array<double, 3> &LinkedCell3D::getDomain() {
     return domain;
 }
 
+void LinkedCell3D::setDomain(std::array<double, 3> &domain_arg) {
+    domain = domain_arg;
+}
 
 LinkedCell3D::LinkedCell3D() = default;

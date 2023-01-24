@@ -46,9 +46,6 @@ namespace XMLReader {
 
     }
 
-    void molecular_pimpl::init(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellContainer> &lc) {
-
-    }
 
     void molecular_pimpl::from_checkpoint() {
         molecular_pskel::from_checkpoint();

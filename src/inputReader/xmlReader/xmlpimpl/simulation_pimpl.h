@@ -6,8 +6,16 @@
 
 #include <queue>
 #include "../molsim-pskel.h"
+#include "../LinkedCellStrategy.h"
 #include "container/LinkedCellContainer.h"
 #include "Simulation.h"
+#include "cuboid_input_pimpl.h"
+#include "spheres_input_pimpl.h"
+#include "boundaries_impl.h"
+#include "temperature_pimpl.h"
+#include "sphere_pimpl.h"
+#include "from_checkpoint.h"
+#include "membrane_pimpl.h"
 
 namespace XMLReader {
     class simulation_pimpl : public simulation_pskel {
@@ -15,7 +23,7 @@ namespace XMLReader {
         /**
          * @brief Container containing all linked cells for the simulation
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
         /**
          * @brief Simulation to set the parameters of the simulation
          */
@@ -28,11 +36,13 @@ namespace XMLReader {
          * @brief Cutoff radius
          */
         double rCutOff;
+
+        size_t dim = 2;
     public:
         /**
          * @brief Function that initializes the container and the simulation
          */
-        void init(std::shared_ptr<LinkedCellContainer> &cells_arg, std::shared_ptr<Simulation> &simu);
+        void init(std::shared_ptr<LinkedCellStrategy> &cells_arg, std::shared_ptr<Simulation> &simu);
         /**
          * @brief Function that reads the end time of the simulation
          */
@@ -74,5 +84,7 @@ namespace XMLReader {
          * @brief Function that sets the domain of the cells
          */
         void post_simulation() override;
+
+        void dimension(int) override;
     };
 }

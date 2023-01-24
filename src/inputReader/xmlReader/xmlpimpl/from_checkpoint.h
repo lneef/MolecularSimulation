@@ -2,7 +2,7 @@
 
 
 #include "../molsim-pskel.h"
-#include "container/LinkedCellContainer.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 namespace XMLReader {
     class from_checkpoint_pimpl : public from_checkpoint_pskel {
     private:
@@ -10,19 +10,19 @@ namespace XMLReader {
         /**
          * @brief shared pointer to LinkedCellContainer where Particles are stored
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
 
         /**
          * @brief file name of file containing checkpoint
          */
         std::string filename;
     public:
+
         /**
          * @brief function to initialize the checkpoint parser
          * @param cells_arg reference to shared pointer pointing to a LinkedCellContainer
          */
-        void init(std::shared_ptr<LinkedCellContainer> &cells_arg);
-
+        void init(std::shared_ptr<LinkedCellStrategy> &cells_arg);
         /**
          * @brief function to process the path to a file containing the checkpoint
          */

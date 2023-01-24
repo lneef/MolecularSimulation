@@ -7,15 +7,16 @@
 #include "container/LinkedCellContainer.h"
 #include <iostream>
 #include "MolSimLogger.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 
 namespace XMLReader {
     void boundaries_pimpl::top_boundary(const ::std::string &top) {
         MolSimLogger::logDebug("XMLReader: boundary {}", top);
 
         if (top == "reflecting"){
-            cells->addReflecting(Reflecting(hor, cells->getDomain()[1]));
+            LinkedCellDataStructure::addReflecting(Reflecting(hor, cells->get()->getDomain()[1]));
         }else if(top == "periodic"){
-            cells->addPeriodic(Boundary::TOP);
+            LinkedCellDataStructure::addPeriodic(Boundary::TOP);
         }
     }
 
@@ -23,9 +24,9 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", bottom);
 
         if (bottom == "reflecting"){
-            cells->addReflecting(Reflecting(hor, 0));
+            LinkedCellDataStructure::addReflecting(Reflecting(hor, 0));
         }else if(bottom == "periodic"){
-            cells->addPeriodic(Boundary::BOTTOM);
+            LinkedCellDataStructure::addPeriodic(Boundary::BOTTOM);
         }
     }
 
@@ -33,9 +34,9 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", left);
 
         if (left == "reflecting"){
-            cells->addReflecting(Reflecting(vert, 0));
-        } if(left == "periodic"){
-            cells->addPeriodic(Boundary::LEFT);
+            LinkedCellDataStructure::addReflecting(Reflecting(vert, 0));
+        }else if(left == "periodic"){
+            LinkedCellDataStructure::addPeriodic(Boundary::LEFT);
         }
     }
 
@@ -43,18 +44,32 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", right);
 
         if (right == "reflecting"){
-            cells->addReflecting(Reflecting(vert, cells->getDomain()[0]));
+            LinkedCellDataStructure::addReflecting(Reflecting(vert, cells->get()->getDomain()[0]));
         } if(right == "periodic"){
-            cells->addPeriodic(Boundary::RIGHT);
+            LinkedCellDataStructure::addPeriodic(Boundary::RIGHT);
         }
     }
 
     void boundaries_pimpl::post_boundaries() {
     }
 
-    void boundaries_pimpl::init(std::shared_ptr<LinkedCellContainer> &cells_arg) {
+    void boundaries_pimpl::init(std::shared_ptr<LinkedCellStrategy> &cells_arg) {
         cells = cells_arg;
     }
 
+    void boundaries_pimpl::front_boundary(const std::string & front) {
+        if ( front == "reflecting"){
+            LinkedCellDataStructure::addReflecting(Reflecting(dim3, 0));
+        }else if(front == "periodic"){
+            LinkedCellDataStructure::addPeriodic(Boundary::FRONT);
+        }
+    }
 
+    void boundaries_pimpl::back_boundary(const std::string & back) {
+        if (back == "reflecting"){
+            LinkedCellDataStructure::addReflecting(Reflecting(dim3, cells->get()->getDomain()[2]));
+        }else if(back == "periodic"){
+            LinkedCellDataStructure::addPeriodic(Boundary::BACK);
+        }
+    }
 }

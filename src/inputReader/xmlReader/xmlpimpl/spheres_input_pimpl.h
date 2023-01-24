@@ -5,7 +5,7 @@
 #pragma once
 
 #include "inputReader/xmlReader/molsim-pskel.h"
-#include "container/LinkedCellContainer.h"
+#include "../LinkedCellStrategy.h"
 #include "../../Cuboid_file.h"
 
 namespace XMLReader {
@@ -14,7 +14,7 @@ namespace XMLReader {
         /**
          * @brief Container containing all linked cells for the simulation
          */
-        std::shared_ptr<LinkedCellContainer> cells;
+        std::shared_ptr<LinkedCellStrategy> cells;
         /**
          * @brief Path to the sphere txt-file
          */
@@ -23,7 +23,7 @@ namespace XMLReader {
         /**
          * @brief Function that initializes the container
          */
-        void init(std::shared_ptr<LinkedCellContainer> &cell_arg);
+        void init(std::shared_ptr<LinkedCellStrategy> &cell_arg);
         /**
          * @brief Function that reads the path of the file
          */

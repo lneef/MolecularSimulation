@@ -6,6 +6,7 @@
 #include "cuboid_pimpl.h"
 #include "inputReader/ParticleGenerator.h"
 #include "MolSimLogger.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 
 namespace XMLReader {
 
@@ -73,9 +74,9 @@ namespace XMLReader {
 
             ++i;
         }
-        ParticleGenerator<LinkedCellContainer> cub{};
+        ParticleGenerator<LinkedCellDataStructure> cub{};
         if (!browMot) {
-            cub.generateCuboidNoBrownian(cells, x, n, v, width, m, sigma_p, epsilon_p, type_p);
+            cub.generateCuboidNoBrownian(cells->get(), x, n, v, width, m, sigma_p, epsilon_p, type_p);
         } else {
             double meanVelocity;
             if (sim->getThermostat() != nullptr) {
@@ -83,7 +84,7 @@ namespace XMLReader {
             } else {
                 meanVelocity = 0.1;
             }
-            cub.generateCuboidBrownian(cells, x, n, v, width, m, meanVelocity, sigma_p, epsilon_p, type_p);
+            cub.generateCuboidBrownian(cells->get(), x, n, v, width, m, meanVelocity, sigma_p, epsilon_p, type_p);
         }
 
         browMot = true;
@@ -92,9 +93,9 @@ namespace XMLReader {
         epsilon_p = 5;
     }
 
-    void cuboid_pimpl::init(std::shared_ptr<LinkedCellContainer> &lc, std::shared_ptr<Simulation> &simulation) {
+    void cuboid_pimpl::init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &sim_arg) {
         cells = lc;
-        sim = simulation;
+        sim = sim_arg;
     }
 
     void cuboid_pimpl::type(int type_arg) {

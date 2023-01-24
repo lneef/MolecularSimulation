@@ -4,10 +4,11 @@
 
 #include "sphere_pimpl.h"
 #include "inputReader/ParticleGenerator.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 #include <iostream>
 
 namespace XMLReader {
-    void sphere_pimpl::init(std::shared_ptr<LinkedCellContainer> &lc, std::shared_ptr<Simulation> &simulation) {
+    void sphere_pimpl::init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &simulation) {
         cells = lc;
         sim = simulation;
     }
@@ -63,17 +64,17 @@ namespace XMLReader {
             centre.pop();
             vel.pop();
         }
-        ParticleGenerator<LinkedCellContainer> cub{};
+        ParticleGenerator<LinkedCellDataStructure> cub{};
         if (!browMot) {
-            cub.generateSphereNoBrownian(cells, c, v, radius_r, mass_r, width);
+            cub.generateSphereNoBrownian(cells->get(), c, v, radius_r, mass_r, width);
         } else {
             double meanVelocity;
-            if (sim->getThermostat() != NULL) {
+            if (sim->getThermostat() != nullptr) {
                 meanVelocity = sqrt(sim->getThermostat()->getTemp() / mass_r);
             } else {
                 meanVelocity = 0.1;
             }
-            cub.generateSphereBrownian(cells, c, v, radius_r, mass_r, width, meanVelocity, sigma_s, epsilon_s, type_s);
+            cub.generateSphereBrownian(cells->get(), c, v, radius_r, mass_r, width, meanVelocity, sigma_s, epsilon_s, type_s);
         }
 
         browMot = true;

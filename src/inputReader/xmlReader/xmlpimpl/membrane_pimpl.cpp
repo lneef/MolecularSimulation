@@ -6,6 +6,7 @@
 #include "membrane_pimpl.h"
 #include "inputReader/ParticleGenerator.h"
 #include "MolSimLogger.h"
+#include "inputReader/xmlReader/LinkedCellStrategy.h"
 
 namespace XMLReader {
 
@@ -85,9 +86,9 @@ namespace XMLReader {
 
             ++i;
         }
-        ParticleGenerator<LinkedCellContainer> cub{};
+        ParticleGenerator<LinkedCellDataStructure> cub{};
         if (!browMot) {
-            cub.generateMembraneNoBrownian(cells, x, n, v, width, m, sigma_p, epsilon_p, 3, f);
+            cub.generateMembraneNoBrownian(cells->get(), x, n, v, width, m, sigma_p, epsilon_p, 3, f);
         }
         else {
             double meanVelocity;
@@ -97,7 +98,7 @@ namespace XMLReader {
             else {
                 meanVelocity = 0.1;
             }
-            cub.generateMembraneBrownian(cells, x, n, v, width, m, meanVelocity, sigma_p, epsilon_p, 3, f);
+            cub.generateMembraneBrownian(cells->get(), x, n, v, width, m, meanVelocity, sigma_p, epsilon_p, 3, f);
         }
 
         sim->setIsMembrane(true);
@@ -112,10 +113,6 @@ namespace XMLReader {
         sim->setForce(std::make_unique<MembraneForce>(bond_len, stiff_const));
     }
 
-    void membrane_pimpl::init(std::shared_ptr<LinkedCellContainer>& lc, std::shared_ptr<Simulation>& simulation) {
-        cells = lc;
-        sim = simulation;
-    }
 
     void membrane_pimpl::sigma(double sigma_arg) {
         sigma_p = sigma_arg;
@@ -123,6 +120,11 @@ namespace XMLReader {
 
     void membrane_pimpl::epsilon(double epsilon_arg) {
         epsilon_p = epsilon_arg;
+    }
+
+    void membrane_pimpl::init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &sim_arg) {
+        cells = lc;
+        sim = sim_arg;
     }
 
 }

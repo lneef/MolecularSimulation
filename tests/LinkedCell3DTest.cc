@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "container/LinkedCell3D.h"
 #include "inputReader/ParticleGenerator.h"
+#include "Simulation.h"
 
 
 class LinkedCell3DTest : public ::testing::Test{
@@ -11,7 +12,7 @@ protected:
         lc= std::make_shared<LinkedCell3D>();
         std::array<double, 3> dom{3, 3, 3};
         lc->setSize(1, dom);
-        gen.generateCuboid(lc, {0.5, 0.5, 0.5},{3, 3, 3}, 1, 1, {0, 0, 0});
+        gen.generateCuboid(lc, {0.5, 0.5, 0.5},{3, 3, 3}, 1, 1, {0, 0, 1});
     }
     void TearDown() override {
         lc->clearBoundary();
@@ -40,4 +41,14 @@ TEST_F(LinkedCell3DTest, BoundaryTest) {
     });
     EXPECT_EQ(sz, 16);
 
+}
+
+TEST_F(LinkedCell3DTest, MoveTest){
+    LinkedCell3D::addPeriodic(Boundary::BACK);
+    LinkedCell3D::addPeriodic(Boundary::FRONT);
+    Simulation sim(1, 1);
+    std::shared_ptr<LinkedCellDataStructure> test = lc;
+    sim.setParticle(test);
+    sim.setDeltaT(1);
+    sim.calculateX();
 }

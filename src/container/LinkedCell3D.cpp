@@ -71,25 +71,20 @@ LinkedCell3D::forceThreeD(Particle &p, size_t ind2D, size_t ind3D, std::function
             continue;
 
 
-        auto &neighbours = next[ind2D + j];
-        neighbours.apply(partial);
+        next[ind2D + j].apply(partial);
 
 
         if (ind2D % mesh[0] == mesh[0] - 1) {
             if(ind2D + j - 1 < 0)
                 continue;
-            auto &neighleft = next[ind2D + j - 1];
-            neighleft.apply(partial);
+            next[ind2D + j - 1].apply(partial);
         }else if (ind2D % mesh[0] == 0) {
             if(ind2D + j + 1 > next.cells.size())
                 continue;
-            auto &neighright = next[ind2D + j + 1];
-            neighright.apply(partial);
+            next[ind2D + j + 1].apply(partial);
         } else {
-            auto &neighright = next[ind2D + j + 1];
-            neighright.apply(partial);
-            auto &neighleft = next[ind2D + j - 1];
-            neighleft.apply(partial);
+            next[ind2D + j + 1].apply(partial);
+            next[ind2D + j - 1].apply(partial);
 
         }
 

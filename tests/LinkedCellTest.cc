@@ -58,7 +58,7 @@ TEST_F(LinkedCellTest, AppTest) {
         p1.setF(p1.getF() + add);
         p2.setF(p2.getF() + add);
     });
-    std::vector<ParticleContainer> celllist = test->getCells();
+    auto celllist = test->getCells();
     auto it1 = celllist[6].begin();
     auto it2 = celllist[11].begin();
     auto it4 = celllist[12].begin();

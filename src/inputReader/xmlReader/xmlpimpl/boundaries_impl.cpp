@@ -54,7 +54,7 @@ namespace XMLReader {
     }
 
     void boundaries_pimpl::init(std::shared_ptr<LinkedCellStrategy> &cells_arg) {
-
+        cells = cells_arg;
     }
 
     void boundaries_pimpl::front_boundary(const std::string & front) {

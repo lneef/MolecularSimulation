@@ -126,9 +126,7 @@ void LinkedCell3D::update() {
                     continue;
                 }
 
-                if (ind3D != i) {
-                    update(p, ind3D, ind);
-                }
+                update(p, ind3D, ind);
 
                 it = layers[i][j].remove(it);
 

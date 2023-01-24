@@ -51,4 +51,8 @@ TEST_F(LinkedCell3DTest, MoveTest){
     sim.setParticle(test);
     sim.setDeltaT(1);
     sim.calculateX();
+
+    EXPECT_EQ(lc->size(), 27);
+    EXPECT_EQ((*lc)[1][11].size(), 1);
+
 }

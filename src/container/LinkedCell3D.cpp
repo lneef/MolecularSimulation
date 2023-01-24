@@ -194,7 +194,8 @@ bool LinkedCell3D::side(size_t ind3D) {
 
 void LinkedCell3D::update(Particle &particle, size_t ind3D, size_t ind) {
     if (ind3D > 0 && ind3D < layers.size() - 1) {
-        layers[ind3D].addParticle(particle);
+        ind = layers[ind3D].mirror(particle, ind);
+        layers[ind3D][ind].addParticle(particle);
         return;
     }
 

@@ -43,23 +43,23 @@ void MembraneForce::calculateF(Particle& p1, Particle& p2, double r0, double k) 
         double norm = std::sqrt(sum);
         double scalar = k * (r0 / norm - 1);
         std::array<double, 3> newF = scalar * xij;
-        p1.setF(p1.getF() + newF);
-        p2.setF(p2.getF() - newF);
+        p1.addToF(newF);
+        p2.subtractFromF(newF);
     }
     else if (p1.ifDiagonalNeighbor(p2)) {
         double norm = std::sqrt(sum);
         double scalar = k * (1.414 * r0 / norm - 1);
         std::array<double, 3> newF = scalar * xij;
-        p1.setF(p1.getF() + newF);
-        p2.setF(p2.getF() - newF);
+        p1.addToF(newF);
+        p2.subtractFromF(newF);
     }
     else {
         if (sum < 1.26 * sigma * sigma) {
             double pow_6 = pow((sigma * sigma) / sum, 3);
             double scalar = ((-24 * epsilon) / sum) * (pow_6 - 2 * pow(pow_6, 2));
             std::array<double, 3> newF = scalar * xij;
-            p1.setF(p1.getF() + newF);
-            p2.setF(p2.getF() - newF);
+            p1.addToF(newF);
+            p2.subtractFromF(newF);
         }
     }
 }

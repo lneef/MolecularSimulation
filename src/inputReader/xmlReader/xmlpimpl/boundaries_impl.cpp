@@ -59,7 +59,7 @@ namespace XMLReader {
 
     void boundaries_pimpl::front_boundary(const std::string & front) {
         if ( front == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(dim3, 0));
+            LinkedCellDataStructure::addThird(Boundary::FRONT, Reflecting(dim3, 0));
         }else if(front == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::FRONT);
         }
@@ -67,7 +67,7 @@ namespace XMLReader {
 
     void boundaries_pimpl::back_boundary(const std::string & back) {
         if (back == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(dim3, cells->get()->getDomain()[2]));
+            LinkedCellDataStructure::addThird(Boundary::BACK, Reflecting(dim3, cells->get()->getDomain()[2]));
         }else if(back == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::BACK);
         }

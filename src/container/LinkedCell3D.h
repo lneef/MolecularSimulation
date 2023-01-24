@@ -59,6 +59,9 @@ public:
 
     std::array<double, 3> &getDomain() override;
 
+    void applyPar(std::function<void(Particle &)> fun) override;
+
+
 
 private:
     std::vector<LinkedCellContainer> layers;
@@ -83,10 +86,6 @@ private:
 
     bool side(size_t ind3D);
 
-    void update(Particle &particle, size_t ind3D, size_t ind);
-
-    void updatePeriodic(Particle &p, size_t ind3D, size_t ind);
-
     void update();
 
     double mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
@@ -94,5 +93,11 @@ private:
     double mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
     void mirrorDiagonal(std::array<double, 3> array1, Particle& particle, size_t i, LinkedCellContainer& counter);
+
+    void update(Particle &particle, size_t ind3D, size_t ind);
+
+    size_t updatePeriodic(Particle &p, size_t ind3D);
+
+    void applyFBoundary(std::function<void(Particle &, Particle &)> fun);
 };
 

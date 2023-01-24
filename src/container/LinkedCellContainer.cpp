@@ -11,7 +11,7 @@
 
 std::array<double, 3> LinkedCellContainer::domain{};
 double LinkedCellContainer::rcutoff{};
-std::array<size_t , 3> LinkedCellContainer::mesh{};
+std::array<size_t, 3> LinkedCellContainer::mesh{};
 
 void LinkedCellContainer::apply(std::function<void(Particle &)> fun) {
     for (size_t i = mesh[0] + 1; i < cells.size() - mesh[0] - 1; ++i) {
@@ -46,7 +46,7 @@ void LinkedCellContainer::update() {
             if (pos[0] < -rcutoff || pos[0] >= domain[0] + rcutoff || pos[1] < -rcutoff ||
                 pos[1] > domain[1] + rcutoff) {
                 SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Particle at position ({}, {}, {}) removed", p.getX()[0],
-                                    p.getX()[1], p.getX()[2]);
+                                   p.getX()[1], p.getX()[2]);
                 it = cells[i].remove(it);
                 continue;
             }
@@ -74,7 +74,7 @@ size_t LinkedCellContainer::size() {
 
     size_t len = 0;
     for (size_t i = mesh[0] + 1; i < cells.size() - mesh[0] - 1; ++i) {
-        len+=cells[i].size();
+        len += cells[i].size();
         if (i % mesh[0] == mesh[0] - 2)
             i += 2;
     }
@@ -95,8 +95,8 @@ void LinkedCellContainer::applyFBoundary(Reflecting cond, std::function<void(Par
 void LinkedCellContainer::applyF(std::function<void(Particle &, Particle &)> fun) {
     updatePeriodic();
     size_t len = cells.size() - mesh[0] - 1;
-    size_t i = 0;
-    for (; i < len; ++i) {
+#pragma omp parallel for schedule(dynamic, 1)
+    for (size_t i = 0; i < len; ++i) {
         auto &cell = cells[i];
         cell.applyF(fun);
         for (auto &p: cell) {
@@ -254,8 +254,7 @@ void LinkedCellContainer::rightNeighbour(size_t i, const std::function<void(Part
     }
 }
 
-void
-LinkedCellContainer::upperNeighbour(size_t i, const std::function<void(Particle &)> &partial) {
+void LinkedCellContainer::upperNeighbour(size_t i, const std::function<void(Particle &)> &partial) {
     if (mesh[1] <= 1)
         return;
 
@@ -286,7 +285,6 @@ void LinkedCellContainer::upperRightNeighbour(size_t i, const std::function<void
         neighbour.apply(partial);
     }
 }
-
 
 
 bool LinkedCellContainer::side(size_t ind) {
@@ -341,7 +339,7 @@ void LinkedCellContainer::update(Particle &p, size_t ind) {
 
 }
 
-void LinkedCellContainer::mirrorPeriodic(size_t ind, Particle &p){
+void LinkedCellContainer::mirrorPeriodic(size_t ind, Particle &p) {
 
     //mirror to right side if periodic boundary is specified
     if (leftBoundary(ind) && containsPeriodic(Boundary::RIGHT)) {
@@ -376,24 +374,24 @@ void LinkedCellContainer::mirrorPeriodic(size_t ind, Particle &p){
     //mirror particles from corner cells to other corner cells
     if (topBoundary(ind) && rightBoundary(ind) &&
         (containsPeriodic(Boundary::BOTTOM) || containsPeriodic(Boundary::LEFT))) {
-         //mirror boundary particle
+        //mirror boundary particle
         std::array<double, 3> to_add{-domain[0], -domain[1], 0};
         simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType()));
 
     } else if (topBoundary(ind) && leftBoundary(ind) &&
                (containsPeriodic(Boundary::BOTTOM) || containsPeriodic(Boundary::RIGHT))) {
-         //mirror boundary particle
+        //mirror boundary particle
         std::array<double, 3> to_add{domain[0], -domain[1], 0};
         simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType()));
     } else if (bottomBoundary(ind) && leftBoundary(ind) &&
                (containsPeriodic(Boundary::TOP) || containsPeriodic(Boundary::RIGHT))) {
-         //mirror boundary particle
+        //mirror boundary particle
         std::array<double, 3> to_add{domain[0], domain[1], 0};
         simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType()));
 
     } else if (bottomBoundary(ind) && rightBoundary(ind) &&
                (containsPeriodic(Boundary::TOP) || containsPeriodic(Boundary::LEFT))) {
-         //mirror boundary particle
+        //mirror boundary particle
         std::array<double, 3> to_add{-domain[0], domain[1], 0};
         simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType()));
     }
@@ -432,7 +430,7 @@ void LinkedCellContainer::updatePeriodic() {
     }
 }
 
-void LinkedCellContainer::addParticle(Particle& p){
+void LinkedCellContainer::addParticle(Particle &p) {
     size_t ind = index(p);
     auto &pos = p.getX();
     if (0 <= pos[0] && pos[0] < domain[0] && 0 <= pos[1] && pos[1] < domain[1]) {
@@ -445,9 +443,10 @@ ParticleContainer &LinkedCellContainer::operator[](size_t i) {
     return cells[i];
 }
 
-void LinkedCellContainer::forceTwoD(ParticleContainer &particles, size_t ind, std::function<void(Particle&, Particle&)> fun) {
+void LinkedCellContainer::forceTwoD(ParticleContainer &particles, size_t ind,
+                                    std::function<void(Particle &, Particle &)> fun) {
     particles.applyF(fun);
-    for(auto & p : particles){
+    for (auto &p: particles) {
         auto partial = [&p, &fun](Particle &p2) { fun(p, p2); };
         rightNeighbour(ind, partial);
         upperLeftNeighbour(ind, partial);
@@ -473,4 +472,15 @@ void LinkedCellContainer::setMesh(std::array<size_t, 3> &mesh_arg) {
 void LinkedCellContainer::clearBoundary() {
     periodic.clear();
     conditions.clear();
+}
+
+void LinkedCellContainer::applyPar(std::function<void(Particle &)> fun) {
+    size_t len = mesh[0] * mesh[1];
+
+#pragma omp parallel for schedule(dynamic , 1)
+    for (size_t i = mesh[0] + 1; i < len - mesh[0] - 1; ++i) {
+        if (i % mesh[0] == 0 || i % mesh[0] == mesh[0] - 1)
+            continue;
+        cells[i].apply(fun);
+    }
 }

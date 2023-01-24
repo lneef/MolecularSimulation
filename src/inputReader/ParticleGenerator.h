@@ -189,7 +189,7 @@ public:
                              std::array<double, 3> v, double h, double m, double sigma = 1, double epsilon = 5, int type = 3, double fz = 1) {
         std::array<double, 3> newX{};
         //iterate over cuboid in each dimension
-        std::array<int, 2> index;
+        std::array<int, 2> index{};
         for (int x_cord = 0; x_cord < n[0]; x_cord++) {
             newX[0] = x[0] + (x_cord * h);
             for (int y_cord = 0; y_cord < n[1]; y_cord++) {

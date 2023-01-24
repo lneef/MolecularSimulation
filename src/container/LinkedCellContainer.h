@@ -27,6 +27,7 @@ public:
      */
     void apply(std::function<void(Particle &)> fun) override;
 
+    void applyPar(std::function<void(Particle &)> fun) override;
     /**
      * @brief applies the given function to calculate the position of a particle
      * @param fun function taking lvalue reference to particle

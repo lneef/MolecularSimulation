@@ -48,7 +48,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
     preparePeriodic();
 
-#pragma omp parallel for schedule(static, 2) num_threads(8) shared(layers)
+#pragma omp parallel for schedule(static, 2) shared(layers)
     for (std::size_t j = 0; j < layers.size() - 1; ++j) {
         auto &layer = layers[j];
         for (size_t i = 0; i < layer.cells.size(); ++i) {
@@ -150,7 +150,7 @@ void LinkedCell3D::update() {
 
 
 void LinkedCell3D::clearHalo() {
-#pragma omp parallel for schedule(static, 1)num_threads(6) shared(layers)
+#pragma omp parallel for schedule(static, 1) shared(layers)
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].clearHalo();
     }
@@ -383,7 +383,7 @@ void LinkedCell3D::applyFBoundary(std::function<void(Particle &, Particle &)> fu
 }
 
 void LinkedCell3D::applyPar(std::function<void(Particle &)> fun) {
-#pragma omp parallel for schedule(static, 2) num_threads(8) shared(layers)
+#pragma omp parallel for schedule(static, 2) shared(layers)
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].apply(fun);
     }

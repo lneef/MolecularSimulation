@@ -128,7 +128,7 @@ void LinkedCellContainer::applyFBoundary(std::function<void(Particle &, Particle
 void LinkedCellContainer::applyF(std::function<void(Particle &, Particle &)> fun) {
     updatePeriodic();
     size_t len = cells.size() - mesh[0] - 1;
-#pragma omp parallel for schedule(dynamic, 1) num_threads(6) shared(cells)
+#pragma omp parallel for schedule(dynamic, 1) shared(cells)
     for (size_t i = 0; i < len; ++i) {
         auto &cell = cells[i];
         cell.applyF(fun);
@@ -525,7 +525,7 @@ void LinkedCellContainer::clearBoundary() {
 void LinkedCellContainer::applyPar(std::function<void(Particle &)> fun) {
     size_t len = mesh[0] * mesh[1];
 
-#pragma omp parallel for schedule(dynamic , 1) num_threads(6)
+#pragma omp parallel for schedule(dynamic , 1) 
     for (size_t i = mesh[0] + 1; i < len - mesh[0] - 1; ++i) {
         if (i % mesh[0] == 0 || i % mesh[0] == mesh[0] - 1)
             continue;

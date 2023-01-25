@@ -7,7 +7,7 @@ LJGravitation::LJGravitation(double g_arg) {
 }
 
 void LJGravitation::calculateF(std::shared_ptr<Container> &particles) {
-    particles->apply([this](Particle& p){
+    particles->applyPar([this](Particle& p){
         p.updateF({0, p.getM() * g, 0});
     });
 

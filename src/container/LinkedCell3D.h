@@ -43,21 +43,40 @@ public:
     size_t size() override;
 
     /**
-     * @brief adds a particle to the conainer given as rvalue reference
+     * @brief adds a particle given as rvalue reference to the container
      *
      * @param p rvalue reference to particle to be added to the container
      */
     void addParticle(Particle&& p) override;
 
+    /**
+     * @brief adds a particle given as rvalue reference to the container
+     * @param p lvalue reference to particle to be added to the container
+     */
     void addParticle(Particle& p) override;
 
+    /**
+     * @brief constructor
+     */
     LinkedCell3D();
 
+    /**
+     * @brief function to retrieve LinkedCellContainer at given index
+     * @param i index of the LinkedCellContainer
+     * @return reference to LinkedCellContainer
+     */
     LinkedCellContainer& operator[](size_t i);
 
     void setSize(double cutOff_arg, std::array<double, 3>& domain_arg) override;
 
     std::array<double, 3> &getDomain() override;
+
+    /**
+     * @brief parallelized version of apply
+     * @param fun function taking lvalue reference to Particle
+     */
+    void applyPar(std::function<void(Particle &)> fun) override;
+
 
 
 private:
@@ -83,16 +102,18 @@ private:
 
     bool side(size_t ind3D);
 
-    void update(Particle &particle, size_t ind3D, size_t ind);
-
-    void updatePeriodic(Particle &p, size_t ind3D, size_t ind);
-
     void update();
 
-    double mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
+    static void mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
-    double mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
+    static void mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
-    void mirrorDiagonal(std::array<double, 3> array1, Particle& particle, size_t i, LinkedCellContainer& counter);
+    void mirrorDiagonal(std::array<double, 3>& newP, Particle& particle, size_t i, LinkedCellContainer& counter);
+
+    void update(Particle &particle, size_t ind3D, size_t ind);
+
+    size_t updatePeriodic(Particle &p, size_t ind3D);
+
+    void applyFBoundary(std::function<void(Particle &, Particle &)> fun);
 };
 

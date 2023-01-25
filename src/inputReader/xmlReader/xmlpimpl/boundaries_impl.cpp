@@ -14,7 +14,7 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", top);
 
         if (top == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(hor, cells->get()->getDomain()[1]));
+            LinkedCellDataStructure::addReflecting(Boundary::TOP, Reflecting(hor, cells->get()->getDomain()[1]));
         }else if(top == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::TOP);
         }
@@ -24,7 +24,7 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", bottom);
 
         if (bottom == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(hor, 0));
+            LinkedCellDataStructure::addReflecting(Boundary::BOTTOM, Reflecting(hor, 0));
         }else if(bottom == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::BOTTOM);
         }
@@ -34,7 +34,7 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", left);
 
         if (left == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(vert, 0));
+            LinkedCellDataStructure::addReflecting(Boundary::LEFT, Reflecting(vert, 0));
         }else if(left == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::LEFT);
         }
@@ -44,8 +44,8 @@ namespace XMLReader {
         MolSimLogger::logDebug("XMLReader: boundary {}", right);
 
         if (right == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(vert, cells->get()->getDomain()[0]));
-        } if(right == "periodic"){
+            LinkedCellDataStructure::addReflecting(Boundary::RIGHT, Reflecting(vert, cells->get()->getDomain()[0]));
+        }else if(right == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::RIGHT);
         }
     }
@@ -59,7 +59,7 @@ namespace XMLReader {
 
     void boundaries_pimpl::front_boundary(const std::string & front) {
         if ( front == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(dim3, 0));
+            LinkedCellDataStructure::addReflecting(Boundary::FRONT, Reflecting(dim3, 0));
         }else if(front == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::FRONT);
         }
@@ -67,7 +67,7 @@ namespace XMLReader {
 
     void boundaries_pimpl::back_boundary(const std::string & back) {
         if (back == "reflecting"){
-            LinkedCellDataStructure::addReflecting(Reflecting(dim3, cells->get()->getDomain()[2]));
+            LinkedCellDataStructure::addReflecting(Boundary::BACK, Reflecting(dim3, cells->get()->getDomain()[2]));
         }else if(back == "periodic"){
             LinkedCellDataStructure::addPeriodic(Boundary::BACK);
         }

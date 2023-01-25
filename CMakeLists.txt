@@ -14,6 +14,8 @@ option(VECTOR "Enable vectorization" OFF)
 
 option(FAST_I "Enable fastet Benchmark" OFF)
 
+option(OMP "Enable OpenMP" OFF)
+
 option(FAST_G "Enable fastet Benchmark GCC" OFF)
 # option to disable logging in performance critical regions
 option(BMARK "Disable io in benchmark region" OFF)
@@ -36,6 +38,11 @@ if (FAST_I)
     message("Fast ICPC")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -ipo -fast")
     SET(CMAKE_RANLIB ${CMAKE_CXX_COMPILER_RANLIB} CACHE PATH "RANLIB" FORCE)
+endif ()
+
+if (OMP)
+    message("with openmp")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 endif ()
 
 if (FAST_G)

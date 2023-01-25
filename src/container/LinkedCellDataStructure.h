@@ -3,12 +3,15 @@
 //
 #pragma once
 
+
+
 /**
  * @brief enum to store identifiers for sides
  */
 enum class Boundary{LEFT, RIGHT, BOTTOM, TOP, FRONT, BACK};
 
 #include "Reflecting.h"
+#include "map"
 
 class LinkedCellDataStructure : public Container{
 public:
@@ -28,12 +31,6 @@ public:
      * @brief overridden destructor to prevent memory leaks
      */
     ~LinkedCellDataStructure() override;
-
-    /**
-     * @brief adds a reflecting boundary condition to the container
-     * @param ref rvalue reference to object of type Reflecting
-     */
-    static void addReflecting(Reflecting &&ref);
 
     /**
      * @brief calculates the force effective on particles using the given function
@@ -73,10 +70,12 @@ public:
 
     virtual std::array<double, 3> &getDomain() = 0;
 
-    void clearBoundary();
+    static void clearBoundary();
+
+    static void addReflecting(Boundary bound, Reflecting &&reflecting);
 
 protected:
-    static std::vector<Reflecting> conditions;
+    static std::map<Boundary,Reflecting> conditions;
 
     static std::set<Boundary> periodic;
 
@@ -86,6 +85,8 @@ protected:
      * @return true if for bound periodic boundary is specified, false otherwise
      */
     static bool containsPeriodic(Boundary bound);
+
+
 
 };
 

@@ -33,14 +33,6 @@ public:
     ~LinkedCellDataStructure() override;
 
     /**
-     * @brief adds a reflecting boundary condition to the container
-     * @param ref rvalue reference to object of type Reflecting
-     */
-    static void addReflecting(Reflecting &&ref);
-
-    static void addThird(Boundary bound, Reflecting&& ref);
-
-    /**
      * @brief calculates the force effective on particles using the given function
      * @param fun std::function taking two lvalue reference to particles
      */
@@ -80,10 +72,10 @@ public:
 
     static void clearBoundary();
 
-protected:
-    static std::vector<Reflecting> conditions;
+    static void addReflecting(Boundary bound, Reflecting &&reflecting);
 
-    static std::map<Boundary,Reflecting> frontBack;
+protected:
+    static std::map<Boundary,Reflecting> conditions;
 
     static std::set<Boundary> periodic;
 

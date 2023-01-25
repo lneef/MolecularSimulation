@@ -14,7 +14,7 @@ class Particle {
 
 private:
     bool ghost;
-#ifdef __OPENMP
+#ifdef _OPENMP
     omp_lock_t par_lock;
 #endif
     /**

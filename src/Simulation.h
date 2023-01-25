@@ -229,6 +229,7 @@ public:
     [[nodiscard]] const std::shared_ptr<Thermostat>& getThermostat() const;
 
     [[nodiscard]] const std::shared_ptr<Container>& getParticles() const;
+
 };
 
 

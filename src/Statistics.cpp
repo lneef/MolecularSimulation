@@ -62,14 +62,48 @@ void Statistics::calcRDF() {
     rdf.push_back(loc_densities);
 }
 
+void Statistics::writeDiffusion() {
+    std::ifstream checkFile;
+    checkFile.open("../output/diffusion");
+    if (checkFile) {
+        remove("../output/diffusion");
+    }
+    std::ofstream diffFile;
+    diffFile.open("../output/diffusion");
+    diffFile << "timestep, var(t)" << std::endl;
+    for (int i = 0; i < diffusion.size(); i++) {
+        diffFile << i*n_statistics << "," << diffusion[i] <<std::endl;
+    }
+    diffFile.close();
+}
+
+void Statistics::writeRDF() {
+    if(!std::filesystem::is_empty("../output/rdf")){
+        std::filesystem::remove_all("../output/rdf");
+    }
+    for(int i = 0; i < rdf.size(); i++){
+        std::ofstream rdfFile;
+        rdfFile.open("../output/rdf/time_" + i*n_statistics);
+        rdfFile << "distance, densities" << std::endl;
+        for(int z = 0; z < rdf[i].size(); z++){
+            rdfFile << z+i_rdf_begin << "," << rdf[i][z] << std::endl;
+        }
+        rdfFile.close();
+    }
+}
+
 void Statistics::setParticles(std::shared_ptr<LinkedCellDataStructure> particles_arg) {
     particles = particles_arg;
 }
 
-std::vector<std::vector<double>> Statistics::getRdf() const{
+std::vector<std::vector<double>> Statistics::getRdf() const {
     return rdf;
 }
 
-std::vector<double> Statistics::getDiffusion() const{
+std::vector<double> Statistics::getDiffusion() const {
     return diffusion;
+}
+
+void Statistics::setN_statistics(int n_arg) {
+    n_statistics = n_arg;
 }

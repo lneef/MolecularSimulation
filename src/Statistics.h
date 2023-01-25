@@ -9,6 +9,8 @@
 #include <array>
 #include "container/LinkedCellContainer.h"
 #include <cmath>
+#include <fstream>
+#include <filesystem>
 
 class Statistics {
 private:
@@ -18,6 +20,7 @@ private:
     int i_rdf_end;
     double delta_r;
     std::shared_ptr<LinkedCellDataStructure> particles;
+    int n_statistics;
 public:
     Statistics(int i_begin, int i_end, double delta_distance);
 
@@ -31,4 +34,8 @@ public:
 
     std::vector<double> getDiffusion() const;
 
+    void writeDiffusion();
+    void writeRDF();
+
+    void setN_statistics(int n_arg);
 };

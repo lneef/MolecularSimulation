@@ -167,6 +167,8 @@ public:
      */
     void setIndex(const std::array<int, 2>& index);
 
+    void setOldX(const std::array<double, 3>& oldx_arg);
+
     /**
      * @brief to detect if the another membrane-particle is the direct neighbor  
      * @param another membrane-particle

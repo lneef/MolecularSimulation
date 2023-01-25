@@ -19,8 +19,10 @@ void Statistics::calcDiffusion() {
         std::array<double, 3> x = p.getX();
         std::array<double, 3> old_x = p.getOldX();
         for (int i = 0; i < 3; i++) {
-            if ((x[i] < old_x[i] && v[i] > 0) || (x[i] > old_x[i] && v[i] < 0)) {
-                x_diff[i] = dom_size[0] - (old_x[i] - x[i]);
+            if (x[i] < old_x[i] && v[i] > 0) {
+                x_diff[i] = dom_size[i] - (old_x[i] - x[i]);
+            } else if (x[i] > old_x[i] && v[i] < 0) {
+                x_diff[i] = dom_size[i] - (x[i] - old_x[i]);
             } else {
                 x_diff[i] = x[i] - old_x[i];
             }
@@ -28,7 +30,9 @@ void Statistics::calcDiffusion() {
         double sum = x_diff[0] * x_diff[0] + x_diff[1] * x_diff[1] + x_diff[2] * x_diff[2];
         numerator = numerator + sum;
     });
+    //if (particles->size() > 0) {
     diffusion.push_back(numerator / particles->size());
+    //}
 }
 
 void Statistics::calcRDF() {
@@ -49,15 +53,17 @@ void Statistics::calcRDF() {
     }
     for (int i = 0; i < array_size; i++) {
         for (double d: distances) {
-            if (d > i + i_rdf_begin && d <= i + i_rdf_begin + delta_r) {
+            if ((d > (i + i_rdf_begin)) && (d <= (i + i_rdf_begin + delta_r))) {
                 quantities[i]++;
             }
         }
     }
+
     std::vector<double> loc_densities;
     for (int i = 0; i < array_size; i++) {
         loc_densities.push_back(
-                (quantities[i]) / (((4 * M_PI) / (3)) * (pow(i + i_rdf_begin + delta_r, 3) - pow(i + i_rdf_begin, 3))));
+                (quantities[i] / 2) /
+                (((4 * M_PI) / (3)) * (pow(i + i_rdf_begin + delta_r, 3) - pow(i + i_rdf_begin, 3))));
     }
     rdf.push_back(loc_densities);
 }
@@ -72,21 +78,21 @@ void Statistics::writeDiffusion() {
     diffFile.open("../output/diffusion");
     diffFile << "timestep, var(t)" << std::endl;
     for (int i = 0; i < diffusion.size(); i++) {
-        diffFile << i*n_statistics << "," << diffusion[i] <<std::endl;
+        diffFile << i * n_statistics << "," << diffusion[i] << std::endl;
     }
     diffFile.close();
 }
 
 void Statistics::writeRDF() {
-    if(!std::filesystem::is_empty("../output/rdf")){
+    if (!std::filesystem::is_empty("../output/rdf")) {
         std::filesystem::remove_all("../output/rdf");
     }
-    for(int i = 0; i < rdf.size(); i++){
+    for (int i = 0; i < rdf.size(); i++) {
         std::ofstream rdfFile;
-        rdfFile.open("../output/rdf/time_" + i*n_statistics);
+        rdfFile.open("../output/rdf/time_" + i * n_statistics);
         rdfFile << "distance, densities" << std::endl;
-        for(int z = 0; z < rdf[i].size(); z++){
-            rdfFile << z+i_rdf_begin << "," << rdf[i][z] << std::endl;
+        for (int z = 0; z < rdf[i].size(); z++) {
+            rdfFile << z + i_rdf_begin << "," << rdf[i][z] << std::endl;
         }
         rdfFile.close();
     }

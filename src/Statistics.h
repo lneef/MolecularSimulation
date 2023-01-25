@@ -11,6 +11,7 @@
 #include <cmath>
 #include <fstream>
 #include <filesystem>
+#include "utils/ArrayUtils.h"
 
 class Statistics {
 private:

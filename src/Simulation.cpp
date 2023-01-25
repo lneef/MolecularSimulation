@@ -178,14 +178,13 @@ void Simulation::run() {
             statistics->writeRDF();
         }
 
-
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-        MolSimLogger::logInfo("Runtime: {} ms", difference.count());
-
-        double mups = (particles_begin * iteration * 1000.0) / (difference.count());
-        MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
     }
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+
+    double mups = (particles_begin * iteration * 1000.0) / (difference.count());
+    MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
 }
 
 Simulation::Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,

@@ -114,6 +114,9 @@ void Particle::setIndex(const std::array<int, 2>& index) {
     this->membrane_index = index;
 }
 
+void Particle::setOldX(const std::array<double, 3> &oldx_arg) {
+    this->old_x = oldx_arg;
+}
 
 bool Particle::comp(double d1, double d2) {
     return std::abs(d1 - d2) < std::numeric_limits<double>::epsilon();

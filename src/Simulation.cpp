@@ -85,9 +85,21 @@ void Simulation::run() {
                 writer->plotParticles(particles, out_name, iteration);
             }
 
+            if (use_statistics) {
+                if (iteration % n_statistics == 0) {
+                    statistics->calcDiffusion();
+                    statistics->calcRDF();
+                }
+            }
+
             MolSimLogger::logInfo("Itertation {} finished.", iteration);
 #endif
             current_time += delta_t;
+        }
+
+        if (use_statistics) {
+            statistics->writeDiffusion();
+            statistics->writeRDF();
         }
     } else {
         double temp_g = g;

@@ -11,7 +11,7 @@ LinkedCell3D::~LinkedCell3D() = default;
 size_t LinkedCell3D::size() {
     size_t len = 0;
 
-    for(size_t i = 1; i < layers.size() - 1 ; ++i){
+    for (size_t i = 1; i < layers.size() - 1; ++i) {
         len += layers[i].size();
     }
 
@@ -19,7 +19,7 @@ size_t LinkedCell3D::size() {
 }
 
 void LinkedCell3D::apply(std::function<void(Particle &)> fun) {
-    for(size_t i = 1; i < layers.size() - 1 ; ++i){
+    for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].apply(fun);
     }
 
@@ -27,7 +27,7 @@ void LinkedCell3D::apply(std::function<void(Particle &)> fun) {
 
 void LinkedCell3D::addParticle(Particle &&p) {
     auto ind = index(p.getX());
-    if ( ind >= mesh[2]) {
+    if (ind >= mesh[2]) {
         return;
     }
     layers[ind].addParticle(p);
@@ -48,7 +48,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
     preparePeriodic();
 
-#pragma omp parallel for schedule(static , 2) num_threads(8) shared(layers)
+#pragma omp parallel for schedule(static, 2) num_threads(8) shared(layers)
     for (std::size_t j = 0; j < layers.size() - 1; ++j) {
         auto &layer = layers[j];
         for (size_t i = 0; i < layer.cells.size(); ++i) {
@@ -62,7 +62,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
     applyFBoundary(fun);
 
-    for(size_t i = 1 ; i < layers.size() - 1; ++i){
+    for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].applyFBoundary(fun);
     }
 
@@ -146,8 +146,6 @@ void LinkedCell3D::update() {
     }
 
 
-
-
 }
 
 
@@ -170,12 +168,27 @@ void LinkedCell3D::preparePeriodic() {
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].updatePeriodic();
     }
-    if (periodic.contains(Boundary::BACK)) {
+    if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT)) {
         frontBackBoundary(-domain[2], layers.size() - 2, 0);
+        frontBackBoundary(domain[2], 1, layers.size() - 1);
     }
 
-    if (periodic.contains(Boundary::FRONT)) {
-        frontBackBoundary(domain[2], 1, layers.size() - 1);
+    if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT) || containsPeriodic(Boundary::LEFT) ||
+        containsPeriodic(Boundary::RIGHT)) {
+        mirrorHorizontal(domain[2], 1, layers[layers.size() - 1]);
+        mirrorHorizontal(-domain[2], layers.size() - 2, layers[0]);
+    }
+
+    if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT) || containsPeriodic(Boundary::BOTTOM) ||
+        containsPeriodic(Boundary::TOP)) {
+        mirrorVertical(domain[2], 1, layers[layers.size() - 1]);
+        mirrorVertical(-domain[2], layers.size() - 2, layers[0]);
+    }
+
+    if (!periodic.empty()) {
+        mirrorDiagonal(domain[2], 1, layers[layers.size() - 1]);
+        mirrorDiagonal(-domain[2], layers.size() - 2, layers[0]);
+
     }
 
 }
@@ -195,10 +208,6 @@ void LinkedCell3D::frontBackBoundary(double to_add, size_t ind, size_t oth) {
             auto newP = p.getX();
             newP[2] += to_add;
             counter.simpleAdd(Particle(newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
-
-            mirrorHorizontal(newP, p, i, counter);
-            mirrorVertical(newP, p, i, counter);
-            mirrorDiagonal(newP, p, i, counter);
         }
     }
 
@@ -222,7 +231,7 @@ void LinkedCell3D::update(Particle &particle, size_t ind3D, size_t ind) {
         ind = layers[ind3D].mirror(particle, ind);
 
     }
-    if(ind >= layerSize)
+    if (ind >= layerSize)
         return;
 
     layers[ind3D][ind].addParticle(particle);
@@ -276,54 +285,77 @@ LinkedCellContainer &LinkedCell3D::operator[](size_t i) {
     return layers[i];
 }
 
-void LinkedCell3D::mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter) {
-    std::array<double, 3> newP = pos;
-    if (LinkedCellContainer::leftBoundary(i)) {
-        newP[0] += LinkedCellContainer::domain[0];
-        counter.simpleAdd(Particle(newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+void LinkedCell3D::mirrorHorizontal(double dis, size_t i, LinkedCellContainer &counter) {
 
-    } else if (LinkedCellContainer::rightBoundary(i)) {
-        newP[0] -= LinkedCellContainer::domain[0];
-        counter.simpleAdd(Particle(newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
-
+    for (auto &cell: layers[i].left_boundary) {
+        std::array<double, 3> newP{domain[0], 0, dis};
+        for (auto &p: cell.get()) {
+            counter.simpleAdd(
+                    Particle(p.getX() + newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+        }
     }
-}
 
-void LinkedCell3D::mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter) {
-    std::array<double, 3> newP = pos;
-    if (LinkedCellContainer::bottomBoundary(i)) {
-        newP[1] += LinkedCellContainer::domain[1];
-        counter.simpleAdd(Particle(newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
-    } else if (LinkedCellContainer::topBoundary(i)) {
-        newP[1] -= LinkedCellContainer::domain[1];
-        counter.simpleAdd(Particle(newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+    for (auto &cell: layers[i].right_boundary) {
+        std::array<double, 3> newP{-domain[0], 0, dis};
+        for (auto &p: cell.get()) {
+            counter.simpleAdd(
+                    Particle(p.getX() + newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+        }
     }
+
 
 }
 
-void LinkedCell3D::mirrorDiagonal(std::array<double, 3>& newP, Particle &p, size_t i, LinkedCellContainer &counter) {
+
+void LinkedCell3D::mirrorVertical(double dis, size_t i, LinkedCellContainer &counter) {
+
+    for (auto &cell: layers[i].bottom_boundary) {
+        std::array<double, 3> newP{0, domain[1], dis};
+        for (auto &p: cell.get()) {
+            counter.simpleAdd(
+                    Particle(p.getX() + newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+        }
+    }
+
+    for (auto &cell: layers[i].top_boundary) {
+        std::array<double, 3> newP{0, -domain[1], dis};
+        for (auto &p: cell.get()) {
+            counter.simpleAdd(
+                    Particle(p.getX() + newP, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+        }
+    }
+}
+
+void LinkedCell3D::mirrorDiagonal(double dis, size_t i, LinkedCellContainer &counter) {
     //mirror particles from corner cells to other corner cells
-    if (LinkedCellContainer::topBoundary(i) && LinkedCellContainer::rightBoundary(i)) {
-        //mirror boundary particle
-        std::array<double, 3> to_add{-domain[0], -domain[1], 0};
-        counter.simpleAdd(Particle(newP + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
 
-    } else if (LinkedCellContainer::topBoundary(i) && LinkedCellContainer::leftBoundary(i)) {
-        //mirror boundary particle
-        std::array<double, 3> to_add{domain[0], -domain[1], 0};
-        counter.simpleAdd(Particle(newP + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
-    } else if (LinkedCellContainer::bottomBoundary(i) && LinkedCellContainer::leftBoundary(i)) {
-        //mirror boundary particle
-        std::array<double, 3> to_add{domain[0], domain[1], 0};
-        counter.simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(),
-                                   true));
-
-    } else if (LinkedCellContainer::bottomBoundary(i) && LinkedCellContainer::rightBoundary(i)) {
-        //mirror boundary particle
-        std::array<double, 3> to_add{-domain[0], domain[1], 0};
-        counter.simpleAdd(Particle(newP + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+    for (auto &p: layers[i].bottom_boundary[0].get()) {
+        std::array<double, 3> to_add{domain[0], domain[1], dis};
+        counter.simpleAdd(
+                Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
     }
+
+    for (auto &p: layers[i].top_boundary[0].get()) {
+        std::array<double, 3> to_add{domain[0], -domain[1], dis};
+        counter.simpleAdd(
+                Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+    }
+
+    for (auto &p: layers[i].right_boundary[0].get()) {
+        std::array<double, 3> to_add{-domain[0], domain[1], dis};
+        counter.simpleAdd(
+                Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+    }
+
+    size_t len = layers[i].top_boundary.size();
+    for (auto &p: layers[i].top_boundary[len - 1].get()) {
+        std::array<double, 3> to_add{-domain[0], -domain[1], dis};
+        counter.simpleAdd(
+                Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType(), true));
+    }
+
 }
+
 
 void LinkedCell3D::applyFBoundary(std::function<void(Particle &, Particle &)> fun) {
 
@@ -351,7 +383,7 @@ void LinkedCell3D::applyFBoundary(std::function<void(Particle &, Particle &)> fu
 }
 
 void LinkedCell3D::applyPar(std::function<void(Particle &)> fun) {
-#pragma omp parallel for schedule(static , 2) num_threads(8) shared(layers)
+#pragma omp parallel for schedule(static, 2) num_threads(8) shared(layers)
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].apply(fun);
     }

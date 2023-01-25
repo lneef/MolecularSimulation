@@ -104,9 +104,9 @@ private:
 
     void update();
 
-    static void mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
+    void mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
-    static void mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
+    void mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
     void mirrorDiagonal(std::array<double, 3>& newP, Particle& particle, size_t i, LinkedCellContainer& counter);
 
@@ -115,5 +115,11 @@ private:
     size_t updatePeriodic(Particle &p, size_t ind3D);
 
     void applyFBoundary(std::function<void(Particle &, Particle &)> fun);
+
+    void mirrorHorizontal(double dis, size_t i, LinkedCellContainer &counter);
+
+    void mirrorVertical(double dis, size_t i, LinkedCellContainer &counter);
+
+    void mirrorDiagonal(double dis, size_t i, LinkedCellContainer &counter);
 };
 

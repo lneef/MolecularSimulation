@@ -35,7 +35,7 @@ TEST_F(LinkedCell3DTest, BoundaryTest) {
     });
     auto f = (*lc)[1][6].begin();
     auto & force = f->getF();
-    auto f1 = (*lc)[3][6].begin();
+    auto f1 = (*lc)[3][16].begin();
     auto f2 = (*lc)[2][12].begin();
     auto & halo = (*lc)[0].getHalo();
     int sz = std::accumulate(halo.cbegin(), halo.cend(), 0, []( int cur, std::reference_wrapper<ParticleContainer> p){
@@ -64,6 +64,7 @@ TEST_F(LinkedCell3DTest, BoundaryTest1) {
     EXPECT_EQ(force[0], 22);
     MolSimLogger::logInfo("{}", force[0]);
     EXPECT_EQ((*lc)[1][7].begin()->getF()[0], 20);
+    EXPECT_EQ((*lc)[3][16].begin()->getF()[0], 22);
 
 }
 

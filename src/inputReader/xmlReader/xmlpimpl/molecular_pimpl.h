@@ -13,6 +13,7 @@
 #include "temperature_pimpl.h"
 #include "sphere_pimpl.h"
 #include "membrane_pimpl.h"
+#include "statistics_impl.h"
 
 namespace XMLReader {
     class molecular_pimpl : public molecular_pskel {
@@ -61,6 +62,8 @@ namespace XMLReader {
         void from_checkpoint() override;
 
         void membrane() override;
+
+        void statistics() override;
         /**
          * @brief Function that generates the main parser molecular
          */

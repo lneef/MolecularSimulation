@@ -38,6 +38,10 @@ namespace XMLReader {
         sim->setOut_frequency(f);
     }
 
+    void simulation_pimpl::l_radius(double rl){
+        sim->setForce(std::make_unique<SLennardJones>(rCutOff, rl));
+    }
+
     void simulation_pimpl::post_simulation() {
         std::array<double, 3> dom{};
         size_t i = 0;

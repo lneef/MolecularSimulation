@@ -4,7 +4,9 @@
 
 #pragma once
 
+
 #include <valarray>
+
 #include "LinkedCellContainer.h"
 
 class LinkedCell3D : public LinkedCellDataStructure {
@@ -47,7 +49,8 @@ public:
      *
      * @param p rvalue reference to particle to be added to the container
      */
-    void addParticle(Particle&& p) override;
+    void addParticle(Particle &&p) override;
+
 
     /**
      * @brief adds a particle given as rvalue reference to the container
@@ -55,10 +58,13 @@ public:
      */
     void addParticle(Particle& p) override;
 
+
     /**
      * @brief constructor
      */
     LinkedCell3D();
+
+
 
     /**
      * @brief function to retrieve LinkedCellContainer at given index
@@ -79,6 +85,7 @@ public:
 
 
 
+
 private:
     std::vector<LinkedCellContainer> layers;
 
@@ -86,11 +93,11 @@ private:
 
     std::array<double, 3> domain{};
 
-    std::array<size_t , 3> mesh{};
+    std::array<size_t, 3> mesh{};
 
     size_t layerSize = 0;
 
-    size_t index(const std::array<double, 3>& pos) noexcept;
+    size_t index(const std::array<double, 3> &pos) noexcept;
 
     void clearHalo();
 

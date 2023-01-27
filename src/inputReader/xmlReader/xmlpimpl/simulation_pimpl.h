@@ -38,6 +38,7 @@ namespace XMLReader {
         double rCutOff;
 
         size_t dim = 2;
+
     public:
         /**
          * @brief Function that initializes the container and the simulation
@@ -80,6 +81,8 @@ namespace XMLReader {
          * @brief changes the force calculation method of the simulation to LJGravitation
          */
         void g_gravitation(double ) override;
+
+        void l_radius(double ) override;
         /**
          * @brief Function that sets the domain of the cells
          */

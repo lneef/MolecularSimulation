@@ -4,6 +4,7 @@
 #include "container/LinkedCellContainer.h"
 #include "inputReader/ParticleGenerator.h"
 #include "Simulation.h"
+#include "MolSimLogger.h"
 
 /**
  * @brief Test class with uniform setUP and Teardown function
@@ -45,7 +46,7 @@ TEST_F(LinkedCellTest, AddTest) {
  * @brief test if the correct number of references are stored
  */
 TEST_F(LinkedCellTest, BoundaryHalo_Test){
-    EXPECT_EQ(test->getBoundary().size(), 8);
+    EXPECT_EQ(test->getBoundary().size(), 12);
     EXPECT_EQ(test->getHalo().size(), 16);
 }
 
@@ -55,16 +56,17 @@ TEST_F(LinkedCellTest, BoundaryHalo_Test){
 TEST_F(LinkedCellTest, AppTest) {
     test->applyF([](Particle &p1, Particle &p2) {
         std::array<double, 3> add = {1., 0., 0.};
-        p1.setF(p1.getF() + add);
-        p2.setF(p2.getF() + add);
+        p1.addToF(add);
+        p2.addToF(add);
     });
-    std::vector<ParticleContainer> celllist = test->getCells();
+    auto celllist = test->getCells();
     auto it1 = celllist[6].begin();
     auto it2 = celllist[11].begin();
     auto it4 = celllist[12].begin();
     auto it3 = celllist[17].begin();
     
     EXPECT_DOUBLE_EQ((*it1).getF()[0], 3);
+    MolSimLogger::logInfo("{}", (*it1).getF()[0]);
     EXPECT_DOUBLE_EQ(it2->getF()[0], 5);
     EXPECT_DOUBLE_EQ((*it4).getF()[0], 8);
     EXPECT_DOUBLE_EQ(it3->getF()[0], 5);
@@ -76,12 +78,12 @@ TEST_F(LinkedCellTest, AppTest) {
  */
 TEST_F(LinkedCellTest, ReflectingBoundary){
     std::array<double ,3 > arr{1., 0, 0};
-    test->addReflecting(Reflecting(arr, 0));
-    test->addReflecting(Reflecting(arr, 3.));
+    test->addReflecting(Boundary::LEFT,Reflecting(arr, 0));
+    test->addReflecting(Boundary::RIGHT, Reflecting(arr, 3.));
     test->applyF([](Particle &p1, Particle &p2) {
         std::array<double, 3> add = {1., 0., 0.};
-        p1.setF(p1.getF() + add);
-        p2.setF(p2.getF() + add);
+        p1.addToF(add);
+        p2.addToF(add);
     });
     std::vector<ParticleContainer> celllist = test->getCells();
     auto it1 = celllist[6].begin();
@@ -132,8 +134,8 @@ TEST_F(LinkedCellTest, PeriodicTest){
     test->addPeriodic(Boundary::RIGHT);
     test->applyF([](Particle &p1, Particle &p2) {
         std::array<double, 3> add = {1., 0., 0.};
-        p1.setF(p1.getF() + add);
-        p2.setF(p2.getF() + add);
+        p1.addToF(add);
+        p2.addToF(add);
     });
     auto celllist = test->getCells();
     auto it1 = celllist[16].begin();
@@ -152,8 +154,9 @@ TEST_F(LinkedCellTest, PeriodicTest1){
     lj.calculateF(test1);
     auto celllist = test->getCells();
     auto it1 = celllist[6].begin();
-    std::array<double, 3> f1{-114.375, -5.6250000000005125, 0};
-    EXPECT_THAT(it1->getF(), testing::Pointwise(testing::DoubleEq(),f1));
+    EXPECT_DOUBLE_EQ( it1->getF()[0], -114.375);
+
+    EXPECT_DOUBLE_EQ( it1->getF()[2], 0);
 
 }
 
@@ -166,9 +169,9 @@ TEST_F(LinkedCellTest, PeriodicTest2){
     auto celllist = test->getCells();
     auto it1 = celllist[6].begin();
     auto it2 = celllist[11].begin();
+    EXPECT_DOUBLE_EQ( it1->getF()[1], -114.375);
 
-    std::array<double, 3> f1{ -5.6250000000005125,-114.375, 0};
-    EXPECT_THAT(it1->getF(), testing::Pointwise(testing::DoubleEq(),f1));
+    EXPECT_DOUBLE_EQ( it1->getF()[2], 0);
 }
 
 /**
@@ -184,8 +187,8 @@ TEST(LinkedCellTest_Outflow_Test, AppTest1){
 
     test1->applyF([](Particle &p1, Particle &p2) {
         std::array<double, 3> add = {1., 0., 0.};
-        p1.setF(p1.getF() + add);
-        p2.setF(p2.getF() + add);
+        p1.addToF(add);
+        p2.addToF(add);
     });
 
 

@@ -17,8 +17,8 @@ void Gravitation::calculateF(std::shared_ptr<Container> &particles) {
                           double scalar = p1.getM() * p2.getM() / pow(norm, 3);
 
                           newF = scalar * xji;
-                          p1.setF(p1.getF() + newF);
-                          p2.setF(-1 * newF + p2.getF());
+                          p1.addToF(newF);
+                          p2.subtractFromF(newF);
                       }
     );
 }

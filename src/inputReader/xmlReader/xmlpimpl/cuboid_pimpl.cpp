@@ -91,6 +91,7 @@ namespace XMLReader {
         type_p = 1;
         sigma_p = 1;
         epsilon_p = 5;
+
     }
 
     void cuboid_pimpl::init(std::shared_ptr<LinkedCellStrategy> &lc, std::shared_ptr<Simulation> &sim_arg) {

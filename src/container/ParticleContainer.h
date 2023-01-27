@@ -35,6 +35,9 @@ public:
     std::vector<Particle> getParticles();
 
 
+    void applyPar(std::function<void(Particle&)> fun) override;
+
+
     /**
      * @brief Setter for field particles
      *

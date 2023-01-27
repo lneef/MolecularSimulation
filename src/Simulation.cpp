@@ -25,7 +25,9 @@ void Simulation::calculateX() {
 }
 
 void Simulation::calculateV() {
-    particles->apply([this](Particle &p) {
+
+    particles->applyPar([this](Particle &p) {
+
         const std::array<double, 3> &tempV{p.getV()};
         const std::array<double, 3> &tempOldF{p.getOldF()};
         const std::array<double, 3> &tempF{p.getF()};
@@ -51,7 +53,6 @@ void Simulation::run() {
     auto start = std::chrono::high_resolution_clock::now();
 
     double current_time = start_time;
-
     int iteration = 0;
 
     if (!isMembrane) {
@@ -97,10 +98,12 @@ void Simulation::run() {
             current_time += delta_t;
         }
 
+
         if (use_statistics) {
             statistics->writeDiffusion();
             statistics->writeRDF();
         }
+
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
@@ -173,18 +176,23 @@ void Simulation::run() {
             current_time += delta_t;
         }
 
+
         if (use_statistics) {
             statistics->writeDiffusion();
             statistics->writeRDF();
         }
 
-    }
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    MolSimLogger::logInfo("Runtime: {} ms", difference.count());
 
-    double mups = (particles_begin * iteration * 1000.0) / (difference.count());
-    MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
+    }
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+        std::cout<<particles->size()<<std::endl;
+
+        double mups = (particles_begin * iteration * 1000.0) / (difference.count());
+        MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
+
+
 }
 
 Simulation::Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,
@@ -273,8 +281,7 @@ void Simulation::setForce(std::unique_ptr<LJGravitation> &&force_arg) {
 }
 
 void Simulation::setForce(std::unique_ptr<SLennardJones> &&force_arg) {
-    force = std::move(force_arg);
-}
+
 
 void Simulation::setForce(std::unique_ptr<MembraneForce> &&force_arg) {
     force = std::move(force_arg);
@@ -351,6 +358,8 @@ void Simulation::setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg
     particles = particles_arg;
 }
 
+
 const std::shared_ptr<Container> &Simulation::getParticles() const {
     return particles;
 }
+

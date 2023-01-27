@@ -19,6 +19,12 @@ public:
     virtual void apply(std::function<void(Particle &)> fun) = 0;
 
     /**
+     * @brief applies given function parallelized to all elements
+     * @param fun function to be applied to all elements
+     */
+    virtual void applyPar(std::function<void(Particle&)> fun) = 0;
+
+    /**
      * @brief calculates the position of the particles inside the container
      *
      * @param fun function to calculate the next position of a particles

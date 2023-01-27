@@ -2,6 +2,7 @@
 // Created by lukas on 11.01.23.
 //
 
+#include <iostream>
 #include "LinkedCellStrategy.h"
 #include "container/LinkedCellContainer.h"
 

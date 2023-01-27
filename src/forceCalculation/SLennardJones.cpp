@@ -50,8 +50,10 @@ void SLennardJones::calculateF(Particle& p1, Particle& p2, double rc, double rl)
         double pow_6 = pow((sigma * sigma) / sum, 3);
         double scalar = ((-24 * epsilon) / sum) * (pow_6 - 2 * pow(pow_6, 2));
         std::array<double, 3> newF = scalar * xij;
-        p1.setF(p1.getF() + newF);
-        p2.setF(p2.getF() - newF);
+
+        p1.addToF(newF);
+        p2.subtractFromF(newF);
+
     }
     else {
         double sigma_6 = pow(sigma, 6);
@@ -60,11 +62,9 @@ void SLennardJones::calculateF(Particle& p1, Particle& p2, double rc, double rl)
         double scalar1 = 24 * sigma_6 * epsilon / ((dij_6 * dij_6 * sum) * pow((rc - rl), 3)) * (rc - norm);
         double scalar2 = (rc + norm - 3 * rl) * (rc * (2 * sigma_6 - dij_6)) + norm * (5 * rl * sigma_6 - 2 * rl * dij_6 - 3 * sigma_6 * norm) + pow(sum, 4);
         std::array<double, 3> newF = scalar1 * scalar2 * xij;
-        p1.setF(p1.getF() + newF);
-        p2.setF(p2.getF() - newF);
 
+        p1.addToF(newF);
+        p2.subtractFromF(newF);
     }
-
-
 
 }

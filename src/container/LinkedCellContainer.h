@@ -28,6 +28,11 @@ public:
     void apply(std::function<void(Particle &)> fun) override;
 
     /**
+     * @brief parallelized version of the apply function
+     * @param fun function taking lvalue reference to particle
+     */
+    void applyPar(std::function<void(Particle &)> fun) override;
+    /**
      * @brief applies the given function to calculate the position of a particle
      * @param fun function taking lvalue reference to particle
      */
@@ -111,7 +116,7 @@ public:
      * @brief returns reference to boundary cells
      * @return std::vector containing reference wrappers to boundary cells
      */
-    [[nodiscard]] const std::vector<std::reference_wrapper<ParticleContainer>> &getBoundary() const;
+    [[nodiscard]] std::vector<std::reference_wrapper<ParticleContainer>> getBoundary() const;
 
     /**
      * @brief set containing periodic boundaries
@@ -163,7 +168,11 @@ private:
     /**
      * @brief vector containing references to boundary cells
      */
-    std::vector<std::reference_wrapper<ParticleContainer>> boundary;
+    std::vector<std::reference_wrapper<ParticleContainer>> right_boundary;
+    std::vector<std::reference_wrapper<ParticleContainer>> left_boundary;
+    std::vector<std::reference_wrapper<ParticleContainer>> top_boundary;
+    std::vector<std::reference_wrapper<ParticleContainer>> bottom_boundary;
+
 
     /**
      * @brief updates the boundary field after initialization
@@ -175,14 +184,6 @@ private:
     /**
      * @brief vector containing reelecting boundaries
      */
-
-
-    /**
-     * @brief applies reflecting boundary to particles in boundary cells
-     * @param cond object representing reflecting boundary condition
-     * @param fun function to calculate force
-     */
-    void applyFBoundary(Reflecting cond, std::function<void(Particle &, Particle &)> &fun);
 
     /**
      * @brief calculates the force between a particle and its right neighbours
@@ -219,13 +220,6 @@ private:
      * @return true if periodic boundary is specified, false otherwise
      */
     bool side(size_t ind);
-
-    /**
-     * @brief mirrors particles in boundary cells in the halo if periodic boundary is specified
-     * @param ind index of the cell the particle is contained in
-     * @param p particle to be mirrored
-     */
-    void mirrorPeriodic(size_t ind, Particle& p);
 
     /**
      * @brief add a particle to the data structure without any checks
@@ -287,5 +281,9 @@ private:
 
     void forceTwoD(ParticleContainer &particles, size_t ind, std::function<void(Particle &, Particle &)> fun);
 
+    void mirrorBoundary(ParticleContainer &par, std::array<double, 3> &&to_add);
 
+    void mirrorPeriodic();
+
+    void applyFBoundary(std::function<void(Particle &, Particle &)> &fun);
 };

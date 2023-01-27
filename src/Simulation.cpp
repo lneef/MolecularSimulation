@@ -281,7 +281,8 @@ void Simulation::setForce(std::unique_ptr<LJGravitation> &&force_arg) {
 }
 
 void Simulation::setForce(std::unique_ptr<SLennardJones> &&force_arg) {
-
+  force = std::move(force_arg);
+}
 
 void Simulation::setForce(std::unique_ptr<MembraneForce> &&force_arg) {
     force = std::move(force_arg);

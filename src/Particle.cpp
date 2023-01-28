@@ -32,7 +32,6 @@ Particle::Particle(const Particle& other) {
     sigma = other.sigma;
     epsilon = other.epsilon;
     membrane_index = other.membrane_index;
-
     old_x = other.old_x;
 
     ghost = other.ghost;

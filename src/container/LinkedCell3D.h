@@ -6,7 +6,6 @@
 
 
 #include <valarray>
-
 #include "LinkedCellContainer.h"
 
 class LinkedCell3D : public LinkedCellDataStructure {
@@ -56,24 +55,21 @@ public:
      * @brief adds a particle given as rvalue reference to the container
      * @param p lvalue reference to particle to be added to the container
      */
-    void addParticle(Particle& p) override;
-
+    void addParticle(Particle &p) override;
 
     /**
      * @brief constructor
      */
     LinkedCell3D();
 
-
-
     /**
      * @brief function to retrieve LinkedCellContainer at given index
      * @param i index of the LinkedCellContainer
      * @return reference to LinkedCellContainer
      */
-    LinkedCellContainer& operator[](size_t i);
+    LinkedCellContainer &operator[](size_t i);
 
-    void setSize(double cutOff_arg, std::array<double, 3>& domain_arg) override;
+    void setSize(double cutOff_arg, std::array<double, 3> &domain_arg) override;
 
     std::array<double, 3> &getDomain() override;
 
@@ -83,7 +79,7 @@ public:
      */
     void applyPar(std::function<void(Particle &)> fun) override;
 
-
+    void setDomain(std::array<double, 3> &domain_arg);
 
 
 private:
@@ -115,7 +111,7 @@ private:
 
     void mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
 
-    void mirrorDiagonal(std::array<double, 3>& newP, Particle& particle, size_t i, LinkedCellContainer& counter);
+    void mirrorDiagonal(std::array<double, 3> &newP, Particle &particle, size_t i, LinkedCellContainer &counter);
 
     void update(Particle &particle, size_t ind3D, size_t ind);
 

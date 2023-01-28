@@ -45,7 +45,7 @@ TEST(DiffusionTest, StatisticsTest) {
     lc->addParticle(p4);
 
     Statistics s(1,3,1.);
-    s.setParticles(std::make_shared<LinkedCell3D>());
+    s.setParticles(lc);
     s.calcDiffusion();
     std::vector<double> diffusion = s.getDiffusion();
     EXPECT_EQ(diffusion[0], 25.);

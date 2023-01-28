@@ -30,16 +30,15 @@ void Statistics::calcDiffusion() {
         double sum = x_diff[0] * x_diff[0] + x_diff[1] * x_diff[1] + x_diff[2] * x_diff[2];
         numerator = numerator + sum;
     });
-    //if (particles->size() > 0) {
-    diffusion.push_back(numerator / particles->size());
-    //}
+    if (particles->size() > 0) {
+        diffusion.push_back(numerator / particles->size());
+    }
 }
 
 void Statistics::calcRDF() {
     int array_size = i_rdf_end - i_rdf_begin + 1;
     double quantities[array_size];
     std::vector<std::array<double, 3>> positions;
-    //ToDo Apply pairs of particles
     particles->apply([&positions](Particle &p) {
         positions.push_back(p.getX());
     });

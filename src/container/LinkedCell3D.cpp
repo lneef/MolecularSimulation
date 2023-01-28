@@ -255,7 +255,13 @@ void LinkedCell3D::setSize(double cutOff_arg, std::array<double, 3> &domain_arg)
     domain = domain_arg;
     cutOff = cutOff_arg;
     for (size_t i = 0; i < 3; ++i) {
-        mesh[i] = std::ceil(std::abs(domain_arg[i]) / cutOff_arg) + 2;
+        mesh[i] = std::floor(std::abs(domain_arg[i]) / cutOff_arg);
+    }
+
+    cutOff = (domain[0] + domain[1] + domain[2]) / static_cast<double >(mesh[0] + mesh[1] + mesh[0]);
+
+    for(size_t i = 0; i<3; ++i){
+        mesh[i]+=2;
     }
     LinkedCellContainer::setDomain(domain_arg);
     LinkedCellContainer::setRCutOff(cutOff_arg);

@@ -155,7 +155,7 @@ if (TESTS)
             ${CMAKE_CURRENT_SOURCE_DIR}/src/outputWriter/FileWriter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/Simulation.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/Thermostat.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/Statistics.cpp)
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/Statistics.cpp src/utils/BoundaryException.cpp src/utils/BoundaryException.h)
 
 
     target_link_libraries(lib_test PRIVATE spdlog::spdlog)

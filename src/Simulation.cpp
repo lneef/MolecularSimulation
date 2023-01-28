@@ -26,6 +26,7 @@ void Simulation::calculateX() {
 
 void Simulation::calculateV() {
     particles->applyPar([this](Particle &p) {
+
         const std::array<double, 3> &tempV{p.getV()};
         const std::array<double, 3> &tempOldF{p.getOldF()};
         const std::array<double, 3> &tempF{p.getF()};
@@ -99,6 +100,7 @@ void Simulation::run() {
             statistics->writeDiffusion();
             statistics->writeRDF();
         }
+
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
@@ -175,13 +177,13 @@ void Simulation::run() {
             statistics->writeRDF();
         }
     }
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-        MolSimLogger::logInfo("Runtime: {} ms", difference.count());
-        std::cout<<particles->size()<<std::endl;
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+    std::cout << particles->size() << std::endl;
 
-        double mups = (particles_begin * iteration * 1000.0) / (difference.count());
-        MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
+    double mups = (particles_begin * iteration * 1000.0) / (difference.count());
+    MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
 }
 
 Simulation::Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,

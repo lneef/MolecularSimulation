@@ -67,6 +67,10 @@ ParticleIterator ParticleContainer::remove(ParticleIterator & iterator) {
     return ParticleIterator(new_it);
 }
 
+void ParticleContainer::applyPar(std::function<void(Particle &)> fun) {
+    apply(fun);
+}
+
 ParticleContainer::~ParticleContainer() = default;
 
 

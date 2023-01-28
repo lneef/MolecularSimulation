@@ -6,13 +6,17 @@
  */
 
 #pragma once
-
+#include <omp.h>
 #include <array>
 #include <string>
 #include <memory>
 class Particle {
 
 private:
+    bool ghost;
+#ifdef _OPENMP
+    omp_lock_t par_lock;
+#endif
     /**
      * Position of the particle
      */
@@ -70,6 +74,9 @@ public:
      */
     Particle(const Particle& other);
 
+    void subtractFromF(std::array<double, 3>& to_sub);
+    void addToF(std::array<double, 3>& to_add);
+
     /**
      * @brief constructor of the class particle
      * @param x_arg position of the particles
@@ -83,7 +90,7 @@ public:
         // for visualization, we need always 3 coordinates
         // -> in case of 2d, we use only the first and the second
         std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg, double sigma_arg = 1, double epsilon_arg = 5,
-        int type = 0);
+        int type = 0, bool ghost_arg = false);
 
     virtual ~Particle();
 

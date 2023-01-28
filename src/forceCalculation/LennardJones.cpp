@@ -40,8 +40,8 @@ void LennardJones::calculateF(Particle &p1, Particle &p2) {
     double pow_6 = pow((sigma * sigma)/sum, 3);
     double scalar = ((-24 * epsilon) / sum) * (pow_6 - 2 * pow(pow_6, 2));
     std::array<double, 3> newF = scalar * xij;
-    p1.setF(p1.getF() + newF);
-    p2.setF(p2.getF() - newF);
+    p1.addToF(newF);
+    p2.subtractFromF(newF);
 #endif
 
 #ifdef AVX
@@ -65,8 +65,8 @@ void LennardJones::calculateF(Particle &p1, Particle &p2) {
     __m256d scalar_avx = _mm256_set_pd(scalar, scalar, scalar, scalar);
     acc = _mm256_mul_pd(acc, scalar_avx);
     std::array<double, 3> newF{acc[1], acc[2], acc[3]};
-    p1.setF(p1.getF() + newF);
-    p2.setF(p2.getF() - newF);
+    p1.addToF(newF);
+    p2.subtractFromF(newF);
 #endif
 
 }

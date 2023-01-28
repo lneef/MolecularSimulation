@@ -25,7 +25,7 @@ void Simulation::calculateX() {
 }
 
 void Simulation::calculateV() {
-    particles->apply([this](Particle &p) {
+    particles->applyPar([this](Particle &p) {
         const std::array<double, 3> &tempV{p.getV()};
         const std::array<double, 3> &tempOldF{p.getOldF()};
         const std::array<double, 3> &tempF{p.getF()};
@@ -51,7 +51,6 @@ void Simulation::run() {
     auto start = std::chrono::high_resolution_clock::now();
 
     double current_time = start_time;
-
     int iteration = 0;
 
     if (!isMembrane) {
@@ -96,7 +95,6 @@ void Simulation::run() {
 #endif
             current_time += delta_t;
         }
-
         if (use_statistics) {
             statistics->writeDiffusion();
             statistics->writeRDF();
@@ -172,19 +170,18 @@ void Simulation::run() {
 #endif
             current_time += delta_t;
         }
-
         if (use_statistics) {
             statistics->writeDiffusion();
             statistics->writeRDF();
         }
-
     }
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+        std::cout<<particles->size()<<std::endl;
 
-    double mups = (particles_begin * iteration * 1000.0) / (difference.count());
-    MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
+        double mups = (particles_begin * iteration * 1000.0) / (difference.count());
+        MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
 }
 
 Simulation::Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,
@@ -284,7 +281,6 @@ const std::unique_ptr<Force> &Simulation::getForce() const {
     return force;
 }
 
-
 void Simulation::checkpoint(const std::string &filename) {
     std::ofstream file;
     std::stringstream strstr;
@@ -354,3 +350,4 @@ void Simulation::setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg
 const std::shared_ptr<Container> &Simulation::getParticles() const {
     return particles;
 }
+

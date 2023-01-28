@@ -14,6 +14,7 @@
             <xs:element name="g_gravitation" type="xs:double" minOccurs="0" maxOccurs="1"/>
             <xs:element name="l_radius" type="xs:double"/>
             <xs:element name="dimension" type="xs:int" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="parallel_mode" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 

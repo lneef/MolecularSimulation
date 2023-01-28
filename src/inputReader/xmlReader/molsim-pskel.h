@@ -94,6 +94,7 @@ class molecular_pskel;
 #include <xsd/cxx/parser/xerces/elements.hxx>
 
 namespace XMLReader {
+
     namespace xml_schema {
         // Built-in XML Schema types mapping.
         //
@@ -327,6 +328,9 @@ namespace XMLReader {
         dimension(int);
 
         virtual void
+        parallel_mode(const ::std::string &);
+
+        virtual void
         post_simulation();
 
         // Parser construction API.
@@ -365,6 +369,9 @@ namespace XMLReader {
         dimension_parser(xml_schema::int_pskel &);
 
         void
+        parallel_mode_parser(xml_schema::string_pskel &);
+
+        void
         parsers(xml_schema::double_pskel & /* t_end */,
                 xml_schema::double_pskel & /* delta_t */,
                 xml_schema::double_pskel & /* domain_size_x */,
@@ -375,7 +382,8 @@ namespace XMLReader {
                 xml_schema::int_pskel & /* output_frequency */,
                 xml_schema::double_pskel & /* g_gravitation */,
                 xml_schema::double_pskel & /* l_radius */,
-                xml_schema::int_pskel & /* dimension */);
+                xml_schema::int_pskel & /* dimension */,
+                xml_schema::string_pskel & /* parallel_mode */);
 
         // Constructor.
         //
@@ -405,6 +413,7 @@ namespace XMLReader {
         xml_schema::double_pskel *g_gravitation_parser_;
         xml_schema::double_pskel *l_radius_parser_;
         xml_schema::int_pskel *dimension_parser_;
+        xml_schema::string_pskel *parallel_mode_parser_;
     };
 
     class temperature_pskel : public xml_schema::complex_content {

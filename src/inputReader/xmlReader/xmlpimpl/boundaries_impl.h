@@ -18,14 +18,17 @@ namespace XMLReader {
          * @brief Function that reads the top condition
          */
         void top_boundary(const ::std::string &) override;
+
         /**
          * @brief Function that reads the bottom condition
          */
         void bottom_boundary(const ::std::string &) override;
+
         /**
          * @brief Function that reads the left condition
          */
         void left_boundary(const ::std::string &) override;
+
         /**
          * @brief Function that reads the right condition
          */
@@ -45,7 +48,7 @@ namespace XMLReader {
          *
          * @param cells_arg shared_ptr to LinkedCellContainer to which the conditions apply
          */
-        void init(std::shared_ptr<LinkedCellStrategy>& cells_arg);
+        void init(std::shared_ptr<LinkedCellStrategy> &cells_arg);
 
     private:
         /**
@@ -63,10 +66,10 @@ namespace XMLReader {
          */
         std::array<double, 3> dim3{0, 0, 1};
 
-        /**
-         * @brief set for storing periodic boundaries
-         */
-         std::set<int> periodic;
+        int first = 0;
+        int second = 0;
+
+        int third = 0;
 
         /**
          * @brief cells to which the boundary condition applies

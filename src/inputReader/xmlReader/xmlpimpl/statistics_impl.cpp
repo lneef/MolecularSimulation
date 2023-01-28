@@ -28,7 +28,7 @@ namespace XMLReader {
 
     void statistics_impl::post_statistics() {
         std::shared_ptr<Statistics> statistics_p = std::make_shared<Statistics>(begin,end,delta);
-        statistics_p->setParticles(cells->chose(3));
+        statistics_p->setParticles(cells->get());
         statistics_p->setN_statistics(n);
         sim->setN_statistics(n);
         sim->setUse_statistics(true);

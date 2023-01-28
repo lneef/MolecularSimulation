@@ -18,7 +18,7 @@ protected:
         test = std::make_shared<LinkedCellContainer>();
         std::array<double, 3> domain{3., 3., 0.5};
         test->setDomain(domain);
-        test->setSize(1.1, domain);
+        test->setSize(1., domain);
         cub.generateCuboid(test, {.55, .55, 0}, {3, 3, 1}, 1., 1.0, {0., 1, 0.}, 1);
     }
 

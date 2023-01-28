@@ -9,7 +9,7 @@ namespace XMLReader {
     void XmlReader::read(std::shared_ptr<Simulation> &sim, std::shared_ptr<LinkedCellStrategy> &lc) {
         XMLReader::molecular_pimpl parser{};
         xml_schema::document doc_p(parser, "molecular");
-        sim_p.parsers(double_p, double_p, double_p, double_p, double_p, double_p, string_p, int_p, double_p, double_p, int_p);
+        sim_p.parsers(double_p, double_p, double_p, double_p, double_p, double_p, string_p, int_p, double_p, double_p, int_p, string_p);
         temp_p.parsers(double_p, int_p, double_p, double_p);
         cub_in_p.parsers(string_p);
         cub_p.parsers(int_p, double_p, double_p, double_p, double_p, double_p, int_p, int_p, int_p, double_p, double_p,

@@ -11,11 +11,13 @@ namespace XMLReader {
         return lc;
     }
 
-    std::shared_ptr<LinkedCellDataStructure> &LinkedCellStrategy::chose(size_t dim) {
+    std::shared_ptr<LinkedCellDataStructure> &LinkedCellStrategy::chose(size_t dim, std::string mode) {
         if(dim == 2){
             lc = std::make_shared<LinkedCellContainer>();
         }else{
-            lc = std::make_shared<LinkedCell3D>();
+            if(mode=="generic") {
+                lc = std::make_shared<LinkedCell3D>();
+            }
         }
         return lc;
     }

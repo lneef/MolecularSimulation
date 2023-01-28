@@ -34,6 +34,10 @@ namespace XMLReader {
         sim->setOut_name(name);
     }
 
+    void simulation_pimpl::parallel_mode(const ::std::string & par){
+        mode = par;
+    }
+
     void simulation_pimpl::output_frequency(int f) {
         sim->setOut_frequency(f);
     }
@@ -49,7 +53,7 @@ namespace XMLReader {
             dom[i++] = domain.front();
             domain.pop();
         }
-        auto& chosen = cells -> chose(dim);
+        auto& chosen = cells -> chose(dim, mode);
         chosen->setSize(rCutOff, dom);
         sim->setParticle(chosen);
         MolSimLogger::logInfo("XMLReader: domain=({}, {}, {}), cutoff_radius = {}", dom[0], dom[1], dom[2], rCutOff);

@@ -37,6 +37,8 @@ namespace XMLReader {
          */
         double rCutOff;
 
+        std::string mode = "generic";
+
         size_t dim = 2;
 
     public:
@@ -89,5 +91,7 @@ namespace XMLReader {
         void post_simulation() override;
 
         void dimension(int) override;
+
+        void parallel_mode(const std::string &par) override;
     };
 }

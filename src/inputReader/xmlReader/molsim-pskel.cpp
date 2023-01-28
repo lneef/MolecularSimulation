@@ -99,6 +99,11 @@ namespace XMLReader {
     }
 
     void simulation_pskel::
+    parallel_mode_parser(xml_schema::string_pskel &p) {
+        this->parallel_mode_parser_ = &p;
+    }
+
+    void simulation_pskel::
     parsers(xml_schema::double_pskel &t_end,
             xml_schema::double_pskel &delta_t,
             xml_schema::double_pskel &domain_size_x,
@@ -109,7 +114,8 @@ namespace XMLReader {
             xml_schema::int_pskel &output_frequency,
             xml_schema::double_pskel &g_gravitation,
             xml_schema::double_pskel &l_radius,
-            xml_schema::int_pskel &dimension) {
+            xml_schema::int_pskel &dimension,
+            xml_schema::string_pskel &parallel_mode) {
         this->t_end_parser_ = &t_end;
         this->delta_t_parser_ = &delta_t;
         this->domain_size_x_parser_ = &domain_size_x;
@@ -121,6 +127,7 @@ namespace XMLReader {
         this->g_gravitation_parser_ = &g_gravitation;
         this->l_radius_parser_ = &l_radius;
         this->dimension_parser_ = &dimension;
+        this->parallel_mode_parser_ = &parallel_mode;
     }
 
     simulation_pskel::
@@ -135,7 +142,8 @@ namespace XMLReader {
               output_frequency_parser_(0),
               g_gravitation_parser_(0),
               l_radius_parser_(0),
-              dimension_parser_(0) {
+              dimension_parser_(0),
+              parallel_mode_parser_(0) {
     }
 
 // temperature_pskel
@@ -862,6 +870,10 @@ namespace XMLReader {
     }
 
     void simulation_pskel::
+    parallel_mode(const ::std::string &) {
+    }
+
+    void simulation_pskel::
     post_simulation() {
     }
 
@@ -973,6 +985,15 @@ namespace XMLReader {
             return true;
         }
 
+        if (n == "parallel_mode" && ns.empty()) {
+            this->xml_schema::complex_content::context_.top().parser_ = this->parallel_mode_parser_;
+
+            if (this->parallel_mode_parser_)
+                this->parallel_mode_parser_->pre();
+
+            return true;
+        }
+
         return false;
     }
 
@@ -1055,6 +1076,13 @@ namespace XMLReader {
         if (n == "dimension" && ns.empty()) {
             if (this->dimension_parser_)
                 this->dimension(this->dimension_parser_->post_int());
+
+            return true;
+        }
+
+        if (n == "parallel_mode" && ns.empty()) {
+            if (this->parallel_mode_parser_)
+                this->parallel_mode(this->parallel_mode_parser_->post_string());
 
             return true;
         }
@@ -2802,7 +2830,6 @@ namespace XMLReader {
         return false;
     }
 }
-
 #include <xsd/cxx/post.hxx>
 
 // Begin epilogue.

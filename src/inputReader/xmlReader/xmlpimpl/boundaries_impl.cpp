@@ -8,6 +8,7 @@
 #include <iostream>
 #include "MolSimLogger.h"
 #include "inputReader/xmlReader/LinkedCellStrategy.h"
+#include "utils/BoundaryException.h"
 
 namespace XMLReader {
     void boundaries_pimpl::top_boundary(const ::std::string &top) {
@@ -16,6 +17,7 @@ namespace XMLReader {
         if (top == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::TOP, Reflecting(hor, cells->get()->getDomain()[1]));
         }else if(top == "periodic"){
+            ++second;
             LinkedCellDataStructure::addPeriodic(Boundary::TOP);
         }
     }
@@ -26,6 +28,7 @@ namespace XMLReader {
         if (bottom == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::BOTTOM, Reflecting(hor, 0));
         }else if(bottom == "periodic"){
+            ++second;
             LinkedCellDataStructure::addPeriodic(Boundary::BOTTOM);
         }
     }
@@ -36,6 +39,7 @@ namespace XMLReader {
         if (left == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::LEFT, Reflecting(vert, 0));
         }else if(left == "periodic"){
+            ++first;
             LinkedCellDataStructure::addPeriodic(Boundary::LEFT);
         }
     }
@@ -46,11 +50,33 @@ namespace XMLReader {
         if (right == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::RIGHT, Reflecting(vert, cells->get()->getDomain()[0]));
         }else if(right == "periodic"){
+            ++first;
             LinkedCellDataStructure::addPeriodic(Boundary::RIGHT);
         }
     }
 
     void boundaries_pimpl::post_boundaries() {
+        std::stringstream stream;
+        bool wrong_num= false;
+        stream << "Periodic must be applied on bot boundaries in: ";
+        if(first%2 == 1){
+            stream<<"first";
+            wrong_num = true;
+        }
+        if(second%2 == 1){
+            stream<<"second";
+            wrong_num = true;
+        }
+        if(third%2 == 1){
+            stream<<"third";
+            wrong_num = true;
+        }
+
+        if(wrong_num){
+            stream<<"dimension"<<std::endl;
+            throw BoundaryException(stream.str());
+        }
+
     }
 
     void boundaries_pimpl::init(std::shared_ptr<LinkedCellStrategy> &cells_arg) {
@@ -61,6 +87,7 @@ namespace XMLReader {
         if ( front == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::FRONT, Reflecting(dim3, 0));
         }else if(front == "periodic"){
+            ++third;
             LinkedCellDataStructure::addPeriodic(Boundary::FRONT);
         }
     }
@@ -69,6 +96,7 @@ namespace XMLReader {
         if (back == "reflecting"){
             LinkedCellDataStructure::addReflecting(Boundary::BACK, Reflecting(dim3, cells->get()->getDomain()[2]));
         }else if(back == "periodic"){
+            ++third;
             LinkedCellDataStructure::addPeriodic(Boundary::BACK);
         }
     }

@@ -63,6 +63,8 @@ private:
      */
     double epsilon;
 
+    std::array<double, 3> old_x;
+
 public:
     explicit Particle(int type = 0);
 
@@ -105,6 +107,8 @@ public:
     [[nodiscard]] double getM() const;
 
     [[nodiscard]] int getType() const;
+
+    [[nodiscard]] const std::array<double, 3>& getOldX() const;
 
     bool operator==(Particle& other);
 
@@ -169,6 +173,8 @@ public:
      * @param index Array representing two dimensional indices of the membrane-particle
      */
     void setIndex(const std::array<int, 2>& index);
+
+    void setOldX(const std::array<double, 3>& oldx_arg);
 
     /**
      * @brief to detect if the another membrane-particle is the direct neighbor  

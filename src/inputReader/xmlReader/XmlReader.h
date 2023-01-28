@@ -77,6 +77,8 @@ namespace XMLReader {
 
         membrane_pimpl memb_p;
 
+        statistics_impl stat_p;
+
     public:
         /**
          * @brief constructor of XmlReader

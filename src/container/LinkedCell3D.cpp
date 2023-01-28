@@ -287,6 +287,10 @@ std::array<double, 3> &LinkedCell3D::getDomain() {
     return domain;
 }
 
+void LinkedCell3D::setDomain(std::array<double, 3> &domain_arg) {
+    domain = domain_arg;
+}
+
 LinkedCellContainer &LinkedCell3D::operator[](size_t i) {
     return layers[i];
 }
@@ -394,6 +398,5 @@ void LinkedCell3D::applyPar(std::function<void(Particle &)> fun) {
         layers[i].apply(fun);
     }
 }
-
 
 LinkedCell3D::LinkedCell3D() = default;

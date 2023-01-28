@@ -26,6 +26,7 @@ void Simulation::calculateX() {
 
 void Simulation::calculateV() {
     particles->applyPar([this](Particle &p) {
+
         const std::array<double, 3> &tempV{p.getV()};
         const std::array<double, 3> &tempOldF{p.getOldF()};
         const std::array<double, 3> &tempF{p.getF()};
@@ -84,10 +85,22 @@ void Simulation::run() {
                 writer->plotParticles(particles, out_name, iteration);
             }
 
+            if (use_statistics) {
+                if (iteration % n_statistics == 0) {
+                    statistics->calcDiffusion();
+                    statistics->calcRDF();
+                }
+            }
+
             MolSimLogger::logInfo("Itertation {} finished.", iteration);
 #endif
             current_time += delta_t;
         }
+        if (use_statistics) {
+            statistics->writeDiffusion();
+            statistics->writeRDF();
+        }
+
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
@@ -148,20 +161,29 @@ void Simulation::run() {
                 writer->plotParticles(particles, out_name, iteration);
             }
 
+            if (use_statistics) {
+                if (iteration % n_statistics == 0) {
+                    statistics->calcDiffusion();
+                    statistics->calcRDF();
+                }
+            }
+
             MolSimLogger::logInfo("Itertation {} finished.", iteration);
 #endif
             current_time += delta_t;
         }
-
+        if (use_statistics) {
+            statistics->writeDiffusion();
+            statistics->writeRDF();
+        }
     }
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-        MolSimLogger::logInfo("Runtime: {} ms", difference.count());
-        std::cout<<particles->size()<<std::endl;
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    MolSimLogger::logInfo("Runtime: {} ms", difference.count());
+    std::cout << particles->size() << std::endl;
 
-        double mups = (particles_begin * iteration * 1000.0) / (difference.count());
-        MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
-
+    double mups = (particles_begin * iteration * 1000.0) / (difference.count());
+    MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);
 }
 
 Simulation::Simulation(std::shared_ptr<Container> &particles, double delta_t, double end_time,
@@ -231,9 +253,25 @@ void Simulation::setG(double g_arg) {
     g = g_arg;
 }
 
+void Simulation::setN_statistics(int n_arg) {
+    n_statistics = n_arg;
+}
+
+void Simulation::setUse_statistics(bool use_arg) {
+    use_statistics = use_arg;
+}
+
+void Simulation::setStatistics(std::shared_ptr<Statistics> &statistics_arg) {
+    statistics = statistics_arg;
+}
+
 const std::shared_ptr<Thermostat> &Simulation::getThermostat() const { return thermostat; }
 
 void Simulation::setForce(std::unique_ptr<LJGravitation> &&force_arg) {
+    force = std::move(force_arg);
+}
+
+void Simulation::setForce(std::unique_ptr<SLennardJones> &&force_arg) {
     force = std::move(force_arg);
 }
 
@@ -310,3 +348,8 @@ void Simulation::checkpoint(const std::string &filename) {
 void Simulation::setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg) {
     particles = particles_arg;
 }
+
+const std::shared_ptr<Container> &Simulation::getParticles() const {
+    return particles;
+}
+

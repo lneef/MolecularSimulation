@@ -265,8 +265,11 @@ void LinkedCellContainer::setSize(double rcutoff_arg, std::array<double, 3> &dom
     setRCutOff(rcutoff_arg);
     setDomain(domain_arg);
     for (size_t i = 0; i < 2; ++i) {
-        mesh[i] = static_cast<size_t>(ceil(std::abs(domain_arg[i]) / rcutoff_arg)) + 2;
+        mesh[i] = static_cast<size_t>(floor(std::abs(domain_arg[i]) / rcutoff_arg));
     }
+    rcutoff=(domain[0] + domain[1]) / static_cast<double>(mesh[0] + mesh[1]);
+    mesh[0]+=2;
+    mesh[1]+=2;
     setUp();
 }
 
@@ -538,4 +541,6 @@ void LinkedCellContainer::mirrorBoundary(ParticleContainer &par, std::array<doub
         simpleAdd(Particle(p.getX() + to_add, p.getV(), p.getM(), p.getSigma(), p.getEpsilon(), p.getType()));
     }
 }
+
+
 

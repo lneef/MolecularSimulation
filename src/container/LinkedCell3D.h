@@ -85,8 +85,6 @@ public:
 private:
     std::vector<LinkedCellContainer> layers;
 
-    double cutOff{};
-
     std::array<double, 3> domain{};
 
     std::array<size_t, 3> mesh{};
@@ -106,12 +104,6 @@ private:
     bool side(size_t ind3D);
 
     void update();
-
-    void mirrorVertical(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
-
-    void mirrorHorizontal(std::array<double, 3> &pos, Particle &p, size_t i, LinkedCellContainer &counter);
-
-    void mirrorDiagonal(std::array<double, 3> &newP, Particle &particle, size_t i, LinkedCellContainer &counter);
 
     void update(Particle &particle, size_t ind3D, size_t ind);
 

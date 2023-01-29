@@ -79,6 +79,8 @@ protected:
 
     static std::set<Boundary> periodic;
 
+    static std::array<double, 3> cutoff;
+
     /**
      * @brief implements c++20 contains for LinkedCellContainer for icpc
      * @param bound Boundary

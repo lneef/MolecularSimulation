@@ -7,7 +7,7 @@
         <domain_size_y>60</domain_size_y>
         <domain_size_z>60</domain_size_z>
         <cutOff_radius>3.6</cutOff_radius>
-        <ouput_frequency>100</ouput_frequency>
+        <output_frequency>100</output_frequency>
         <dimension>3</dimension>
         <g_gravitation>-12.44</g_gravitation>
     </simulation>

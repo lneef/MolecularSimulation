@@ -5,6 +5,7 @@
 #include <iostream>
 #include "LinkedCellStrategy.h"
 #include "container/LinkedCellContainer.h"
+#include "container/LinkedCellParallel.h"
 
 namespace XMLReader {
     std::shared_ptr<LinkedCellDataStructure> &LinkedCellStrategy::get() {
@@ -17,6 +18,8 @@ namespace XMLReader {
         }else{
             if(mode=="generic") {
                 lc = std::make_shared<LinkedCell3D>();
+            }else if(mode=="optimized"){
+                lc = std::make_shared<LinkedCellParallel>();
             }
         }
         return lc;

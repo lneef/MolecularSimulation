@@ -1,14 +1,13 @@
 //
-// Created by lukas on 02.01.23.
+// Created by lukas on 29.01.23.
 //
 
 #pragma once
 
 
-#include <valarray>
-#include "LinkedCellContainer.h"
+#include "LinkedCell3D.h"
 
-class LinkedCell3D : public LinkedCellDataStructure {
+class LinkedCellParallel :public LinkedCellDataStructure{
 public:
     /**
      * @brief applies the given function to all elements of the container
@@ -27,7 +26,7 @@ public:
     /**
      * @brief virtual destructor to prevent memory leaks
      */
-    ~LinkedCell3D() override;
+    ~LinkedCellParallel() override;
 
     /**
      * @brief calculates the force acting upon a particle
@@ -60,7 +59,7 @@ public:
     /**
      * @brief constructor
      */
-    LinkedCell3D();
+    LinkedCellParallel();
 
     /**
      * @brief function to retrieve LinkedCellContainer at given index

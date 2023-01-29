@@ -55,6 +55,7 @@ namespace XMLReader {
         }
         auto& chosen = cells -> chose(dim, mode);
         chosen->setSize(rCutOff, dom);
+        Simulation::setDim(dim);
         sim->setParticle(chosen);
         MolSimLogger::logInfo("XMLReader: domain=({}, {}, {}), cutoff_radius = {}", dom[0], dom[1], dom[2], rCutOff);
     }

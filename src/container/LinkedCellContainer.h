@@ -8,6 +8,8 @@
 
 
 class LinkedCell3D;
+
+class LinkedCellParallel;
 /**
  * @brief LinkedCellContainer implements the linked cell algorithm for a 2D simulation
  *
@@ -289,6 +291,8 @@ private:
     static bool topBoundary(size_t ind);
 
     friend class LinkedCell3D;
+
+    friend class LinkedCellParallel;
 
     void forceTwoD(ParticleContainer &particles, size_t ind, std::function<void(Particle &, Particle &)> fun);
 

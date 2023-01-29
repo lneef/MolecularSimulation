@@ -91,6 +91,8 @@ class Simulation {
     bool use_statistics = false;
     std::shared_ptr<Statistics> statistics;
 
+    static size_t dim;
+
 public:
     /**
      * @brief Calculates next position for each particle in particles
@@ -229,6 +231,10 @@ public:
     [[nodiscard]] const std::shared_ptr<Thermostat>& getThermostat() const;
 
     [[nodiscard]] const std::shared_ptr<Container>& getParticles() const;
+
+    static void setDim(size_t dim_arg);
+
+    static size_t getDim();
 
 };
 

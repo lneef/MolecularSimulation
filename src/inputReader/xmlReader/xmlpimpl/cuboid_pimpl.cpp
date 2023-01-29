@@ -74,7 +74,7 @@ namespace XMLReader {
 
             ++i;
         }
-        ParticleGenerator<LinkedCellDataStructure> cub{};
+        ParticleGenerator<LinkedCellDataStructure> cub{Simulation::getDim()};
         if (!browMot) {
             cub.generateCuboidNoBrownian(cells->get(), x, n, v, width, m, sigma_p, epsilon_p, type_p);
         } else {

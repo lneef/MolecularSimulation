@@ -35,7 +35,11 @@ namespace XMLReader {
     }
 
     void simulation_pimpl::parallel_mode(const ::std::string & par){
-        mode = par;
+        if(par == "generic"){
+            mode = 1;
+        }else if(par == "optimized"){
+            mode = 2;
+        }
     }
 
     void simulation_pimpl::output_frequency(int f) {
@@ -55,6 +59,7 @@ namespace XMLReader {
         }
         auto& chosen = cells -> chose(dim, mode);
         chosen->setSize(rCutOff, dom);
+        Simulation::setDim(dim);
         sim->setParticle(chosen);
         MolSimLogger::logInfo("XMLReader: domain=({}, {}, {}), cutoff_radius = {}", dom[0], dom[1], dom[2], rCutOff);
     }

@@ -37,7 +37,7 @@ namespace XMLReader {
          */
         double rCutOff;
 
-        std::string mode = "generic";
+        int mode = 1;
 
         size_t dim = 2;
 

@@ -353,3 +353,12 @@ const std::shared_ptr<Container> &Simulation::getParticles() const {
     return particles;
 }
 
+size_t Simulation::dim = 2;
+
+void Simulation::setDim(size_t dim_arg) {
+    dim = dim_arg;
+}
+
+size_t Simulation::getDim() {
+    return dim;
+}

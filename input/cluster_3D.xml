@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <molecular>
     <simulation>
-        <t_end>200</t_end>
+        <t_end>0.5</t_end>
         <delta_t>0.0005</delta_t>
         <domain_size_x>60</domain_size_x>
         <domain_size_y>60</domain_size_y>
         <domain_size_z>60</domain_size_z>
         <cutOff_radius>3.6</cutOff_radius>
         <output_frequency>100</output_frequency>
+        <parallel_mode>optimized</parallel_mode>
         <dimension>3</dimension>
         <g_gravitation>-12.44</g_gravitation>
     </simulation>

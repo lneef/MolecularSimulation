@@ -15,6 +15,7 @@
 template<typename T>
 class ParticleGenerator {
 private:
+    size_t dim = 2;
     double meanV = 0.1;
     MaxwellBoltzmannDistribution mb;
 
@@ -26,7 +27,7 @@ private:
     */
     std::array<double, 3> calculateV(std::array<double, 3> v) {
         //calculate velocity with thermal friction
-        std::array<double, 3> mbV = mb.maxwellBoltzmannDistributedVelocity(meanV, 2);
+        std::array<double, 3> mbV = mb.maxwellBoltzmannDistributedVelocity(meanV, dim);
         std::array<double, 3> newV{};
         for (int i = 0; i < 3; i++) {
             newV[i] = v[i] + mbV[i];
@@ -47,7 +48,9 @@ private:
     }
 
 public:
-    ParticleGenerator() = default;
+    explicit ParticleGenerator(size_t dim_arg = 2){
+        dim = dim_arg;
+    }
 
     virtual ~ParticleGenerator() = default;
 

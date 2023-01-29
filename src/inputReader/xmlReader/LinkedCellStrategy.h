@@ -13,7 +13,7 @@ namespace XMLReader {
     public:
         std::shared_ptr<LinkedCellDataStructure> &get();
 
-        std::shared_ptr<LinkedCellDataStructure> &chose(size_t dim, std::string mode);
+        std::shared_ptr<LinkedCellDataStructure> &chose(size_t dim, int mode);
 
 
     private:

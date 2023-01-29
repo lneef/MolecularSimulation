@@ -8,6 +8,7 @@
         <domain_size_z>60</domain_size_z>
         <cutOff_radius>3.6</cutOff_radius>
         <ouput_frequency>100</ouput_frequency>
+        <parallel_mode>"optimized"</parallel_mode>
         <dimension>3</dimension>
         <g_gravitation>-12.44</g_gravitation>
     </simulation>

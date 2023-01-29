@@ -152,10 +152,6 @@ private:
     static std::array<double, 3> domain;
 
     /**
-     * @brief cutoff radius, i.e. length of the sides of the cells
-     */
-    static double rcutoff;
-    /**
      * @brief updates the cell a particle is contained in after calculating the positions
      */
     void update();
@@ -166,11 +162,23 @@ private:
     std::vector<std::reference_wrapper<ParticleContainer>> halo;
 
     /**
-     * @brief vector containing references to boundary cells
+     * @brief vector containing references to right boundary cells
      */
     std::vector<std::reference_wrapper<ParticleContainer>> right_boundary;
+
+    /**
+     * @brief vector containing references to left boundary cells
+     */
     std::vector<std::reference_wrapper<ParticleContainer>> left_boundary;
+
+    /**
+     * @brief vector containing references to top boundary cells
+     */
     std::vector<std::reference_wrapper<ParticleContainer>> top_boundary;
+
+    /**
+     * @brief vector containing references to bottom boundary cells
+     */
     std::vector<std::reference_wrapper<ParticleContainer>> bottom_boundary;
 
 
@@ -179,6 +187,9 @@ private:
      */
     void setUpRef();
 
+    /**
+     * @brief set up linked cell data structure
+     */
     void setUp();
 
     /**

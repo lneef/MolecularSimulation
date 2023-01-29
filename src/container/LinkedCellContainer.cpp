@@ -10,7 +10,6 @@
 #include "MolSimLogger.h"
 
 std::array<double, 3> LinkedCellContainer::domain{};
-double LinkedCellContainer::rcutoff{};
 std::array<size_t, 3> LinkedCellContainer::mesh{};
 
 void LinkedCellContainer::apply(std::function<void(Particle &)> fun) {
@@ -43,8 +42,8 @@ void LinkedCellContainer::update() {
             auto &pos = p.getX();
 
             //check that not completely outside
-            if (pos[0] < -rcutoff || pos[0] >= domain[0] + rcutoff || pos[1] < -rcutoff ||
-                pos[1] > domain[1] + rcutoff) {
+            if (pos[0] < -cutoff[0] || pos[0] >= domain[0] + cutoff[0] || pos[1] < -cutoff[1] ||
+                pos[1] > domain[1] + cutoff[1]) {
                 SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Particle at position ({}, {}, {}) removed", p.getX()[0],
                                    p.getX()[1], p.getX()[2]);
                 it = cells[i].remove(it);
@@ -161,13 +160,13 @@ size_t LinkedCellContainer::index(Particle &p) {
     if (pos[0] >= domain[0]) {
         x_ind = mesh[0] - 1;
     } else {
-        x_ind = static_cast<int>(floor(pos[0] / rcutoff)) + 1;
+        x_ind = static_cast<int>(floor(pos[0] / cutoff[0])) + 1;
     }
 
     if (pos[1] >= domain[1]) {
         y_ind = (mesh[1] - 1) * mesh[0];
     } else {
-        y_ind = static_cast<int>(floor(pos[1] / rcutoff)) * mesh[0] + mesh[0];
+        y_ind = static_cast<int>(floor(pos[1] / cutoff[1])) * mesh[0] + mesh[0];
     }
     return x_ind + y_ind;
 }
@@ -254,7 +253,7 @@ void LinkedCellContainer::setUpRef() {
 }
 
 void LinkedCellContainer::setRCutOff(double rcutoff_arg) {
-    rcutoff = rcutoff_arg;
+    cutoff = {rcutoff_arg, rcutoff_arg, rcutoff_arg};
 }
 
 void LinkedCellContainer::setDomain(std::array<double, 3> &domain_arg) {
@@ -266,11 +265,12 @@ void LinkedCellContainer::setSize(double rcutoff_arg, std::array<double, 3> &dom
     setDomain(domain_arg);
     for (size_t i = 0; i < 2; ++i) {
         mesh[i] = static_cast<size_t>(floor(std::abs(domain_arg[i]) / rcutoff_arg));
+        cutoff[i] = domain[i] / mesh[i];
+        mesh[i]+=2;
     }
-    rcutoff=(domain[0] + domain[1]) / static_cast<double>(mesh[0] + mesh[1]);
-    mesh[0]+=2;
-    mesh[1]+=2;
+
     setUp();
+
 }
 
 
@@ -430,6 +430,10 @@ void LinkedCellContainer::mirrorPeriodic() {
 
 void LinkedCellContainer::simpleAdd(Particle &&p) {
     size_t ind = index(p);
+    if(ind >= cells.size()){
+        std::cout<<p.getX();
+        return;
+    }
     cells[ind].addParticle(p);
 
 }

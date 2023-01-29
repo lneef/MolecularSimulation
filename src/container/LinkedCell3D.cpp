@@ -35,7 +35,7 @@ size_t LinkedCell3D::index(const std::array<double, 3> &pos) noexcept {
         return mesh[2] - 1;
     }
 
-    size_t ind = std::floor(pos[2] / cutOff) + 1;
+    size_t ind = std::floor(pos[2] / cutoff[2]) + 1;
 
     return ind;
 }
@@ -127,8 +127,8 @@ void LinkedCell3D::update() {
                 auto &pos = p.getX();
 
                 //check that not completely outside
-                if (pos[0] < -cutOff || pos[0] >= domain[0] + cutOff || pos[1] < -cutOff ||
-                    pos[1] > domain[1] + cutOff) {
+                if (pos[0] < -cutoff[0] || pos[0] >= domain[0] + cutoff[0] || pos[1] < -cutoff[1] ||
+                    pos[1] > domain[1] + cutoff[1]) {
                     SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Particle at position ({}, {}, {}) removed",
                                        p.getX()[0],
                                        p.getX()[1], p.getX()[2]);
@@ -269,16 +269,13 @@ size_t LinkedCell3D::updatePeriodic(Particle &p, size_t ind3D) {
 
 void LinkedCell3D::setSize(double cutOff_arg, std::array<double, 3> &domain_arg) {
     domain = domain_arg;
-    cutOff = cutOff_arg;
     for (size_t i = 0; i < 3; ++i) {
         mesh[i] = std::floor(std::abs(domain_arg[i]) / cutOff_arg);
+        cutoff[i] = domain[i] / static_cast<double>(mesh[i]);
+        mesh[i] +=2;
     }
-    cutOff = (domain[0] + domain[1] + domain[2]) / static_cast<double>(mesh[0] + mesh[1] + mesh[2]);
-    for (size_t i = 0; i < 3; ++i)
-        mesh[i] += 2;
 
-    LinkedCellContainer::setDomain(domain_arg);
-    LinkedCellContainer::setRCutOff(cutOff);
+    LinkedCellContainer::setDomain(domain);
     LinkedCellContainer::setMesh(mesh);
 
     layers.resize(mesh[2]);

@@ -7,6 +7,7 @@
 LinkedCellDataStructure::~LinkedCellDataStructure() = default;
 
 std::set<Boundary> LinkedCellDataStructure::periodic{};
+std::array<double, 3> LinkedCellDataStructure::cutoff{};
 std::map<Boundary,Reflecting> LinkedCellDataStructure::conditions{};
 
 bool LinkedCellDataStructure::containsPeriodic(Boundary bound) {

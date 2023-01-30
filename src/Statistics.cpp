@@ -69,12 +69,12 @@ void Statistics::calcRDF() {
 
 void Statistics::writeDiffusion() {
     std::ifstream checkFile;
-    checkFile.open("../output/diffusion");
+    checkFile.open("../output/diffusion.csv");
     if (checkFile) {
-        remove("../output/diffusion");
+        remove("../output/diffusion.csv");
     }
     std::ofstream diffFile;
-    diffFile.open("../output/diffusion");
+    diffFile.open("../output/diffusion.csv");
     diffFile << "timestep, var(t)" << std::endl;
     for (int i = 0; i < diffusion.size(); i++) {
         diffFile << i * n_statistics << "," << diffusion[i] << std::endl;
@@ -83,12 +83,10 @@ void Statistics::writeDiffusion() {
 }
 
 void Statistics::writeRDF() {
-    if (!std::filesystem::is_empty("../output/rdf")) {
-        std::filesystem::remove_all("../output/rdf");
-    }
     for (int i = 0; i < rdf.size(); i++) {
         std::ofstream rdfFile;
-        rdfFile.open("../output/rdf/time_" + i * n_statistics);
+        std::string path = "../output/rdf/time_" + std::to_string(i * n_statistics) + ".csv";
+        rdfFile.open(path);
         rdfFile << "distance, densities" << std::endl;
         for (int z = 0; z < rdf[i].size(); z++) {
             rdfFile << z + i_rdf_begin << "," << rdf[i][z] << std::endl;

@@ -25,7 +25,7 @@ private:
 public:
     Statistics(int i_begin, int i_end, double delta_distance);
 
-    void calcDiffusion();
+    void calcDiffusion(double delta_t);
 
     void calcRDF();
 

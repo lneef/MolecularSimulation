@@ -25,6 +25,7 @@
         <velocity_y>0.0</velocity_y>
         <velocity_z>0.0</velocity_z>
         <fz_up>0.8</fz_up>
+        <brownianMotion>false</brownianMotion>
         <stiffness_const>300</stiffness_const>
         <bond_length>2.2</bond_length>
     </membrane>

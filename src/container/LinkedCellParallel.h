@@ -7,7 +7,7 @@
 
 #include "LinkedCell3D.h"
 
-class LinkedCellParallel :public LinkedCellDataStructure{
+class LinkedCellParallel : public LinkedCell3D{
 public:
     /**
      * @brief applies the given function to all elements of the container
@@ -61,16 +61,7 @@ public:
      */
     LinkedCellParallel();
 
-    /**
-     * @brief function to retrieve LinkedCellContainer at given index
-     * @param i index of the LinkedCellContainer
-     * @return reference to LinkedCellContainer
-     */
-    LinkedCellContainer &operator[](size_t i);
-
     void setSize(double cutOff_arg, std::array<double, 3> &domain_arg) override;
-
-    std::array<double, 3> &getDomain() override;
 
     /**
      * @brief parallelized version of apply
@@ -78,7 +69,6 @@ public:
      */
     void applyPar(std::function<void(Particle &)> fun) override;
 
-    void setDomain(std::array<double, 3> &domain_arg);
 
 
 protected:
@@ -90,30 +80,5 @@ protected:
 
     size_t layerSize = 0;
 
-    size_t index(const std::array<double, 3> &pos) noexcept;
-
-    void clearHalo();
-
-    void preparePeriodic();
-
-    void forceThreeD(Particle &p, size_t ind2D, size_t ind3D, std::function<void(Particle &, Particle &)> fun);
-
-    void frontBackBoundary(double to_add, size_t ind, size_t oth);
-
-    bool side(size_t ind3D);
-
-    virtual void update();
-
-    void update(Particle &particle, size_t ind3D, size_t ind);
-
-    size_t updatePeriodic(Particle &p, size_t ind3D);
-
-    void applyFBoundary(std::function<void(Particle &, Particle &)> fun);
-
-    void mirrorHorizontal(double dis, size_t i, LinkedCellContainer &counter);
-
-    void mirrorVertical(double dis, size_t i, LinkedCellContainer &counter);
-
-    void mirrorDiagonal(double dis, size_t i, LinkedCellContainer &counter);
 };
 

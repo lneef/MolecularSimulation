@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <molecular>
     <simulation>
-        <t_end>200</t_end>
+        <t_end>50</t_end>
         <delta_t>0.0005</delta_t>
         <domain_size_x>60</domain_size_x>
         <domain_size_y>60</domain_size_y>

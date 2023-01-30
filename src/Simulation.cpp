@@ -104,7 +104,6 @@ void Simulation::run() {
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
-        // force->calculateF(particles);
         while (current_time < end_time) {
 
             calculateX();
@@ -126,13 +125,8 @@ void Simulation::run() {
                 SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "the gravitation has been calculated", iteration);
 
             } else {
-                particles->apply([temp_F_up](Particle &p) {
-                    if ((p.getIndex()[0] == 17 && p.getIndex()[1] == 24) ||
-                        (p.getIndex()[0] == 17 && p.getIndex()[1] == 25) ||
-                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 24) ||
-                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 25)) {
-                        p.updateF({0, 0, temp_F_up});
-                    }
+                particles->apply([temp_g](Particle &p) {
+                        p.updateF({0, 0, p.getM() * temp_g});
                 });
             }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <molecular>
     <simulation>
-        <t_end>250</t_end>
+        <t_end>10</t_end>
         <delta_t>0.001</delta_t>
         <domain_size_x>9.2</domain_size_x>
         <domain_size_y>9.2</domain_size_y>
@@ -17,21 +17,9 @@
         <temp_target>0.5</temp_target>
         <temp_delta>0.00078</temp_delta>
     </temperature>
-    <cuboid>
-        <sigma>1.</sigma>
-        <epsilon>1.</epsilon>
-        <lower_left_x>0.575</lower_left_x>
-        <lower_left_y>0.575</lower_left_y>
-        <lower_left_z>0.575</lower_left_z>
-        <number_x>8</number_x>
-        <number_y>8</number_y>
-        <number_z>8</number_z>
-        <mesh_width>1.15</mesh_width>
-        <mass>1.</mass>
-        <velocity_x>0.</velocity_x>
-        <velocity_y>0.</velocity_y>
-        <velocity_z>0.</velocity_z>
-    </cuboid>
+    <from_checkpoint>
+        <path>../input/heating-checkpoint.txt</path>
+    </from_checkpoint>
     <boundaries>
         <top_boundary>periodic</top_boundary>
         <bottom_boundary>periodic</bottom_boundary>

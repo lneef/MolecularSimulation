@@ -7,7 +7,6 @@ LinkedCell3D::~LinkedCell3D() = default;
 size_t LinkedCell3D::size() {
     size_t len = 0;
 
-
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         len += layers[i].size();
     }
@@ -56,7 +55,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
             }
 
-#pragma omp for schedule(guided, 2) collapse(2)
+#pragma omp for schedule(guided, 2)
         for (std::size_t j = 1; j < layers.size() - 1; ++j) {
             for (size_t i = 0; i < layerSize; ++i) {
                 layers[j].forceTwoD(layers[j][i], i, fun);

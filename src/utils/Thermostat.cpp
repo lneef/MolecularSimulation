@@ -51,7 +51,9 @@ double Thermostat::getTemp() const{
 
 double Thermostat::measureTemp(std::shared_ptr<Container> &particles) {
     double energy = 0.;
-    particles->apply([&energy](Particle &p) {
+    particles->applyPar([&energy](Particle &p) {
+
+#pragma omp atomic
         energy = energy + p.getM() * scalarProduct(p) / 2;
     });
     double temperature = (energy * 2) / (2 * particles->size());

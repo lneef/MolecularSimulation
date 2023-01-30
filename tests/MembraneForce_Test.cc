@@ -16,6 +16,11 @@ TEST(MembraneForceTest, MFTest1) {
     p[0].setF(oldf);
     p[0].setIndex({ 0,0 });
     p[1].setIndex({ 0,1 });
+
+    par->apply([](Particle& p) {
+        p.updateF({});
+    });
+
     MembraneForce mf{ 2.3,300 };
 
     mf.calculateF(par);
@@ -42,6 +47,11 @@ TEST(MembraneForceTest, MFTest2) {
     p[0].setF(oldf);
     p[0].setIndex({ 0,0 });
     p[1].setIndex({ 1,1 });
+
+    par->apply([](Particle& p) {
+        p.updateF({});
+    });
+
     MembraneForce mf{ 2.3,300 };
 
     mf.calculateF(par);
@@ -67,6 +77,10 @@ TEST(MembraneForceTest, MFTest3) {
     p[0].setF(oldf);
     p[0].setIndex({ 0,0 });
     p[1].setIndex({ 1,2 });
+    par->apply([](Particle& p) {
+        p.updateF({});
+    });
+
     MembraneForce mf{ 2.3,300 };
 
     mf.calculateF(par);
@@ -91,6 +105,10 @@ TEST(MembraneForceTest, MFTest4) {
     p[0].setF(oldf);
     p[0].setIndex({ 0,0 });
     p[1].setIndex({ 1,2 });
+    par->apply([](Particle& p) {
+        p.updateF({});
+    });
+
     MembraneForce mf{ 2.3,300 };
 
     mf.calculateF(par);

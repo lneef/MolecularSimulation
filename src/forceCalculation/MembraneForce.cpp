@@ -8,11 +8,6 @@ MembraneForce::~MembraneForce() = default;
 //calculation new force with harmonic potential
 
 void MembraneForce::calculateF(std::shared_ptr<Container>& particles) {
-
-    particles->apply([](Particle& p) {
-        p.updateF({});
-        });
-
     auto r0_arg = r0;
     auto k_arg = k;
     particles->applyF([r0_arg, k_arg](Particle& p1, Particle& p2) {

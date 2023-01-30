@@ -104,7 +104,6 @@ void Simulation::run() {
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
-        force->calculateF(particles);
         while (current_time < end_time) {
 
             calculateX();
@@ -128,6 +127,7 @@ void Simulation::run() {
             } else {
                 particles->apply([temp_g](Particle &p) {
                         p.updateF({0, 0,  p.getM() * temp_g});
+
                 });
             }
 

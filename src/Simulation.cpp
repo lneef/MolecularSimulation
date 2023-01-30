@@ -104,10 +104,6 @@ void Simulation::run() {
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
-<<<<<<< HEAD
-=======
-        force->calculateF(particles);
->>>>>>> a59826dff7e7e8311a144d72c2d8d9bfda02da73
         while (current_time < end_time) {
 
             calculateX();

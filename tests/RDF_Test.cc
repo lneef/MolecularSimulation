@@ -22,4 +22,5 @@ TEST(RDFTest, StatisticsTest) {
     std::vector<std::vector<double>> rdf = s.getRdf();
     EXPECT_EQ(round(rdf[0][0] * 1000), 68.);
     EXPECT_EQ(round(rdf[0][2] * 1000), 6.);
+    //note
 }

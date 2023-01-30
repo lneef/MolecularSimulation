@@ -65,6 +65,7 @@ void Statistics::calcRDF() {
                 (((4 * M_PI) / (3)) * (pow(i + i_rdf_begin + delta_r, 3) - pow(i + i_rdf_begin, 3))));
     }
     rdf.push_back(loc_densities);
+    
 }
 
 void Statistics::writeDiffusion() {

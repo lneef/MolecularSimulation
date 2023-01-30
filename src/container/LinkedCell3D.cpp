@@ -55,7 +55,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
             }
 
-#pragma omp for schedule(guided, mesh[0] + 1)
+#pragma omp for schedule(guided, 2)
         for (std::size_t j = 1; j < layers.size() - 1; ++j) {
             for (size_t i = 0; i < layerSize; ++i) {
                 layers[j].forceTwoD(layers[j][i], i, fun);

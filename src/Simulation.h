@@ -87,24 +87,10 @@ class Simulation {
      */
     double F_up;
 
-    /**
-     * @brief time step after which statistics will be calculated
-     */
     int n_statistics;
-
-    /**
-     * @brief a bool value to show if the statistics are used
-     */
     bool use_statistics = false;
-
-    /**
-     * @brief shared pointer to statistics
-     */
     std::shared_ptr<Statistics> statistics;
 
-    /**
-     * @brief dimension number of simulation
-     */
     static size_t dim;
 
 public:
@@ -173,22 +159,10 @@ public:
      */
     void setForce(std::unique_ptr<Force>& force_arg);
 
-    /**
-     * @brief setter for LJGravitation
-     * @param force_arg method for calculating the force effective on particles
-    */
     void setForce(std::unique_ptr<LJGravitation>&& force_arg);
 
-    /**
-     * @brief setter for SLennardJones
-     * @param force_arg method for calculating the force effective on particles
-    */
     void setForce(std::unique_ptr<SLennardJones>&& force_arg);
 
-    /**
-     * @brief setter for MembraneForce
-     * @param force_arg method for calculating the force effective on particles
-    */
     void setForce(std::unique_ptr<MembraneForce>&& force_arg);
 
     /**
@@ -197,10 +171,6 @@ public:
      */
     void setParticle(std::shared_ptr<ParticleContainer>& particles_arg);
 
-    /**
-     * @brief setter for particles
-     * @param particles_arg LinkedCellContainer containing the particles
-     */
     void setParticle(std::shared_ptr<LinkedCellContainer> &particles_arg);
 
     /**
@@ -222,16 +192,8 @@ public:
      */
     void setOut_frequency(int out_frequency_arg);
 
-    /**
-     * @brief setter for bool value isMembrane
-     * @param input for bool value isMembrane
-     */
     void setIsMembrane(bool input);
 
-    /**
-     * @brief setter for F_up(only for membrane Simulation)
-     * @param F_up_arg for the F_up 
-     */
     void setF_up(double F_up_arg);
 
     /**
@@ -258,22 +220,8 @@ public:
      */
     void setThermostat(std::shared_ptr<Thermostat>& thermostat);
 
-    /**
-     * @brief setter for the n_statistics
-     * @param n_arg time step after which statistics will be calculated
-     */
     void setN_statistics(int n_arg);
-
-    /**
-     * @brief setter for the use_statistics
-     * @param use_arg bool value for use_statistics
-     */
     void setUse_statistics(bool use_arg);
-
-    /**
-     * @brief setter for the statistics
-     * @param statistics_arg is the shared pointer to statistics
-     */
     void setStatistics(std::shared_ptr<Statistics> &statistics_arg);
 
     /**
@@ -282,22 +230,10 @@ public:
      */
     [[nodiscard]] const std::shared_ptr<Thermostat>& getThermostat() const;
 
-    /**
-     * @brief getter for the Particles
-     * @return reference to shared pointer to the Container
-     */
     [[nodiscard]] const std::shared_ptr<Container>& getParticles() const;
 
-     /**
-     * @brief setter for the dim
-     * @param dim_arg the dimension number
-     */
     static void setDim(size_t dim_arg);
 
-    /**
-     * @brief getter for the dim
-     * @return dim the dimension number
-     */
     static size_t getDim();
 
 };

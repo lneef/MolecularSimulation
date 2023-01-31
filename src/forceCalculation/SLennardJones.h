@@ -30,6 +30,8 @@ public:
      */
      SLennardJones(double rc_arg, double rl_arg);
 
+
+
 private:
 
     /**

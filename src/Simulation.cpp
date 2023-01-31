@@ -122,35 +122,14 @@ void Simulation::run() {
     } else {
         double temp_g = g;
         double temp_F_up = F_up;
+        MembraneForce::membraneForce(particles, temp_F_up, temp_g, force, 0);
         while (current_time < end_time) {
 
             calculateX();
 
             SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Position of particles calculated for iteration {} ", iteration);
 
-            if (iteration <= 15000) {
-                particles->apply([temp_g, temp_F_up](Particle &p) {
-                    if ((p.getIndex()[0] == 17 && p.getIndex()[1] == 24) ||
-                        (p.getIndex()[0] == 17 && p.getIndex()[1] == 25) ||
-                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 24) ||
-                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 25)) {
-                        p.updateF({0, 0, p.getM() * temp_g + temp_F_up});
-                        // std::cout << p.getIndex().at(0) << " " << p.getIndex().at(1) << std::endl;
-                    } else {
-                        p.updateF({0, 0, p.getM() * temp_g});
-                    }
-                });
-                SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "the gravitation has been calculated", iteration);
-
-            } else {
-                particles->apply([temp_g](Particle &p) {
-                        p.updateF({0, 0,  p.getM() * temp_g});
-
-                });
-            }
-
-
-            force->calculateF(particles);
+            MembraneForce::membraneForce(particles, temp_F_up, temp_g, force, current_time);
 
             SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Force on particles calculated for iteration {}", iteration);
 

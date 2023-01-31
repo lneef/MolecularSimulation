@@ -16,6 +16,8 @@ def plotDiffusion():
     plt.plot(timestep,var)
     plt.xlabel("Time step")
     plt.ylabel("Diffusion Var(t)")
+    plt.ylim(bottom=0)
+    plt.xlim(left=0)
     
     plt.savefig("../output/plot/diffusion.png")
     plt.clf()
@@ -33,6 +35,8 @@ def plotRDF():
     plt.xlabel("distance")
     plt.ylabel("densities")
     plt.legend()
+    plt.ylim(bottom=0)
+    plt.xlim(left=0)
 
     plt.savefig("../output/plot/rdf.png")
     plt.clf()

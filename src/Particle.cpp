@@ -54,6 +54,7 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
     sigma = sigma_arg;
     epsilon = epsilon_arg;
     ghost = ghost_arg;
+    old_x = x;
 #ifdef _OPENMP
     omp_init_lock(&par_lock);
 #endif
@@ -100,7 +101,6 @@ void Particle::setV(const std::array<double, 3>& v) {
 }
 
 void Particle::setX(const std::array<double, 3>& x) {
-    this->old_x = this->x;
     this->x = x;
 }
 

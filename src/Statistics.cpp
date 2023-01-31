@@ -32,6 +32,7 @@ void Statistics::calcDiffusion(double delta_t) {
         }
         double sum = x_diff[0] * x_diff[0] + x_diff[1] * x_diff[1] + x_diff[2] * x_diff[2];
         numerator = numerator + sum;
+        p.setOldX(x);
     });
     if (particles->size() > 0) {
         diffusion.push_back(numerator / particles->size());

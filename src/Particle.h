@@ -65,7 +65,14 @@ private:
 
     std::array<double, 3> old_x;
 
+    std::array<int, 3> warp{};
+    std::array<double, 3> last_x;
+
 public:
+    std::array<int, 3>& getWarp();
+    std::array<double, 3>& getLast();
+    void setWarp(std::array<int, 3>& warp_arg);
+
     explicit Particle(int type = 0);
 
     /**

@@ -3,8 +3,8 @@
 void LinkedCellParallel::applyF(std::function<void(Particle &, Particle &)> fun) {
 #pragma omp parallel shared(layers)
     {
-        preparePeriodic();
-#pragma omp for
+
+#pragma omp for nowait
         for (size_t i = 0; i < layerSize; ++i) {
             layers[0][i].apply([this, &fun, i](Particle &p) {
                 forceThreeD(p, i, 0, fun);

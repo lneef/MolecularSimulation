@@ -33,7 +33,8 @@ Particle::Particle(const Particle& other) {
     epsilon = other.epsilon;
     membrane_index = other.membrane_index;
     old_x = other.old_x;
-
+    warp = other.warp;
+    last_x = other.last_x;
     ghost = other.ghost;
 #ifdef _OPENMP
     omp_init_lock(&par_lock);
@@ -54,6 +55,9 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
     sigma = sigma_arg;
     epsilon = epsilon_arg;
     ghost = ghost_arg;
+    old_x = x_arg;
+    last_x = x_arg;
+    warp = {0, 0, 0};
 #ifdef _OPENMP
     omp_init_lock(&par_lock);
 #endif
@@ -100,7 +104,7 @@ void Particle::setV(const std::array<double, 3>& v) {
 }
 
 void Particle::setX(const std::array<double, 3>& x) {
-    this->old_x = this->x;
+    last_x = this->x;
     this->x = x;
 }
 
@@ -179,4 +183,16 @@ void Particle::addToF(std::array<double, 3> &to_add) {
 #ifdef _OPENMP
     omp_unset_lock(&par_lock);
 #endif
+}
+
+std::array<int, 3> &Particle::getWarp() {
+    return warp;
+}
+
+std::array<double, 3>& Particle::getLast() {
+    return last_x;
+}
+
+void Particle::setWarp(std::array<int, 3> &warp_arg) {
+    warp = warp_arg;
 }

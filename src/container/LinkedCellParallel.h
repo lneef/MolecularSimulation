@@ -69,16 +69,5 @@ public:
      */
     void applyPar(std::function<void(Particle &)> fun) override;
 
-
-
-protected:
-    std::vector<LinkedCellContainer> layers;
-
-    std::array<double, 3> domain{};
-
-    std::array<size_t, 3> mesh{};
-
-    size_t layerSize = 0;
-
 };
 

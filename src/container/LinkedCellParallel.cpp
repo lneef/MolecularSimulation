@@ -1,9 +1,4 @@
-//
-// Created by lukas on 29.01.23.
-//
-
 #include "LinkedCellParallel.h"
-#include "MolSimLogger.h"
 
 void LinkedCellParallel::applyF(std::function<void(Particle &, Particle &)> fun) {
 #pragma omp parallel shared(layers)

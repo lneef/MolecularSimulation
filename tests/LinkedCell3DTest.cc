@@ -36,16 +36,18 @@ TEST_F(LinkedCell3DTest, BoundaryTest) {
     auto f = (*lc)[1][6].begin();
     auto & force = f->getF();
     auto f1 = (*lc)[3][16].begin();
+    auto f3 = (*lc)[3][17].begin();
     auto f2 = (*lc)[2][12].begin();
     auto & halo = (*lc)[0].getHalo();
     int sz = std::accumulate(halo.cbegin(), halo.cend(), 0, []( int cur, std::reference_wrapper<ParticleContainer> p){
        return cur + p.get().size();
     });
+
     EXPECT_EQ(sz, 16);
     EXPECT_EQ(force[0], 16);
     EXPECT_EQ(f1->getF()[0], 16);
     EXPECT_EQ(f2->getF()[0], 26);
-
+    EXPECT_EQ(f3->getF()[0], 20);
 }
 
 TEST_F(LinkedCell3DTest, BoundaryTest1) {

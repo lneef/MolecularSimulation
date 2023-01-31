@@ -7,6 +7,9 @@
 
 #include "LinkedCell3D.h"
 
+/**
+ * @brief class implements a different parallelization strategy
+ */
 class LinkedCellParallel : public LinkedCell3D{
 public:
     /**
@@ -57,10 +60,15 @@ public:
     void addParticle(Particle &p) override;
 
     /**
-     * @brief constructor
+     * @brief constructor of LinkedCellParallel
      */
     LinkedCellParallel();
 
+    /**
+     * @brief function to initialize the data structure
+     * @param cutOff_arg cutoff radius
+     * @param domain_arg domain of the simulation
+     */
     void setSize(double cutOff_arg, std::array<double, 3> &domain_arg) override;
 
     /**

@@ -13,7 +13,6 @@
 class Particle {
 
 private:
-    bool ghost;
 #ifdef _OPENMP
     omp_lock_t par_lock;
 #endif
@@ -63,14 +62,38 @@ private:
      */
     double epsilon;
 
+    /**
+     * @brief position at previous reference point
+     */
     std::array<double, 3> old_x;
 
+    /**
+     * @brief holds information if particle has crossed a periodic boundary
+     */
     std::array<int, 3> warp{};
+
+    /**
+     * @brief holds position at last time step
+     */
     std::array<double, 3> last_x;
 
 public:
+    /**
+     * @brief getter for the field warp
+     * @return array of size three holding -1,0,1 at each position
+     */
     std::array<int, 3>& getWarp();
+
+    /**
+     * @brief getter for last_x
+     * @return lvalue reference to last_x
+     */
     std::array<double, 3>& getLast();
+
+    /**
+     * @brief setter for warp
+     * @param warp_arg array of size 3
+     */
     void setWarp(std::array<int, 3>& warp_arg);
 
     explicit Particle(int type = 0);
@@ -180,6 +203,11 @@ public:
      * @param index Array representing two dimensional indices of the membrane-particle
      */
     void setIndex(const std::array<int, 2>& index);
+
+    /**
+     * @brief setter for old_x
+     * @param oldx_arg array of 3 doubles
+     */
 
     void setOldX(const std::array<double, 3>& oldx_arg);
 

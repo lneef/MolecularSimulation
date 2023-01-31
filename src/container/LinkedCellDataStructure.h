@@ -13,6 +13,9 @@ enum class Boundary{LEFT, RIGHT, BOTTOM, TOP, FRONT, BACK};
 #include "Reflecting.h"
 #include "map"
 
+/**
+ * @brief upper class of all classes that implement the LinkedCell algorithm. It provides a uniform interface for the LinkedCell algorithm
+ */
 class LinkedCellDataStructure : public Container{
 public:
      /**
@@ -50,6 +53,10 @@ public:
      */
     void addParticle(Particle &&p) override = 0;
 
+    /**
+     * @brief function to add a periodic boundary
+     * @param bound
+     */
     static void addPeriodic(Boundary bound);
 
     /**
@@ -68,18 +75,50 @@ public:
      */
     virtual void setSize(double rcutoff_arg, std::array<double, 3> &domain_arg) = 0;
 
+    /**
+     * @brief function to obtain the domain
+     * @return array of three doubles
+     */
     virtual std::array<double, 3> &getDomain() = 0;
 
+    /**
+     * @brief remove all boundary conditions
+     */
     static void clearBoundary();
 
+    /**
+     * @brief add reflecting boundary condition
+     * @param bound boundary to which this condition applies
+     * @param reflecting instance of Reflecting representing the boundary condition
+     */
     static void addReflecting(Boundary bound, Reflecting &&reflecting);
 
 protected:
+
+    /**
+     * @brief map containing reflecting boundary conditions
+     */
     static std::map<Boundary,Reflecting> conditions;
 
+    /**
+     * @brief set containing periodic boundary conditions
+     */
     static std::set<Boundary> periodic;
 
+    /**
+     * @brief cutoff radius of each cell in each dimension
+     */
     static std::array<double, 3> cutoff;
+
+    /**
+     * @brief array to hold the number of cells in all three dimensions
+     */
+    static std::array<size_t, 3> mesh;
+
+    /**
+     * @brief vector spanning the domain which is covered by the cells
+     */
+    static std::array<double, 3> domain;
 
     /**
      * @brief implements c++20 contains for LinkedCellContainer for icpc

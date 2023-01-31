@@ -16,7 +16,6 @@ Particle::Particle(int type_arg) {
     MolSimLogger::logTrace("Particle generated!");
     f = { 0., 0., 0. };
     old_f = { 0., 0., 0. };
-    ghost = false;
 #ifdef _OPENMP
     omp_init_lock(&par_lock);
 #endif
@@ -35,7 +34,6 @@ Particle::Particle(const Particle& other) {
     old_x = other.old_x;
     warp = other.warp;
     last_x = other.last_x;
-    ghost = other.ghost;
 #ifdef _OPENMP
     omp_init_lock(&par_lock);
 #endif
@@ -54,7 +52,6 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
     old_f = { 0., 0., 0. };
     sigma = sigma_arg;
     epsilon = epsilon_arg;
-    ghost = ghost_arg;
     old_x = x_arg;
     last_x = x_arg;
     warp = {0, 0, 0};

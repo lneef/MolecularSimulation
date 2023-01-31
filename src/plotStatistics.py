@@ -4,7 +4,7 @@ import os
 
 def plotDiffusion():
     file = open("../output/diffusion.csv", mode='r')
-    
+
     reader = csv.reader(file)
     
     timestep = []

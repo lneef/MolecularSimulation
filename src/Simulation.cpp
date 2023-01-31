@@ -22,6 +22,24 @@ void Simulation::calculateX() {
 
         p.setX(newX);
     });
+
+     if(use_statistics){
+        particles->applyPar([this](Particle& p){
+            auto& newX = p.getX();
+            auto ind = p.getWarp();
+            auto& tempV = p.getV();
+            auto& tempF=p.getF();
+            auto& tempX = p.getLast();
+            for(size_t i = 0; i<3; ++i){
+                if(newX[i] > tempX[i] && tempV[i] + delta_t * tempF[i] / (2 * p.getM()) < 0){
+                    ind[i] = ind[i] < 0 ? ind[i] : ind[i] - 1;
+                }else if(newX[i] < tempX[i] && tempV[i] + delta_t * tempF[i] / (2 * p.getM()) > 0){
+                    ind[i] = ind[i] > 0 ? ind[i] : ind[i] + 1;
+                }
+            }
+            p.setWarp(ind);
+        });
+        }
 }
 
 void Simulation::calculateV() {
@@ -36,9 +54,9 @@ void Simulation::calculateV() {
             //Velocity-Störmer-Verlet-Algorithm
             newV[i] = tempV[i] + delta_t * (tempOldF[i] + tempF[i]) / (2 * p.getM());
         }
-
         p.setV(newV);
     });
+
 }
 
 
@@ -87,7 +105,7 @@ void Simulation::run() {
 
             if (use_statistics) {
                 if (iteration % n_statistics == 0) {
-                    statistics->calcDiffusion();
+                    statistics->calcDiffusion(delta_t);
                     statistics->calcRDF();
                 }
             }
@@ -158,7 +176,7 @@ void Simulation::run() {
 
             if (use_statistics) {
                 if (iteration % n_statistics == 0) {
-                    statistics->calcDiffusion();
+                    statistics->calcDiffusion(delta_t);
                     statistics->calcRDF();
                 }
             }

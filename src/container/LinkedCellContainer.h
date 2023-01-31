@@ -144,16 +144,6 @@ private:
     std::vector<ParticleContainer> cells;
 
     /**
-     * @brief array to hold the number of cells in all three dimensions
-     */
-    static std::array<size_t, 3> mesh;
-
-    /**
-     * @brief vector spanning the domain which is covered by the cells
-     */
-    static std::array<double, 3> domain;
-
-    /**
      * @brief updates the cell a particle is contained in after calculating the positions
      */
     void update();
@@ -290,15 +280,39 @@ private:
      */
     static bool topBoundary(size_t ind);
 
+    /**
+     * @brief LinkedCell3D is a friend of class LinkedCellContainer
+     */
     friend class LinkedCell3D;
 
+    /**
+     * @brief LinkedCellParallel is a friend of class LinkedCellContainer
+     */
     friend class LinkedCellParallel;
 
+    /**
+     * @brief calculates all force effective on particles in the given ParticleContainer in the first two dimensions
+     * @param particles ParticleContainer containing the particles
+     * @param ind index of the ParticleContainer in the grid
+     * @param fun force calculation routine
+     */
     void forceTwoD(ParticleContainer &particles, size_t ind, std::function<void(Particle &, Particle &)> fun);
 
+    /**
+     * @brief mirrors particles of specific ParticleContainer
+     * @param par ParticleContainer containing particle to be mirrored
+     * @param to_add offset that needs to be added to the particle to add them to the halo cells on the opposite side
+     */
     void mirrorBoundary(ParticleContainer &par, std::array<double, 3> &&to_add);
 
+    /**
+     * @brief mirror particles for periodic boundary conditions
+     */
     void mirrorPeriodic();
 
+    /**
+     * @brief apply reflecting boundary condition
+     * @param fun force calculation rountine
+     */
     void applyFBoundary(std::function<void(Particle &, Particle &)> &fun);
 };

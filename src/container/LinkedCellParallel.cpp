@@ -3,6 +3,7 @@
 void LinkedCellParallel::applyF(std::function<void(Particle &, Particle &)> fun) {
 #pragma omp parallel shared(layers)
     {
+        preparePeriodic();
 
 #pragma omp for nowait
         for (size_t i = 0; i < layerSize; ++i) {
@@ -117,9 +118,6 @@ void LinkedCellParallel::setSize(double cutOff_arg, std::array<double, 3> &domai
         cutoff[i] = domain[i] / static_cast<double>(mesh[i]);
         mesh[i] +=2;
     }
-
-    LinkedCellContainer::setDomain(domain);
-    LinkedCellContainer::setMesh(mesh);
 
     layers.resize(mesh[2]);
     for (auto &layer: layers) {

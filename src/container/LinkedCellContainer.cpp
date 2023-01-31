@@ -9,9 +9,6 @@
 #include "Reflecting.h"
 #include "MolSimLogger.h"
 
-std::array<double, 3> LinkedCellContainer::domain{};
-std::array<size_t, 3> LinkedCellContainer::mesh{};
-
 void LinkedCellContainer::apply(std::function<void(Particle &)> fun) {
     for (size_t i = mesh[0] + 1; i < cells.size() - mesh[0] - 1; ++i) {
         cells[i].apply(fun);

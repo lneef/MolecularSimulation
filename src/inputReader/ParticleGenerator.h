@@ -15,8 +15,20 @@
 template<typename T>
 class ParticleGenerator {
 private:
+
+    /**
+     * @brief dimension for the brownian motion
+     */
     size_t dim = 2;
+
+    /**
+     * @brief default mean for brownian motion
+     */
     double meanV = 0.1;
+
+    /**
+     * @brief mb is used to obtain random values according to the MaxwellBoltzmann distribution
+     */
     MaxwellBoltzmannDistribution mb;
 
     /**

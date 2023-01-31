@@ -6,6 +6,9 @@
 
 LinkedCellDataStructure::~LinkedCellDataStructure() = default;
 
+
+std::array<double, 3> LinkedCellDataStructure::domain{};
+std::array<size_t, 3> LinkedCellDataStructure::mesh{};
 std::set<Boundary> LinkedCellDataStructure::periodic{};
 std::array<double, 3> LinkedCellDataStructure::cutoff{};
 std::map<Boundary,Reflecting> LinkedCellDataStructure::conditions{};

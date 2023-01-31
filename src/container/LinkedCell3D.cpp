@@ -276,9 +276,6 @@ void LinkedCell3D::setSize(double cutOff_arg, std::array<double, 3> &domain_arg)
         mesh[i] +=2;
     }
 
-    LinkedCellContainer::setDomain(domain);
-    LinkedCellContainer::setMesh(mesh);
-
     layers.resize(mesh[2]);
     for (auto &layer: layers) {
         layer.setUp();

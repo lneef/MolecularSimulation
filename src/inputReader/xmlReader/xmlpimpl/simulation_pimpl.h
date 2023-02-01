@@ -36,12 +36,14 @@ namespace XMLReader {
          * @brief Cutoff radius
          */
         double rCutOff;
+
         /**
-         * @brief Mode desired parallelization strategy
+         * @brief parallelization startegy
          */
         int mode = 1;
+
         /**
-         * @brief Dimension number
+         * @brief dimension of the simulation
          */
         size_t dim = 2;
 
@@ -95,12 +97,14 @@ namespace XMLReader {
          * @brief Function that sets the domain of the cells
          */
         void post_simulation() override;
+
         /**
-         * @brief Function that reads the dimension number
+         * @brief function sets the dimension of the simulation
          */
         void dimension(int) override;
+
         /**
-         * @brief Function that reads the mode desired parallelization strategy
+         * @brief function sets the parallel mode
          */
         void parallel_mode(const std::string &par) override;
     };

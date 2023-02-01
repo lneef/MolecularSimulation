@@ -46,7 +46,7 @@ TEST(DiffusionTest, StatisticsTest) {
 
     Statistics s(1,3,1.);
     s.setParticles(lc);
-    s.calcDiffusion(0.001);
+    s.calcDiffusion();
     std::vector<double> diffusion = s.getDiffusion();
     EXPECT_EQ(diffusion[0], 45.);
 }

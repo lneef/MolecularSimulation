@@ -15,7 +15,6 @@ void Statistics::calcDiffusion() {
     std::array<double, 3> dom_size = particles->getDomain();
     particles->apply([&numerator, &dom_size](Particle &p) {
         std::array<double, 3> x_diff{};
-        std::array<double, 3> v = p.getV();
         std::array<double, 3> x = p.getX();
         std::array<double, 3> old_x = p.getOldX();
 

@@ -10,7 +10,6 @@
 #include "container/LinkedCellContainer.h"
 #include <cmath>
 #include <fstream>
-#include <filesystem>
 #include "utils/ArrayUtils.h"
 
 class Statistics {

@@ -8,6 +8,7 @@
         <domain_size_z>148</domain_size_z>
         <cutOff_radius>4.0</cutOff_radius>
         <output_frequency>10</output_frequency>
+        <dimension>3</dimension>
         <g_gravitation>-0.001</g_gravitation>
     </simulation>
     <membrane>

@@ -79,6 +79,9 @@ public:
 
 protected:
 
+    /**
+     * @brief routine to update the cells, different strategy than in LinkedCell3D
+     */
     void update() override;
 };
 

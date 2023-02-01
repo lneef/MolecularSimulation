@@ -105,7 +105,7 @@ void Simulation::run() {
 
             if (use_statistics) {
                 if (iteration % n_statistics == 0) {
-                    statistics->calcDiffusion(delta_t);
+                    statistics->calcDiffusion();
                     statistics->calcRDF();
                 }
             }
@@ -155,7 +155,7 @@ void Simulation::run() {
 
             if (use_statistics) {
                 if (iteration % n_statistics == 0) {
-                    statistics->calcDiffusion(delta_t);
+                    statistics->calcDiffusion();
                     statistics->calcRDF();
                 }
             }

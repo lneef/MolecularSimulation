@@ -10,7 +10,7 @@ Statistics::Statistics(int i_begin, int i_end, double delta_distance) {
     this->delta_r = delta_distance;
 }
 
-void Statistics::calcDiffusion(double delta_t) {
+void Statistics::calcDiffusion() {
     double numerator = 0.;
     std::array<double, 3> dom_size = particles->getDomain();
     particles->apply([&numerator, &dom_size](Particle &p) {

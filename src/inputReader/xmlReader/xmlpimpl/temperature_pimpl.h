@@ -11,10 +11,25 @@
 namespace XMLReader {
     class temperature_pimpl : public XMLReader::temperature_pskel {
     private:
+        /**
+        * @brief Shared pointer of the simulation
+        */
         std::shared_ptr<Simulation> sim;
+        /**
+        * @brief Current temperature
+        */
         double temp;
+        /**
+         * @brief time step after which temperature values are updated
+         */
         int n_thermo;
+        /**
+         * @brief Target temperature, which is the temperature you aim to reach
+         */
         double temp_tar;
+        /**
+         * @brief Delta temperature, which is the maximal absolute temperature
+         */
         double temp_del =  std::numeric_limits<double>::infinity();
     public:
         /**

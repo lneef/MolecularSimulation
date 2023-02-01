@@ -44,7 +44,7 @@ public:
 
     /**
      * @brief constructor of the class Thermostat
-     * @param current current temperature
+     * @param current temperature
      */
     Thermostat(double current);
 

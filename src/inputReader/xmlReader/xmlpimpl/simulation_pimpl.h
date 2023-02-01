@@ -89,14 +89,16 @@ namespace XMLReader {
          * @brief changes the force calculation method of the simulation to LJGravitation
          */
         void g_gravitation(double ) override;
-
+        /**
+         * @brief Function that reads the l radius and sets the smoothed lennard jones as force to the simulation
+         */
         void l_radius(double ) override;
         /**
          * @brief Function that sets the domain of the cells
          */
         void post_simulation() override;
 
-        /*
+        /**
          * @brief function sets the dimension of the simulation
          */
         void dimension(int) override;

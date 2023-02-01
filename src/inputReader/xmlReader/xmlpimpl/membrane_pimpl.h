@@ -56,11 +56,17 @@ namespace XMLReader {
          * @brief epsilon value of the particles for Lennard Jones potential
          */
         double epsilon_p = 5;
-
+        /**
+         * @brief Fz-up
+         */
         double f = 1;
-
+        /**
+        * @brief stiffness constant
+        */
         double stiff_const;
-
+        /**
+         * @brief average bond length of a molecule pair
+         */
         double bond_len;
     public:
         /**
@@ -126,11 +132,17 @@ namespace XMLReader {
          * @brief function to process the epsilon value for the particles
          */
         void epsilon(double ) override;
-
+        /**
+         * @brief Function that reads the fz-up
+         */
         void fz_up(double ) override;
-
+        /**
+         * @brief Function that reads the stiffness constant
+         */
         void stiffness_const(double ) override;
-
+        /**
+         * @brief Function that reads the average bond length of a molecule pair
+         */
         void bond_length(double ) override;
 
         /**

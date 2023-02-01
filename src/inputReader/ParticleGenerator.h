@@ -72,8 +72,8 @@ public:
      * @param particles ParticleContainer where the particles are stored
      * @param x Array representation three dimensional position of the particle
      * @param n Array representation of quantity of particles in each dimension
-     * @param h Integer representation of distance between the particles
-     * @param m Integer representation of mass of one particle
+     * @param h Double representation of distance between the particles
+     * @param m Double representation of mass of one particle
      * @param v Array representation of the velocities of the particles in all three dimensions
      * @param sigma sigma value for Lennard Jones
      * @param epsilon epsilon value for Lennard Jones
@@ -105,8 +105,8 @@ public:
      * @param x Array representation three dimensional position of the particle
      * @param n Array representation of quantity of particles in each dimension
      * @param v Array representation of the velocities of the particles in all three dimensions
-     * @param h Integer representation of distance between the particles
-     * @param m Integer representation of mass of one particle
+     * @param h Double representation of distance between the particles
+     * @param m Double representation of mass of one particle
      * @param meanVelocity Double representation of mean of the velocity
      * @param sigma sigma value for Lennard Jones
      * @param epsilon epsilon value for Lennard Jones
@@ -136,6 +136,20 @@ public:
         }
     }
 
+    /**
+     * @brief Generates mebrane of particles with given values and the MaxwellBoltzmannDistribution and stores them in instance of ParticleContainer
+     * @param particles ParticleContainer where the particles are stored
+     * @param x Array representation three dimensional position of the particle
+     * @param n Array representation of quantity of particles in each dimension
+     * @param v Array representation of the velocities of the particles in all three dimensions
+     * @param h Double representation of distance between the particles
+     * @param m Double representation of mass of one particle
+     * @param meanVelocity Double representation of mean of the velocity
+     * @param sigma sigma value for Lennard Jones
+     * @param epsilon epsilon value for Lennard Jones
+     * @param type type of the particle
+     * @param fz force in z up
+     */
     void
     generateMembraneBrownian(std::shared_ptr<T> &particles, std::array<double, 3> x, std::array<int, 3> n,
                            std::array<double, 3> v, double h, double m,
@@ -175,8 +189,8 @@ public:
      * @param x Array representation three dimensional position of the particle
      * @param n Array representation of quantity of particles in each dimension
      * @param v Array representation of the velocities of the particles in all three dimensions
-     * @param h Integer representation of distance between the particles
-     * @param m Integer representation of mass of one particle
+     * @param h Representation of distance between the particles
+     * @param m Representation of mass of one particle
      * @param sigma sigma value for Lennard Jones
      * @param epsilon epsilon value for Lennard Jones
      * @param type type of the particle
@@ -199,6 +213,20 @@ public:
         }
     }
 
+    /**
+     * @brief Generates membrane of particles with given values and stores them in instance of ParticleContainer
+     * @param particles ParticleContainer where the particles are stored
+     * @param x Array representation three dimensional position of the particle
+     * @param n Array representation of quantity of particles in each dimension
+     * @param v Array representation of the velocities of the particles in all three dimensions
+     * @param h Double representation of distance between the particles
+     * @param m Double representation of mass of one particle
+     * @param meanVelocity Double representation of mean of the velocity
+     * @param sigma sigma value for Lennard Jones
+     * @param epsilon epsilon value for Lennard Jones
+     * @param type type of the particle
+     * @param fz force in z up
+     */
     void
     generateMembraneNoBrownian(std::shared_ptr<T> &particles, std::array<double, 3> x, std::array<int, 3> n,
                              std::array<double, 3> v, double h, double m, double sigma = 1, double epsilon = 5, int type = 3, double fz = 1) {

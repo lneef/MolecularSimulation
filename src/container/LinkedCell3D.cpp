@@ -47,7 +47,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
 
 
-#pragma omp for nowait
+#pragma omp for schedule(dynamic, 1) nowait
             for (size_t i = 0; i < layerSize; ++i) {
                 layers[0][i].apply([this, &fun, i](Particle &p) {
                     forceThreeD(p, i, 0, fun);
@@ -55,7 +55,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
             }
 
-#pragma omp for schedule(guided, mesh[0] + 1) nowait
+#pragma omp for schedule(guided, mesh[0] + 1) collapse(2) nowait
         for (std::size_t j = 1; j < layers.size() - 1; ++j) {
             for (size_t i = 0; i < layerSize; ++i) {
                 layers[j].forceTwoD(layers[j][i], i, fun);
@@ -159,7 +159,7 @@ void LinkedCell3D::update() {
 
 
 void LinkedCell3D::clearHalo() {
-#pragma omp parallel for schedule(static, 1) shared(layers)
+#pragma omp parallel for schedule(static, 1)
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         layers[i].clearHalo();
     }
@@ -402,7 +402,7 @@ void LinkedCell3D::applyFBoundary(std::function<void(Particle &, Particle &)> fu
 }
 
 void LinkedCell3D::applyPar(std::function<void(Particle &)> fun) {
-#pragma omp parallel for schedule(dynamic, 1) shared(layers)
+#pragma omp parallel for schedule(dynamic, 1) collapse(2)
     for (size_t i = 1; i < layers.size() - 1; ++i) {
         for (size_t j = mesh[0] + 1; j < layerSize - mesh[0] - 1; ++j){
             if(j% mesh[0] == 0 || j % mesh[0] == mesh[0] - 1)

@@ -232,8 +232,8 @@ void LinkedCell3D::frontBackBoundary(double to_add, size_t ind, size_t oth) {
 }
 
 bool LinkedCell3D::side(size_t ind3D) {
-    return (ind3D == 0 && periodic.contains(Boundary::FRONT)) ||
-           (ind3D == layers.size() - 1 && periodic.contains(Boundary::BACK));
+    return (ind3D == 0 && containsPeriodic(Boundary::FRONT)) ||
+           (ind3D == layers.size() - 1 && containsPeriodic(Boundary::BACK));
 
 }
 

@@ -16,6 +16,9 @@ option(FAST_I "Enable fastet Benchmark" OFF)
 
 option(OMP "Enable OpenMP" OFF)
 
+option(IOMP "Enable OpenMP for icpc" OFF)
+
+
 option(FAST_G "Enable fastet Benchmark GCC" OFF)
 # option to disable logging in performance critical regions
 option(BMARK "Disable io in benchmark region" OFF)
@@ -45,6 +48,11 @@ if (OMP)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 endif ()
 
+if (IOMP)
+    message("with openmp")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qopenmp")
+endif ()
+
 if (FAST_G)
     message("FAST G++")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
@@ -56,7 +64,7 @@ add_executable(MolSim ${MY_SRC} src/Statistics.cpp src/Statistics.h)
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
         PRIVATE
-        cxx_std_20
+        cxx_std_17
         )
 
 if (PROFILE)

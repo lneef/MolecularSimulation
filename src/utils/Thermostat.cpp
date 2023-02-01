@@ -21,7 +21,7 @@ void Thermostat::applyThermostat(std::shared_ptr<Container> &particles) {
     double temperature_new = temperature + temp_diff;
     double scaling = std::sqrt(temperature_new / temperature);
 
-    particles->apply([&scaling](Particle &p) {
+    particles->applyPar([&scaling](Particle &p) {
         std::array<double, 3> newV = scaling * p.getV();
         p.setV(newV);
     });

@@ -80,6 +80,10 @@ public:
      */
     void setSize(double cutOff_arg, std::array<double, 3> &domain_arg) override;
 
+    /**
+     * @brief function to retrieve te domain
+     * @return array of three doubles
+     */
     std::array<double, 3> &getDomain() override;
 
     /**

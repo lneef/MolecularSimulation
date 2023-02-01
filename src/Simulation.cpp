@@ -172,7 +172,6 @@ void Simulation::run() {
     auto stop = std::chrono::high_resolution_clock::now();
     auto difference = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     MolSimLogger::logInfo("Runtime: {} ms", difference.count());
-    std::cout << particles->size() << std::endl;
 
     double mups = (particles_begin * iteration * 1000.0) / (difference.count());
     MolSimLogger::logInfo("Molecule-updates per second: {} MUPS/s", mups);

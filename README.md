@@ -76,6 +76,7 @@ The following command line options are supported:
 * for fluids via xml see input/instability_small.xml and input/instability_big.xml
 * for trying checkpointing via xml see input/checkpoint.xml and then the input/from_checkpoint.xml with the checkpoint parameters in input/checkpoint.txt
 * for our profiling setup via xml see input/cluster.xml
+* two parallelization strategies (generic and tasking), use parallel_mode to specify which one you want to use(default tasking)
 
 # Boundary #
 * the default boundary condition is outflow

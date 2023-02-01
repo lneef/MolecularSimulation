@@ -37,7 +37,7 @@ namespace XMLReader {
     void simulation_pimpl::parallel_mode(const ::std::string & par){
         if(par == "generic"){
             mode = 1;
-        }else if(par == "optimized"){
+        }else if(par == "tasking"){
             mode = 2;
         }
     }

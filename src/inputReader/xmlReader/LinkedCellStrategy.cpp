@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "LinkedCellStrategy.h"
+#include "MolSimLogger.h"
 #include "container/LinkedCellContainer.h"
 #include "container/LinkedCellParallel.h"
 
@@ -19,6 +20,8 @@ namespace XMLReader {
             if(mode== 1) {
                 lc = std::make_shared<LinkedCell3D>();
             }else if(mode==2){
+
+                MolSimLogger::logInfo("{}", "Tasking");
                 lc = std::make_shared<LinkedCellParallel>();
             }
         }

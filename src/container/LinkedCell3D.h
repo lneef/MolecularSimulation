@@ -8,6 +8,9 @@
 #include <valarray>
 #include "LinkedCellContainer.h"
 
+/**
+ * @brief LinkedCell3D implements the Linked Cell algorithm for three dimensions
+ */
 class LinkedCell3D : public LinkedCellDataStructure {
 public:
     /**

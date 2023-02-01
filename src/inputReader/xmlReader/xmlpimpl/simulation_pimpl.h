@@ -37,8 +37,14 @@ namespace XMLReader {
          */
         double rCutOff;
 
+        /**
+         * @brief parallelization startegy
+         */
         int mode = 1;
 
+        /**
+         * @brief dimension of the simulation
+         */
         size_t dim = 2;
 
     public:
@@ -90,8 +96,14 @@ namespace XMLReader {
          */
         void post_simulation() override;
 
+        /*
+         * @brief function sets the dimension of the simulation
+         */
         void dimension(int) override;
 
+        /**
+         * @brief function sets the parallel mode
+         */
         void parallel_mode(const std::string &par) override;
     };
 }

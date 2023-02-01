@@ -135,3 +135,53 @@ void LinkedCellParallel::addParticle(Particle &p) {
 
 }
 
+void LinkedCellParallel::update() {
+    std::vector<std::vector<Particle>> temp;
+    std::vector<std::vector<size_t>> temp_ind;
+    std::vector<std::vector<size_t>> temp_ind3;
+    temp.resize(layerSize);
+    temp_ind3.resize(layerSize);
+    temp_ind.resize(layerSize);
+
+    for (size_t i = 1; i < layers.size() - 1; ++i) {
+
+        #pragma omp parallel for schedule(dynamic, 1)
+        for (size_t j = mesh[0] + 1; j < layerSize - mesh[0] - 1; ++j) {
+            if(j % mesh[0] == 0 || j % mesh[0] == mesh[0] - 1)
+                continue;
+            for (auto it = layers[i][j].begin(); it != layers[i][j].end();) {
+                auto &p = *it;
+                size_t ind = layers[i].index(p);
+                size_t ind3D = index(p.getX());
+                auto &pos = p.getX();
+
+
+                if (ind == j && ind3D == i) {
+                    ++it;
+                    continue;
+                }
+
+                temp[j].push_back(*it);
+                temp_ind[j].push_back(ind);
+                temp_ind3[j].push_back(ind3D);
+
+                it = layers[i][j].remove(it);
+
+
+            }
+        }
+        for(size_t l = 0; l < layerSize; ++l){
+            for(size_t k = 0; k<temp[l].size(); ++k){
+                 LinkedCell3D::update(temp[l][k], temp_ind3[l][k], temp_ind[l][k]);
+            }
+            temp[l].clear();
+            temp_ind[l].clear();
+            temp_ind3[l].clear();
+        }
+
+
+    }
+
+
+}
+

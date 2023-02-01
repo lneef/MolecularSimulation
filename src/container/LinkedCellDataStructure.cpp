@@ -32,3 +32,7 @@ void LinkedCellDataStructure::clearBoundary() {
     conditions.clear();
 
 }
+
+bool LinkedCellDataStructure::containsReflecting(Boundary bound) {
+    return conditions.find(bound) != conditions.end();
+}

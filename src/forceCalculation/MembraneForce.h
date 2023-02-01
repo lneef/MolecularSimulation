@@ -26,6 +26,16 @@ public:
     ~MembraneForce() override;
 
     /**
+     * @brief functions that calculates all effective force on the membrane
+     * @param particles Container containing the membrane
+     * @param f_up force that pulls some of the partiles upwards
+     * @param g gravitation constant
+     * @param force force calculation routine for the forces between the particles in the membrane
+     * @param time current time
+     */
+    static void membraneForce(std::shared_ptr<Container>& particles, double f_up, double g, std::unique_ptr<Force>& force, double time);
+
+    /**
      * @brief constructor of MembraneForce
      */
      MembraneForce(double r0_arg, double k_arg);

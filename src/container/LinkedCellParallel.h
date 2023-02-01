@@ -76,5 +76,9 @@ public:
      * @param fun function taking lvalue reference to Particle
      */
     void applyPar(std::function<void(Particle &)> fun) override;
+
+protected:
+
+    void update() override;
 };
 

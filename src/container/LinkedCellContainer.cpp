@@ -454,25 +454,25 @@ bool LinkedCellContainer::topBoundary(size_t ind) {
 
 void LinkedCellContainer::updatePeriodic() {
     //mirror particles for periodic boundary
-    if(periodic.contains(Boundary::RIGHT)) {
+    if(containsPeriodic(Boundary::RIGHT)) {
         for (auto &cell: left_boundary) {
             mirrorBoundary(cell, {domain[0], 0, 0});
         }
     }
 
-    if(periodic.contains(Boundary::LEFT)) {
+    if(containsPeriodic(Boundary::LEFT)) {
         for (auto &cell: right_boundary) {
             mirrorBoundary(cell, {-domain[0], 0, 0});
         }
     }
 
-    if(periodic.contains(Boundary::TOP)) {
+    if(containsPeriodic(Boundary::TOP)) {
         for (auto &cell: bottom_boundary) {
             mirrorBoundary(cell, {0, domain[1], 0});
         }
     }
 
-    if(periodic.contains(Boundary::BOTTOM)) {
+    if(containsPeriodic(Boundary::BOTTOM)) {
         for (auto &cell: top_boundary) {
             mirrorBoundary(cell, {0, -domain[1], 0});
         }

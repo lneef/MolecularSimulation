@@ -153,7 +153,6 @@ void LinkedCellParallel::update() {
                 auto &p = *it;
                 size_t ind = layers[i].index(p);
                 size_t ind3D = index(p.getX());
-                auto &pos = p.getX();
 
 
                 if (ind == j && ind3D == i) {
@@ -172,7 +171,15 @@ void LinkedCellParallel::update() {
         }
         for(size_t l = 0; l < layerSize; ++l){
             for(size_t k = 0; k<temp[l].size(); ++k){
-                 LinkedCell3D::update(temp[l][k], temp_ind3[l][k], temp_ind[l][k]);
+                auto &pos = temp[l][k].getX();
+
+                if (pos[0] < -cutoff[0] || pos[0] >= domain[0] + cutoff[0] || pos[1] < -cutoff[1] ||
+                    pos[1] > domain[1] + cutoff[1]) {
+                    continue;
+                }
+
+
+                LinkedCell3D::update(temp[l][k], temp_ind3[l][k], temp_ind[l][k]);
             }
             temp[l].clear();
             temp_ind[l].clear();

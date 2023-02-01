@@ -15,11 +15,10 @@ void Statistics::calcDiffusion() {
     std::array<double, 3> dom_size = particles->getDomain();
     particles->apply([&numerator, &dom_size](Particle &p) {
         std::array<double, 3> x_diff{};
-        std::array<double, 3> v = p.getV();
         std::array<double, 3> x = p.getX();
         std::array<double, 3> old_x = p.getOldX();
 
-        for (int i = 0; i < 3; i++) {
+        for (size_t i = 0; i < 3; i++) {
             if (x[i] < old_x[i] && p.getWarp()[i] > 0) {
                 x_diff[i] = dom_size[i] - (old_x[i] - x[i]);
             } else if (x[i] > old_x[i] && p.getWarp()[i] < 0) {
@@ -95,19 +94,19 @@ void Statistics::writeDiffusion() {
     std::ofstream diffFile;
     diffFile.open("../output/diffusion.csv");
     diffFile << "timestep, var(t)" << std::endl;
-    for (int i = 0; i < diffusion.size(); i++) {
+    for (size_t i = 0; i < diffusion.size(); i++) {
         diffFile << i * n_statistics << "," << diffusion[i] << std::endl;
     }
     diffFile.close();
 }
 
 void Statistics::writeRDF() {
-    for (int i = 0; i < rdf.size(); i++) {
+    for (size_t i = 0; i < rdf.size(); i++) {
         std::ofstream rdfFile;
         std::string path = "../output/rdf/time_" + std::to_string(i * n_statistics) + ".csv";
         rdfFile.open(path);
         rdfFile << "distance, densities" << std::endl;
-        for (int z = 0; z < rdf[i].size(); z++) {
+        for (size_t z = 0; z < rdf[i].size(); z++) {
             rdfFile << z + i_rdf_begin << "," << rdf[i][z] << std::endl;
         }
         rdfFile.close();

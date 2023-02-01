@@ -5,7 +5,30 @@
 
 MembraneForce::~MembraneForce() = default;
 
-//calculation new force with harmonic potential
+void MembraneForce::membraneForce(std::shared_ptr<Container> &particles, double f_up, double g, std::unique_ptr<Force> &force, double time){
+    if (time <= 150) {
+                particles->apply([g, f_up](Particle &p) {
+                    if ((p.getIndex()[0] == 17 && p.getIndex()[1] == 24) ||
+                        (p.getIndex()[0] == 17 && p.getIndex()[1] == 25) ||
+                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 24) ||
+                        (p.getIndex()[0] == 18 && p.getIndex()[1] == 25)) {
+                        p.updateF({0, 0, p.getM() * g + f_up});
+                        // std::cout << p.getIndex().at(0) << " " << p.getIndex().at(1) << std::endl;
+                    } else {
+                        p.updateF({0, 0, p.getM() * g});
+                    }
+                });
+
+            } else {
+                particles->apply([g](Particle &p) {
+                        p.updateF({0, 0,  p.getM() * g});
+
+                });
+            }
+
+            force->calculateF(particles);
+}
+
 
 void MembraneForce::calculateF(std::shared_ptr<Container>& particles) {
     auto r0_arg = r0;

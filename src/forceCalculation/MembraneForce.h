@@ -25,6 +25,8 @@ public:
 
     ~MembraneForce() override;
 
+    static void membraneForce(std::shared_ptr<Container>& particles, double f_up, double g, std::unique_ptr<Force>& force, double time);
+
     /**
      * @brief constructor of MembraneForce
      */

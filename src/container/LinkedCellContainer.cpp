@@ -79,7 +79,7 @@ size_t LinkedCellContainer::size() {
 }
 
 void LinkedCellContainer::applyFBoundary(std::function<void(Particle &, Particle &)> &fun) {
-    if(conditions.contains(Boundary::BOTTOM)) {
+    if(containsReflecting(Boundary::BOTTOM)) {
         auto & cond = conditions.at(Boundary::BOTTOM);
         for (auto &list: bottom_boundary) {
             for (auto &p: list.get()) {
@@ -89,7 +89,7 @@ void LinkedCellContainer::applyFBoundary(std::function<void(Particle &, Particle
         }
     }
 
-    if(conditions.contains(Boundary::TOP)) {
+    if(containsReflecting(Boundary::TOP)) {
         auto & cond = conditions.at(Boundary::TOP);
         for (auto &list: top_boundary) {
             for (auto &p: list.get()) {
@@ -99,7 +99,7 @@ void LinkedCellContainer::applyFBoundary(std::function<void(Particle &, Particle
         }
     }
 
-    if(conditions.contains(Boundary::RIGHT)) {
+    if(containsReflecting(Boundary::RIGHT)) {
         auto & cond = conditions.at(Boundary::RIGHT);
         for (auto &list: right_boundary) {
             for (auto &p: list.get()) {
@@ -109,7 +109,7 @@ void LinkedCellContainer::applyFBoundary(std::function<void(Particle &, Particle
         }
     }
 
-    if(conditions.contains(Boundary::LEFT)) {
+    if(containsReflecting(Boundary::LEFT)) {
         auto & cond = conditions.at(Boundary::LEFT);
         for (auto &list: left_boundary) {
             for (auto &p: list.get()) {

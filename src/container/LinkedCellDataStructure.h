@@ -129,5 +129,9 @@ protected:
 
 
 
+    static bool containsReflecting(Boundary bound);
+
+
+
 };
 

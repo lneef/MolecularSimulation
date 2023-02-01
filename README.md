@@ -88,6 +88,13 @@ The following command line options are supported:
 * for temperature the target temperature must appear after the initial temperature
 * an element named path expects a valid path to an input file (.txt, see sphere.txt and eingabe-cuboid.txt for schema)
 
+# Statistics #
+* if you want to use the statistics, you must make sure that the folders /output, /output/rdf and /output/plot exist
+* add the statistics-parameters to your xml-input file
+* the statistics only work with the xml-input
+* after you have run your simulation, you should run /src/plotStatistics.py
+* you will find the plots as png files in /output/plot
+
 # Simulation Runs #
 Videos of runs of the simulation for sheet 4 and profiling informationcan be found at:
 https://syncandshare.lrz.de/getlink/fiDGaEwQXQkjmE4VS1c1A8/

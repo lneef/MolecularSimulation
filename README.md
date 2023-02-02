@@ -64,8 +64,6 @@ The following command line options are supported:
 
     --help  This page is printed.
 
-    You must use the options --planet or --cub if you want to run a simulation. 
-
 # Logging #
 * One Logger for MolSim(MolSimLogger) which writes to logs.txt
 * One Logger for tests(MolSimLogger_test) with loglevel debug which writes to logs_test.txt

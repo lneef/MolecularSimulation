@@ -66,7 +66,7 @@ void LinkedCell3D::applyF(std::function<void(Particle &, Particle &)> fun) {
 
         }
 
-#pragma omp for
+#pragma omp for schedule(dynamic, 1)
         for(size_t i = 1; i< layers.size() - 1; ++i){
             layers[i].applyFBoundary(fun);
         }
@@ -119,41 +119,61 @@ void LinkedCell3D::applyX(std::function<void(Particle &)> fun) {
 }
 
 void LinkedCell3D::update() {
+       //vectors to store particles collected by the worker threads
+    std::vector<std::vector<Particle>> temp;
+    std::vector<std::vector<size_t>> temp_ind;
+    std::vector<std::vector<size_t>> temp_ind3;
+    temp.resize(layerSize);
+    temp_ind3.resize(layerSize);
+    temp_ind.resize(layerSize);
+    //worker threads collect particles that need to be relocated
     for (size_t i = 1; i < layers.size() - 1; ++i) {
+
+        #pragma omp parallel for schedule(dynamic, 1)
         for (size_t j = mesh[0] + 1; j < layerSize - mesh[0] - 1; ++j) {
+            if(j % mesh[0] == 0 || j % mesh[0] == mesh[0] - 1)
+                continue;
             for (auto it = layers[i][j].begin(); it != layers[i][j].end();) {
                 auto &p = *it;
                 size_t ind = layers[i].index(p);
                 size_t ind3D = index(p.getX());
-                auto &pos = p.getX();
 
-                //check that not completely outside
-                if (pos[0] < -cutoff[0] || pos[0] >= domain[0] + cutoff[0] || pos[1] < -cutoff[1] ||
-                    pos[1] > domain[1] + cutoff[1]) {
-                    SPDLOG_LOGGER_INFO(MolSimLogger::logger(), "Particle at position ({}, {}, {}) removed",
-                                       p.getX()[0],
-                                       p.getX()[1], p.getX()[2]);
-                    it = layers[i][j].remove(it);
-                    continue;
-                }
 
                 if (ind == j && ind3D == i) {
                     ++it;
                     continue;
                 }
 
-                update(p, ind3D, ind);
+                temp[j].push_back(*it);
+                temp_ind[j].push_back(ind);
+                temp_ind3[j].push_back(ind3D);
 
                 it = layers[i][j].remove(it);
 
+
             }
-
-            //skip halo
-            if (j % mesh[0] == mesh[0] - 2)
-                j += 2;
         }
-    }
 
+        //relocation is done by the master thread
+        for(size_t l = 0; l < layerSize; ++l){
+            for(size_t k = 0; k<temp[l].size(); ++k){
+                auto &pos = temp[l][k].getX();
+
+                if (pos[0] < -cutoff[0] || pos[0] >= domain[0] + cutoff[0] || pos[1] < -cutoff[1] ||
+                    pos[1] > domain[1] + cutoff[1]) {
+                    continue;
+                }
+
+
+                LinkedCell3D::update(temp[l][k], temp_ind3[l][k], temp_ind[l][k]);
+            }
+            temp[l].clear();
+            temp_ind[l].clear();
+            temp_ind3[l].clear();
+        }
+
+
+    }
 
 }
 

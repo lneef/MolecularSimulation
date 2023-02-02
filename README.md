@@ -97,8 +97,8 @@ The following command line options are supported:
 * you will find the plots as png files in /output/plot
 
 # Simulation Runs #
-Videos of runs of the simulation for sheet 4 and profiling informationcan be found at:
-https://syncandshare.lrz.de/getlink/fiDGaEwQXQkjmE4VS1c1A8/
+Videos of runs of the simulation be found at:
+https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/
 
 # Contest #
 * use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DFAST_I=ON -DFAST_G=OFF -DTESTS=OFF (1170241 mups)

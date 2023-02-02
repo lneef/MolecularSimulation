@@ -34,6 +34,8 @@ Members:
 * by setting DTESTS=OFF test target won't be build
 * by setting FAST_I=ON and using the icpc compiler you can compile with high optimization using icpc
 * by setting FAST_G=ON and using gcc you can compile with high optimization using gcc
+* by setting OMP=ON compilation with openmp is activated for gcc
+* by setting IOMP=ON compilation with openmp is activated for icpc
 
 # Usage #
 MolSim is a simulator for simulating the movement of planets and molecules.
@@ -76,7 +78,7 @@ The following command line options are supported:
 * for fluids via xml see input/instability_small.xml and input/instability_big.xml
 * for trying checkpointing via xml see input/checkpoint.xml and then the input/from_checkpoint.xml with the checkpoint parameters in input/checkpoint.txt
 * for our profiling setup via xml see input/cluster.xml
-* two parallelization strategies (generic and tasking), use parallel_mode to specify which one you want to use(default tasking)
+* two parallelization strategies (generic and tasking), use parallel_mode to specify which one you want to use(default generic)
 
 # Boundary #
 * the default boundary condition is outflow
@@ -101,5 +103,6 @@ Videos of runs of the simulation be found at:
 https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/
 
 # Contest #
-* use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DFAST_I=ON -DFAST_G=OFF -DTESTS=OFF (1170241 mups)
-* use gcc as described above and run cmake wih -DBMARK=ON -DFAST_G=ON -DFAST_I=OFF (323315)
+* the parallel_mode is tasking
+* use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DIOMP=ON -DTESTS=OFF (2D: 4531 ms and 2,2 mmups, 3D: 516764ms)
+* use gcc as described above and run cmake wih -DBMARK=ON -DOMP=ON (2D: 4603ms and 2,1 mmups)

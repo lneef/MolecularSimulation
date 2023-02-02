@@ -98,6 +98,10 @@ The following command line options are supported:
 * after you have run your simulation, you should run /src/plotStatistics.py
 * you will find the plots as png files in /output/plot
 
+# Plots #
+the RDF- and Difussion graphs of both Cooling and Supercooling can be found at:
+https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/
+
 # Simulation Runs #
 Videos of runs of the simulation be found at:
 https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/

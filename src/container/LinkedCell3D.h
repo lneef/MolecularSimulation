@@ -154,7 +154,7 @@ protected:
     /**
      * @brief update the cell a particle is contained in after each iteration
      */
-    virtual void update();
+    void update();
 
     /**
      * @brief updated the indices of the given particle and add it to new location

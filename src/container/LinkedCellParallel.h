@@ -76,12 +76,5 @@ public:
      * @param fun function taking lvalue reference to Particle
      */
     void applyPar(std::function<void(Particle &)> fun) override;
-
-protected:
-
-    /**
-     * @brief routine to update the cells, different strategy than in LinkedCell3D
-     */
-    void update() override;
 };
 

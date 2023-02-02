@@ -76,6 +76,7 @@ The following command line options are supported:
 * for fluids via xml see input/instability_small.xml and input/instability_big.xml
 * for trying checkpointing via xml see input/checkpoint.xml and then the input/from_checkpoint.xml with the checkpoint parameters in input/checkpoint.txt
 * for our profiling setup via xml see input/cluster.xml
+* two parallelization strategies (generic and tasking), use parallel_mode to specify which one you want to use(default tasking)
 
 # Boundary #
 * the default boundary condition is outflow
@@ -96,8 +97,8 @@ The following command line options are supported:
 * you will find the plots as png files in /output/plot
 
 # Simulation Runs #
-Videos of runs of the simulation for sheet 4 and profiling informationcan be found at:
-https://syncandshare.lrz.de/getlink/fiDGaEwQXQkjmE4VS1c1A8/
+Videos of runs of the simulation be found at:
+https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/
 
 # Contest #
 * use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DFAST_I=ON -DFAST_G=OFF -DTESTS=OFF (1170241 mups)

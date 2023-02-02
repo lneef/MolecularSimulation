@@ -31,6 +31,8 @@ namespace XMLReader {
          * @brief Delta temperature, which is the maximal absolute temperature
          */
         double temp_del =  std::numeric_limits<double>::infinity();
+
+        bool target_set = false;
     public:
         /**
          * @brief initializes the parser with a instance of Simulation

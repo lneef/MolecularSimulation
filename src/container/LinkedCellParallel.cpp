@@ -19,9 +19,12 @@ void LinkedCellParallel::applyF(std::function<void(Particle &, Particle &)> fun)
             for (size_t z = 1; z < mesh[2] - 1; z += 3) {
                 for (size_t y = 0; y < mesh[1]; y += 3) {
                     for (size_t x = 0; x < mesh[0]; x += 3) {
+                        //starting index
                         size_t begin = y * mesh[0] + x;
+                        //upper bound for the x coordinate
                         size_t end_x = x + 3 < mesh[0] ? 3 : mesh[0] - x;
                         end_x+=begin;
+                        //upper bounds for z and y coordinatess
                         size_t end_z = z + 3 < mesh[2] - 1 ? z + 3 : mesh[2] - 1;
                         size_t end_y = y + 3 < mesh[1] ? 3 : mesh[1] - y;
 
@@ -136,13 +139,14 @@ void LinkedCellParallel::addParticle(Particle &p) {
 }
 
 void LinkedCellParallel::update() {
+    //vectors to store particles collected by the worker threads
     std::vector<std::vector<Particle>> temp;
     std::vector<std::vector<size_t>> temp_ind;
     std::vector<std::vector<size_t>> temp_ind3;
     temp.resize(layerSize);
     temp_ind3.resize(layerSize);
     temp_ind.resize(layerSize);
-
+    //worker threads collect particles that need to be relocated
     for (size_t i = 1; i < layers.size() - 1; ++i) {
 
         #pragma omp parallel for schedule(dynamic, 1)
@@ -169,6 +173,8 @@ void LinkedCellParallel::update() {
 
             }
         }
+
+        //relocation is done by the master thread
         for(size_t l = 0; l < layerSize; ++l){
             for(size_t k = 0; k<temp[l].size(); ++k){
                 auto &pos = temp[l][k].getX();

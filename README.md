@@ -108,5 +108,5 @@ https://syncandshare.lrz.de/getlink/fiHf5MvzcJGzSjPM4iHRuf/
 
 # Contest #
 * the parallel_mode is tasking
-* use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DIOMP=ON -DTESTS=OFF (2D: 4531 ms and 2,2 mmups, 3D: 516764ms)
-* use gcc as described above and run cmake wih -DBMARK=ON -DOMP=ON (2D: 4603ms and 2,1 mmups)
+* use icpc as described in Run Instructions and run cmake with -DBMARK=ON -DIOMP=ON -DTESTS=OFF (2D: 4531 ms and 2,2 mmups, 3D: 318112ms, 314355 mups)
+* use gcc as described above and run cmake wih -DBMARK=ON -DOMP=ON (2D: 4603ms and 2,1 mmups, 3D 189764ms and 526970 mups)

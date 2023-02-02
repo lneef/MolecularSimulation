@@ -45,9 +45,9 @@ private:
 public:
     /**
      * @brief Constructor of the class Statistics
-     * @param First value of the rdf distance intervals
-     * @param Last value of the rdf distance intervals
-     * @param Delta r, which defines the length of the rdf distance intervals
+     * @param i_begin value of the rdf distance intervals
+     * @param i_end value of the rdf distance intervals
+     * @param delta_distance r, which defines the length of the rdf distance intervals
      */
     Statistics(int i_begin, int i_end, double delta_distance);
 
@@ -61,7 +61,7 @@ public:
     void calcRDF();
     /**
      * @brief Setter for particles
-     * @param Shared pointer of the particles in the simulation
+     * @param particles_arg pointer of the particles in the simulation
      */
     void setParticles(std::shared_ptr<LinkedCellDataStructure> particles_arg);
     /**

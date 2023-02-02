@@ -270,7 +270,7 @@ void LinkedCell3D::update(Particle &particle, size_t ind3D, size_t ind) {
         ind3D = updatePeriodic(particle, ind3D);
 
         //move particle if it front and back is not specified, but it is contained in a boundary cell for which a 2D periodic boundary is specified
-    }else if((ind3D == 0 || ind3D == layers.size() - 1) && layers[ind3D].side()){
+    }else if((ind3D == 0 || ind3D == layers.size() - 1) && layers[ind3D].side(ind)){
         ind3D = updatePeriodic(particle, ind3D);
     }
 

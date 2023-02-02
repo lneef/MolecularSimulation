@@ -84,6 +84,8 @@ LinkedCell3D::forceThreeD(Particle &p, size_t ind2D, size_t ind3D,
     };
     auto &next = layers[ind3D + 1];
     int width = static_cast<int>(mesh[0]);
+
+    //calculate interaction with all three cells in the next layer below, at the same y-coodinate and above the current cell
     for (int j = -width; j <= width; j += width) {
 
         if (ind2D + j < 0 || ind2D + j >= next.cells.size())
@@ -202,11 +204,13 @@ void LinkedCell3D::preparePeriodic() {
 
 #pragma omp single
     {
+        //mirror inner cells
         if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT)) {
             frontBackBoundary(-domain[2], layers.size() - 2, 0);
             frontBackBoundary(domain[2], 1, layers.size() - 1);
         }
 
+        //mirror left and right boundary
         if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT) ||
             containsPeriodic(Boundary::LEFT) ||
             containsPeriodic(Boundary::RIGHT)) {
@@ -214,6 +218,7 @@ void LinkedCell3D::preparePeriodic() {
             mirrorHorizontal(-domain[2], layers.size() - 2, layers[0]);
         }
 
+        //mirror top and bottom boundary
         if (containsPeriodic(Boundary::BACK) || containsPeriodic(Boundary::FRONT) ||
             containsPeriodic(Boundary::BOTTOM) ||
             containsPeriodic(Boundary::TOP)) {
@@ -221,6 +226,7 @@ void LinkedCell3D::preparePeriodic() {
             mirrorVertical(-domain[2], layers.size() - 2, layers[0]);
         }
 
+        //mirror corner cells
         if (!periodic.empty()) {
             mirrorDiagonal(domain[2], 1, layers[layers.size() - 1]);
             mirrorDiagonal(-domain[2], layers.size() - 2, layers[0]);
@@ -259,9 +265,13 @@ bool LinkedCell3D::side(size_t ind3D) {
 
 void LinkedCell3D::update(Particle &particle, size_t ind3D, size_t ind) {
 
+    //move particle if periodic boundaries for fornt and back are specified
     if (side(ind3D)) {
         ind3D = updatePeriodic(particle, ind3D);
 
+        //move particle if it front and back is not specified, but it is contained in a boundary cell for which a 2D periodic boundary is specified
+    }else if((ind3D == 0 || ind3D == layers.size() - 1) && layers[ind3D].side()){
+        ind3D = updatePeriodic(particle, ind3D);
     }
 
     if (layers[ind3D].side(ind)) {
